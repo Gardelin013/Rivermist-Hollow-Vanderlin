@@ -43,10 +43,10 @@ type EggData = {
   scale?: number;
   traits?: string[];
   can_remove?: boolean;
+  can_retch?: boolean;
   is_hatchling?: boolean;
   fertilized?: boolean;
-  hatch_inside?: boolean;
-  auto_hatch?: boolean;
+  hatch?: HatchInfo;
   mother_name?: string;
   father_name?: string;
   status: string;
@@ -65,7 +65,6 @@ type OrganSettings = {
   custom_desc?: string;
   custom_organ_desc?: string;
   custom_color?: string | null;
-  auto_hatch?: boolean | null;
   resource_dependent?: boolean;
   egg_scale: number;
   egg_traits?: string[];
@@ -73,6 +72,20 @@ type OrganSettings = {
   available_traits: TraitOption[];
   color_presets: ColorPreset[];
   nutrient_cost?: number;
+};
+
+type HatchInfo = {
+  mode: string;
+  chance: number;
+  decided?: string | null;
+};
+
+type HatchlingData = {
+  ref: string;
+  name: string;
+  word: string;
+  can_push: boolean;
+  can_retch: boolean;
 };
 
 type OrganData = {
@@ -91,6 +104,7 @@ type OrganData = {
   egg_stage?: number;
   is_egg_layer?: boolean;
   hatchling_count?: number;
+  hatchlings?: HatchlingData[];
   next_egg_seconds?: number;
   interval_seconds?: number;
 };
@@ -143,6 +157,7 @@ type HoleData = {
   eggs: EggData[];
   egg_count: number;
   hatchling_count: number;
+  hatchlings?: HatchlingData[];
 };
 
 type WombData = {
@@ -264,11 +279,9 @@ export type HoleStatusLocale = {
     fertilized: string;
     unfertilized: string;
     by: string;
-    autoHatch: string;
-    internalBirth: string;
-    willHatchInside: string;
     extract: string;
     extractAll: string;
+    retchUp: string;
     layEggs: string;
     edit: string;
     pickColor: string;
@@ -286,6 +299,14 @@ export type HoleStatusLocale = {
   organNames: Record<string, string>;
   eggTypes: Record<string, string>;
   traitNames: Record<string, string>;
+  hatch: {
+    inside: string;
+    outside: string;
+    either: string;
+    decidedInside: string;
+    decidedOutside: string;
+  };
+  hatchlingWords: Record<string, string>;
   formatTime: (seconds: number) => string;
   formatFill: (volume: number, capacity: number) => string;
   formatStage: (stage: number, maxStage: number) => string;
@@ -439,14 +460,12 @@ export const HoleStatusView = (props: { locale: HoleStatusLocale }) => {
                   locale={locale}
                 />
                 <EggBlock act={act} eggs={anus.eggs} locale={locale} />
-                {anus.hatchling_count > 0 && (
-                  <Box mt={0.5} bold color="bad">
-                    <Icon name="baby" mr={0.5} />
-                    {locale.labels.hatchlingsInside}
-                    {': '}
-                    {anus.hatchling_count}
-                  </Box>
-                )}
+                <HatchlingList
+                  act={act}
+                  hatchlings={anus.hatchlings}
+                  count={anus.hatchling_count}
+                  locale={locale}
+                />
               </Section>
             )}
             {stomach && (
@@ -717,15 +736,93 @@ const WombBlock = (props: {
       )}
       <EggActions act={act} organ={organ} locale={locale} />
       <EggBlock act={act} eggs={organ.eggs} locale={locale} />
-      {(organ.hatchling_count ?? 0) > 0 && (
-        <Box mt={0.5} bold color="bad">
-          <Icon name="baby" mr={0.5} />
-          {locale.labels.hatchlingsInside}
-          {': '}
-          {organ.hatchling_count}
-        </Box>
-      )}
+      <HatchlingList
+        act={act}
+        hatchlings={organ.hatchlings}
+        count={organ.hatchling_count}
+        locale={locale}
+      />
     </Section>
+  );
+};
+
+/** The egg kind decides how it hatches; once ripe the roll is made and shown. */
+const formatHatch = (locale: HoleStatusLocale, hatch: HatchInfo): string => {
+  if (hatch.decided === 'inside') {
+    return locale.hatch.decidedInside;
+  }
+  if (hatch.decided === 'outside') {
+    return locale.hatch.decidedOutside;
+  }
+  if (hatch.mode === 'inside') {
+    return locale.hatch.inside;
+  }
+  if (hatch.mode === 'either') {
+    return `${locale.hatch.either}, ${hatch.chance}%`;
+  }
+  return locale.hatch.outside;
+};
+
+/** Hatchlings waiting inside, what each is doing, and a push-out where its kind allows it. */
+const HatchlingList = (props: {
+  act: any;
+  hatchlings?: HatchlingData[];
+  count?: number;
+  locale: HoleStatusLocale;
+}) => {
+  const { act, hatchlings, count, locale } = props;
+  if (!hatchlings?.length) {
+    if (!count) {
+      return null;
+    }
+    return (
+      <Box mt={0.5} bold color="bad">
+        <Icon name="baby" mr={0.5} />
+        {locale.labels.hatchlingsInside}
+        {': '}
+        {count}
+      </Box>
+    );
+  }
+  return (
+    <Box mt={0.5}>
+      <Box bold color="bad">
+        <Icon name="baby" mr={0.5} />
+        {locale.labels.hatchlingsInside}
+        {': '}
+        {hatchlings.length}
+      </Box>
+      {hatchlings.map((hatchling) => (
+        <Box key={hatchling.ref} ml={1} mt={0.2}>
+          <Box inline bold>
+            {hatchling.name}
+          </Box>
+          <Box inline color="label" ml={0.5}>
+            {locale.hatchlingWords[hatchling.word] || hatchling.word}
+          </Box>
+          {hatchling.can_push && (
+            <Button
+              ml={0.5}
+              compact
+              icon="hand"
+              onClick={() => act('push_out_hatchling', { ref: hatchling.ref })}
+            >
+              {locale.labels.extract}
+            </Button>
+          )}
+          {hatchling.can_retch && (
+            <Button
+              ml={0.5}
+              compact
+              icon="arrow-up"
+              onClick={() => act('retch_up', { ref: hatchling.ref })}
+            >
+              {locale.labels.retchUp}
+            </Button>
+          )}
+        </Box>
+      ))}
+    </Box>
   );
 };
 
@@ -1059,32 +1156,6 @@ const SettingsPanel = (props: {
           {settings.nutrient_cost ?? 0} u
         </Box>
       </SettingRow>
-      <SettingRow label={locale.labels.autoHatch}>
-        {[
-          ['profile', locale.labels.profileDefault],
-          ['true', locale.labels.yes],
-          ['false', locale.labels.no],
-        ].map(([value, label]) => (
-          <Button
-            key={value}
-            selected={
-              value === 'profile'
-                ? settings.auto_hatch === null ||
-                  settings.auto_hatch === undefined
-                : settings.auto_hatch === (value === 'true')
-            }
-            onClick={() =>
-              act('set_organ_setting', {
-                organ_id: organ.id,
-                field: 'auto_hatch',
-                value,
-              })
-            }
-          >
-            {label}
-          </Button>
-        ))}
-      </SettingRow>
     </>
   );
 };
@@ -1401,21 +1472,9 @@ const EggDetail = (props: {
           {egg.father_name ? ` ${locale.labels.by} ${egg.father_name}` : ''}
         </Box>
       )}
-      {egg.hatch_inside && (
+      {egg.hatch && (
         <Box fontSize="0.85em" color="average" mt={0.2} italic>
-          * {locale.labels.willHatchInside}
-        </Box>
-      )}
-      {egg.has_preg && (egg.auto_hatch !== undefined || egg.hatch_inside) && (
-        <Box fontSize="0.85em" color="label" mt={0.2}>
-          {locale.labels.autoHatch}
-          {': '}
-          {egg.auto_hatch ? locale.labels.yes : locale.labels.no}
-          {'. '}
-          {locale.labels.internalBirth}
-          {': '}
-          {egg.hatch_inside ? locale.labels.yes : locale.labels.no}
-          {'.'}
+          {formatHatch(locale, egg.hatch)}
         </Box>
       )}
       <Stack mt={0.5}>
@@ -1428,14 +1487,16 @@ const EggDetail = (props: {
             {locale.labels.extract}
           </Button>
         </Stack.Item>
-        <Stack.Item>
-          <Button.Checkbox
-            checked={!!egg.auto_hatch}
-            onClick={() => act('toggle_egg_auto_hatch', { egg_ref: egg.ref })}
-          >
-            {locale.labels.autoHatch}
-          </Button.Checkbox>
-        </Stack.Item>
+        {egg.can_retch && (
+          <Stack.Item>
+            <Button
+              icon="arrow-up"
+              onClick={() => act('retch_up', { ref: egg.ref })}
+            >
+              {locale.labels.retchUp}
+            </Button>
+          </Stack.Item>
+        )}
       </Stack>
     </Box>
   );

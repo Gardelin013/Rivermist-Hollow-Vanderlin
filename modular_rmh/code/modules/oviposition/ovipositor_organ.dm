@@ -10,7 +10,6 @@
 	var/custom_egg_desc = ""
 	var/custom_organ_desc = ""
 	var/custom_egg_color = null
-	var/custom_auto_hatch = null
 	var/egg_scale = OVI_EGG_DEFAULT_SCALE
 	var/list/egg_traits = list()
 	var/resource_dependent_yield = FALSE
@@ -178,7 +177,6 @@
 		list("key" = "custom_organ_desc", "label" = "Custom Organ Desc", "type" = QUIRK_TEXT, "default" = "", "placeholder" = "Leave blank for default", "max_length" = OVI_EGG_MAX_CUSTOM_DESC_LENGTH, "multiline" = TRUE),
 		list("key" = "custom_color", "label" = "Egg Color", "type" = QUIRK_COLOR, "default" = ""),
 		list("key" = "egg_trait", "label" = "Egg Modifier", "type" = QUIRK_SELECT, "default" = "None", "options" = list("None", OVI_EGG_TRAIT_APHRODISIAC, OVI_EGG_TRAIT_POISON, OVI_EGG_TRAIT_PARASITE, OVI_EGG_TRAIT_FAST_GROWTH)),
-		list("key" = "auto_hatch", "label" = "Auto Hatch", "type" = QUIRK_SELECT, "default" = "Profile", "options" = list("Profile", "Yes", "No")),
 		list("key" = "resource_dependent", "label" = "Resource-Dependent Yield", "type" = QUIRK_SELECT, "default" = "No", "options" = list("No", "Yes"))
 	)
 
@@ -216,8 +214,6 @@
 	ovipositor_organ.custom_egg_color = sanitize_oviposition_color(get_extra_value("custom_color", ""))
 	var/egg_trait = get_extra_value("egg_trait", "None")
 	ovipositor_organ.egg_traits = (egg_trait && egg_trait != "None") ? sanitize_oviposition_trait_list(list(egg_trait)) : list()
-	var/auto_hatch = get_extra_value("auto_hatch", "Profile")
-	ovipositor_organ.custom_auto_hatch = (auto_hatch == "Profile") ? null : (auto_hatch == "Yes")
 	ovipositor_organ.resource_dependent_yield = (get_extra_value("resource_dependent", "No") == "Yes")
 	ovipositor_organ.update_custom_organ_desc()
 
@@ -249,7 +245,6 @@
 		list("key" = "custom_organ_desc", "label" = "Custom Womb Desc", "type" = QUIRK_TEXT, "default" = "", "placeholder" = "Leave blank for default", "max_length" = OVI_EGG_MAX_CUSTOM_DESC_LENGTH, "multiline" = TRUE),
 		list("key" = "custom_color", "label" = "Egg Color", "type" = QUIRK_COLOR, "default" = ""),
 		list("key" = "egg_trait", "label" = "Egg Modifier", "type" = QUIRK_SELECT, "default" = "None", "options" = list("None", OVI_EGG_TRAIT_APHRODISIAC, OVI_EGG_TRAIT_POISON, OVI_EGG_TRAIT_PARASITE, OVI_EGG_TRAIT_FAST_GROWTH)),
-		list("key" = "auto_hatch", "label" = "Auto Hatch", "type" = QUIRK_SELECT, "default" = "Profile", "options" = list("Profile", "Yes", "No")),
 		list("key" = "resource_dependent", "label" = "Resource-Dependent Yield", "type" = QUIRK_SELECT, "default" = "No", "options" = list("No", "Yes"))
 	)
 
@@ -287,8 +282,6 @@
 		womb.custom_egg_color = sanitize_oviposition_color(get_extra_value("custom_color", ""))
 		var/egg_trait = get_extra_value("egg_trait", "None")
 		womb.egg_traits = (egg_trait && egg_trait != "None") ? sanitize_oviposition_trait_list(list(egg_trait)) : list()
-		var/auto_hatch = get_extra_value("auto_hatch", "Profile")
-		womb.custom_auto_hatch = (auto_hatch == "Profile") ? null : (auto_hatch == "Yes")
 		womb.resource_dependent_yield = (get_extra_value("resource_dependent", "No") == "Yes")
 		womb.update_custom_organ_desc()
 
@@ -305,7 +298,6 @@
 		womb.custom_egg_desc = ""
 		womb.custom_organ_desc = ""
 		womb.custom_egg_color = null
-		womb.custom_auto_hatch = null
 		womb.egg_scale = OVI_EGG_DEFAULT_SCALE
 		womb.egg_traits = list()
 		womb.resource_dependent_yield = FALSE

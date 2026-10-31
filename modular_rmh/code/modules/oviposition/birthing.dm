@@ -25,6 +25,11 @@
 #define EGG_PUSH_MAX_PUSHES 4
 /// Chance per push that an egg past comfort slips back, per unit of strain over one.
 #define EGG_PUSH_SLIP_CHANCE 25
+/// What a heave costs when a stomach passenger is brought up by the mouth.
+#define RETCH_TIME (4 SECONDS)
+#define RETCH_STAMINA 20
+#define RETCH_NUTRITION 15
+#define RETCH_STUN (2 SECONDS)
 /// Strain past which a passage is all pain; within comfort it is all pleasure, between it is mixed.
 #define BIRTH_PAIN_STRAIN 1.3
 /// Pleasure and climax progress one contraction gives at full pleasure, and what the passage itself gives.
@@ -53,6 +58,13 @@
 /obj/item/mob_holder/internal_womb/get_pass_through_girth()
 	return birth_girth || ..()
 
+/// The host may push a hatchling out only when its kind lets go; the rest keeps the storage's own rule.
+/obj/item/mob_holder/internal_womb/can_remove_from_body_storage(removal_reason = BODYSTORAGE_REMOVE_MANUAL)
+	if(removal_reason != BODYSTORAGE_REMOVE_MANUAL)
+		return ..()
+	var/datum/component/internal_womb_hatchling/hatchling = GetComponent(/datum/component/internal_womb_hatchling)
+	return hatchling?.can_be_pushed_out() || FALSE
+
 /mob/living/carbon/proc/get_birth_fatigue()
 	var/cutoff = world.time - LABOUR_FATIGUE_WINDOW
 	while(length(recent_labours) && recent_labours[1] <= cutoff)
@@ -70,12 +82,16 @@
 		return container.is_oviposition_egg(passenger)
 	return !!SEND_SIGNAL(container, COMSIG_BODYSTORAGE_FIND_ITEM_LAYER, passenger)
 
-/// The organ that holds this egg for its owner, or null.
+/// The organ that holds this egg or hatchling for its owner, or null.
 /mob/living/carbon/proc/get_passenger_container(obj/item/passenger)
 	var/obj/item/organ/container = passenger?.loc
-	if(!istype(container) || container.owner != src || !is_passenger_inside(passenger, container))
-		return null
-	return container
+	if(istype(container) && container.owner == src && is_passenger_inside(passenger, container))
+		return container
+	// A holder with a live mob hangs off the body itself; find the organ whose storage lists it.
+	for(var/obj/item/organ/organ as anything in internal_organs)
+		if(is_passenger_inside(passenger, organ))
+			return organ
+	return null
 
 /// Width a passenger passes the opening with: eggs and hatchlings carry their own, anything else its insert girth.
 /proc/get_passenger_birth_girth(obj/item/passenger)
@@ -156,8 +172,14 @@
 	labour.begin(passenger, container, voluntary)
 	return TRUE
 
-/// The egg leaves right now, through the opening in front of its host.
-/mob/living/carbon/proc/expel_egg_now(obj/item/oviposition_egg/egg, obj/item/organ/container)
+/// The passenger leaves right now, through the opening in front of its host; a hatchling is born the same way.
+/mob/living/carbon/proc/expel_passenger_now(obj/item/passenger, obj/item/organ/container)
+	if(istype(passenger, /obj/item/mob_holder/internal_womb))
+		var/datum/component/internal_womb_hatchling/hatchling = passenger.GetComponent(/datum/component/internal_womb_hatchling)
+		return hatchling?.birth_hatchling() || FALSE
+	var/obj/item/oviposition_egg/egg = passenger
+	if(!istype(egg))
+		return FALSE
 	if(!SEND_SIGNAL(container, COMSIG_BODYSTORAGE_TRY_REMOVE, egg, null, BODYSTORAGE_REMOVE_MANUAL))
 		return FALSE
 	var/obj/item/organ/genitals/filling_organ/canal = container.get_birth_canal()
@@ -183,16 +205,22 @@
 
 // ---- Pushing an egg out by hand ----
 
-/// Why an egg cannot be pushed out right now, or null when it can.
-/mob/living/carbon/human/proc/get_push_out_block_reason(obj/item/oviposition_egg/egg, obj/item/organ/container)
+/// Why an egg or hatchling cannot be pushed out right now, or null when it can.
+/mob/living/carbon/human/proc/get_push_out_block_reason(obj/item/passenger, obj/item/organ/container)
 	if(stat != CONSCIOUS)
 		return "I am in no state to push."
 	if(incapacitated())
 		return "I can't brace myself like this."
 	if(has_status_effect(/datum/status_effect/labour))
 		return "My body is already pushing."
-	if(!egg.can_remove_from_body_storage(BODYSTORAGE_REMOVE_MANUAL))
+	if(!passenger.can_remove_from_body_storage(BODYSTORAGE_REMOVE_MANUAL))
+		if(istype(passenger, /obj/item/mob_holder/internal_womb))
+			return "It clings to me too tightly to push out yet."
 		return "That one is too deep, or too much a part of me, to push out."
+	return get_passage_block_reason(passenger, container)
+
+/// What the body itself puts in the way out, or null: clothes, a worn device, a plug, a penetration, size.
+/mob/living/carbon/human/proc/get_passage_block_reason(obj/item/passenger, obj/item/organ/container)
 	var/obj/item/organ/genitals/filling_organ/canal = container.get_birth_canal()
 	if(!istype(canal) || !canal.orifice_type)
 		return null
@@ -202,28 +230,30 @@
 	if(is_organ_slot_blocked(canal.slot))
 		return "Something worn seals the way out."
 	var/datum/component/body_storage/passage = canal.GetComponent(/datum/component/body_storage)
-	if(passage?.has_layer_insertion_blocker(egg, STORAGE_LAYER_DEEP))
+	if(passage?.has_layer_insertion_blocker(passenger, STORAGE_LAYER_DEEP))
 		return "Something plugs the way out."
 	var/datum/orifice/opening = canal.get_orifice()
 	if(length(opening.get_live_penetrations()))
 		return "Not with that inside me."
-	if(get_passenger_birth_girth(egg) > opening.get_max_girth())
+	if(get_passenger_birth_girth(passenger) > opening.get_max_girth())
 		return "It is too big to pass. I would need more stretching, or something slick."
 	return null
 
-/// Pushes one egg out by hand over a few timed pushes; a ripe egg starts a labour instead.
-/mob/living/carbon/human/proc/try_push_out_egg(obj/item/oviposition_egg/egg)
-	var/obj/item/organ/container = get_passenger_container(egg)
+/// Pushes one egg or hatchling out by hand over a few timed pushes; a ripe egg starts a labour instead.
+/mob/living/carbon/human/proc/try_push_out_passenger(obj/item/passenger)
+	var/obj/item/organ/container = get_passenger_container(passenger)
 	if(!container)
 		return FALSE
-	var/reason = get_push_out_block_reason(egg, container)
+	var/reason = get_push_out_block_reason(passenger, container)
 	if(reason)
 		to_chat(src, span_warning(reason))
 		return FALSE
-	var/datum/component/pregnancy/pregnancy = egg.get_pregnancy_component()
-	if(pregnancy && pregnancy.stage >= pregnancy.max_stage)
-		return start_labour(egg, container, TRUE)
-	INVOKE_ASYNC(src, PROC_REF(push_out_egg), egg, container)
+	if(istype(passenger, /obj/item/oviposition_egg))
+		var/obj/item/oviposition_egg/egg = passenger
+		var/datum/component/pregnancy/pregnancy = egg.get_pregnancy_component()
+		if(pregnancy && pregnancy.stage >= pregnancy.max_stage)
+			return start_labour(egg, container, TRUE)
+	INVOKE_ASYNC(src, PROC_REF(push_out_passenger), passenger, container)
 	return TRUE
 
 /// One egg after another; stops at the first that will not come.
@@ -239,30 +269,32 @@
 		if(pregnancy && pregnancy.stage >= pregnancy.max_stage)
 			start_labour(egg, organ, TRUE)
 			return
-		if(!push_out_egg(egg, organ))
+		if(!push_out_passenger(egg, organ))
 			return
 
-/// Timed pushes that feel by fit; an egg wider than comfort costs more, hurts, and may slip back.
-/mob/living/carbon/human/proc/push_out_egg(obj/item/oviposition_egg/egg, obj/item/organ/container)
+/// Timed pushes that feel by fit; a passenger wider than comfort costs more, hurts, and may slip back.
+/mob/living/carbon/human/proc/push_out_passenger(obj/item/passenger, obj/item/organ/container)
 	var/obj/item/organ/genitals/filling_organ/canal = container.get_birth_canal()
 	var/datum/orifice/opening = (istype(canal) && canal.orifice_type) ? canal.get_orifice() : null
-	var/girth = get_passenger_birth_girth(egg)
+	var/girth = get_passenger_birth_girth(passenger)
+	var/is_hatchling = istype(passenger, /obj/item/mob_holder/internal_womb)
+	var/slip_bonus = get_passenger_slip_chance(passenger)
 	var/strain_over = opening ? max(0, opening.get_strain(girth) - 1) : 0
 	var/share = get_birth_pleasure_share(opening, girth)
 	var/ease = get_birth_pleasure_share(opening, girth, FALSE)
 	var/pushes = clamp(1 + round(strain_over * 2), 1, EGG_PUSH_MAX_PUSHES)
 	if(BIRTH_FEELS_GOOD(share))
-		visible_message(span_notice("[src] squats down, breathing slow, and bears down."), span_love("I squat down and bear down on the [egg.name] inside me, and the pressure of it feels good..."))
+		visible_message(span_notice("[src] squats down, breathing slow, and bears down."), span_love("I squat down and bear down on the [passenger.name] inside me, and the pressure of it feels good..."))
 	else
-		visible_message(span_warning("[src] squats down and strains, bearing down."), span_warning("I squat down and bear down on the [egg.name] inside me..."))
+		visible_message(span_warning("[src] squats down and strains, bearing down."), span_warning("I squat down and bear down on the [passenger.name] inside me..."))
 	var/done = 0
 	var/attempts = 0
 	while(done < pushes)
 		if(attempts++ >= EGG_PUSH_MAX_PUSHES * 2)
-			to_chat(src, span_warning("I can't get the [egg.name] past the opening. Not like this."))
+			to_chat(src, span_warning("I can't get the [passenger.name] past the opening. Not like this."))
 			return FALSE
-		if(!do_after(src, EGG_PUSH_TIME, src, extra_checks = CALLBACK(src, PROC_REF(can_keep_pushing), egg, container)))
-			to_chat(src, span_warning("I lose the rhythm, and the [egg.name] settles back inside."))
+		if(!do_after(src, EGG_PUSH_TIME, src, extra_checks = CALLBACK(src, PROC_REF(can_keep_pushing), passenger, container)))
+			to_chat(src, span_warning("I lose the rhythm, and the [passenger.name] settles back inside."))
 			return FALSE
 		adjust_stamina(EGG_PUSH_STAMINA * BIRTH_COST_MULT(ease))
 		done++
@@ -273,9 +305,10 @@
 		opening?.play_passage_sound("contraction", 25, src)
 		if(done >= pushes)
 			break
-		if(strain_over && prob(EGG_PUSH_SLIP_CHANCE * strain_over))
+		var/slip_chance = EGG_PUSH_SLIP_CHANCE * strain_over + slip_bonus
+		if(slip_chance > 0 && prob(slip_chance))
 			done = max(0, done - 1)
-			to_chat(src, span_warning("It slips back deeper. I have to start that push over."))
+			to_chat(src, span_warning(is_hatchling ? "It squirms back up and clings. I have to start that push over." : "It slips back deeper. I have to start that push over."))
 			continue
 		if(BIRTH_FEELS_GOOD(share))
 			to_chat(src, span_love(pick("It moves, and the slide of it makes me gasp.", "I feel it shift lower, pressing against the opening, and heat follows it.", "Almost... I bear down, and it feels so good.")))
@@ -283,10 +316,75 @@
 			to_chat(src, span_love(pick("It moves, barely. The stretch aches and tingles at once.", "I feel it shift lower, and the ache carries a strange warmth.")))
 		else
 			to_chat(src, span_warning(pick("It moves, barely. I push again.", "I feel it shift lower, pressing against the opening.", "Almost... I bear down harder.")))
-	return expel_egg_now(egg, container)
+	return expel_passenger_now(passenger, container)
 
-/mob/living/carbon/human/proc/can_keep_pushing(obj/item/oviposition_egg/egg, obj/item/organ/container)
-	return stat == CONSCIOUS && !incapacitated() && is_passenger_inside(egg, container)
+/mob/living/carbon/human/proc/can_keep_pushing(obj/item/passenger, obj/item/organ/container)
+	return stat == CONSCIOUS && !incapacitated() && is_passenger_inside(passenger, container)
+
+/// Extra chance per push that a hatchling squirms back up, from its kind; eggs have none.
+/proc/get_passenger_slip_chance(obj/item/passenger)
+	if(!istype(passenger, /obj/item/mob_holder/internal_womb))
+		return 0
+	var/datum/component/internal_womb_hatchling/hatchling = passenger.GetComponent(/datum/component/internal_womb_hatchling)
+	return hatchling?.get_push_slip_chance() || 0
+
+// ---- Bringing a stomach passenger up ----
+
+/// Why [passenger] cannot be brought up from the stomach, or null: only stomach passengers narrow enough for the throat.
+/mob/living/carbon/human/proc/get_retch_block_reason(obj/item/passenger, obj/item/organ/container)
+	if(container?.slot != ORGAN_SLOT_GUTS)
+		return "That is not in my stomach."
+	if(stat != CONSCIOUS)
+		return "I am in no state for that."
+	if(incapacitated())
+		return "I can't brace myself like this."
+	if(has_status_effect(/datum/status_effect/labour))
+		return "My body is busy with something else."
+	if(!passenger.can_remove_from_body_storage(BODYSTORAGE_REMOVE_MANUAL))
+		return istype(passenger, /obj/item/mob_holder/internal_womb) ? "It clings too tightly to bring up." : "That one is too much a part of me to bring up."
+	if(get_passenger_birth_girth(passenger) > OVI_RETCH_MAX_GIRTH)
+		return "It is too big to bring up. It will have to go the other way."
+	if(!has_mouth() || !mouth_is_free())
+		return "My mouth is not free."
+	return null
+
+/// Heaves a stomach passenger up by hand: a short, costly retch with no pleasure in it.
+/mob/living/carbon/human/proc/try_retch_up(obj/item/passenger)
+	var/obj/item/organ/container = get_passenger_container(passenger)
+	if(!container)
+		return FALSE
+	var/reason = get_retch_block_reason(passenger, container)
+	if(reason)
+		to_chat(src, span_warning(reason))
+		return FALSE
+	INVOKE_ASYNC(src, PROC_REF(retch_up), passenger, container)
+	return TRUE
+
+/mob/living/carbon/human/proc/retch_up(obj/item/passenger, obj/item/organ/container)
+	visible_message(span_warning("[src] bends double, heaving."), span_warning("I bend double and heave, forcing the [passenger.name] up..."))
+	if(!do_after(src, RETCH_TIME, src, extra_checks = CALLBACK(src, PROC_REF(can_keep_pushing), passenger, container)))
+		to_chat(src, span_warning("The heave passes, and the [passenger.name] settles back down."))
+		return FALSE
+	adjust_stamina(RETCH_STAMINA)
+	adjust_nutrition(-RETCH_NUTRITION)
+	Stun(RETCH_STUN, TRUE, TRUE)
+	playsound(src, pick('sound/vo/vomit.ogg', 'sound/vo/vomit_2.ogg'), 60, TRUE)
+	return bring_up_now(passenger, container)
+
+/// The passenger comes up and out of the mouth; a hatchling is freed the same way.
+/mob/living/carbon/proc/bring_up_now(obj/item/passenger, obj/item/organ/container)
+	if(istype(passenger, /obj/item/mob_holder/internal_womb))
+		var/datum/component/internal_womb_hatchling/hatchling = passenger.GetComponent(/datum/component/internal_womb_hatchling)
+		var/freed_name = passenger.name
+		if(!hatchling?.release_hatchling(TRUE, 1))
+			return FALSE
+		visible_message(span_warning("[src] retches, and [freed_name] crawls out of [p_their()] mouth!"), span_warning("I retch, and the [freed_name] crawls out of my mouth."))
+		return TRUE
+	if(!SEND_SIGNAL(container, COMSIG_BODYSTORAGE_TRY_REMOVE, passenger, null, BODYSTORAGE_REMOVE_MANUAL))
+		return FALSE
+	passenger.forceMove(get_turf(src))
+	visible_message(span_warning("[src] retches, and [passenger] comes up with a wet cough."), span_warning("I retch, and the [passenger.name] comes up with a wet cough."))
+	return TRUE
 
 // ---- Labour ----
 
@@ -326,7 +424,7 @@
 	container_ref = WEAKREF(container)
 	var/mob/living/carbon/carrier = owner
 	var/fatigue = carrier.get_birth_fatigue()
-	contractions_needed = LABOUR_BASE_CONTRACTIONS + fatigue + get_size_contractions(passenger, container)
+	contractions_needed = LABOUR_BASE_CONTRACTIONS + fatigue + get_size_contractions(passenger, container) + container.get_birth_extra_contractions()
 	// Bearing down on purpose skips the long wait but not the work.
 	if(voluntary)
 		contractions_needed = max(1, round(contractions_needed / 2))
@@ -340,6 +438,8 @@
 		carrier.visible_message(span_warning("[carrier] goes still and presses a hand to [carrier.p_their()] belly."), span_userdanger("My [location] clenches hard around the [passenger.name]. It is coming."))
 	if(fatigue)
 		to_chat(carrier, span_warning("My body remembers the last birth too well. This will be harder."))
+	if(container.get_birth_extra_contractions())
+		to_chat(carrier, span_warning("It has a long way down."))
 
 /// A passenger wider than the opening is comfortable with adds contractions.
 /datum/status_effect/labour/proc/get_size_contractions(obj/item/passenger, obj/item/organ/container)
@@ -455,7 +555,7 @@
 		if(pregnancy && pregnancy.stage >= pregnancy.max_stage)
 			delivered = pregnancy.lay_egg(get_turf(carrier), TRUE)
 		else
-			delivered = carrier.expel_egg_now(egg, container)
+			delivered = carrier.expel_passenger_now(egg, container)
 	if(!delivered)
 		to_chat(carrier, span_warning("I push, but it will not come. My body slackens for a moment."))
 		phase = LABOUR_PHASE_CONTRACTING
@@ -508,7 +608,7 @@
 		for(var/layer in layers)
 			for(var/obj/item/mob_holder/internal_womb/holder in layers[layer])
 				var/datum/component/internal_womb_hatchling/hatchling = holder.GetComponent(/datum/component/internal_womb_hatchling)
-				if(hatchling?.auto_birth)
+				if(hatchling?.leaves_on_its_own())
 					next = holder
 					break
 			if(next)
@@ -565,6 +665,10 @@
 #undef EGG_PUSH_STAMINA
 #undef EGG_PUSH_MAX_PUSHES
 #undef EGG_PUSH_SLIP_CHANCE
+#undef RETCH_TIME
+#undef RETCH_STAMINA
+#undef RETCH_NUTRITION
+#undef RETCH_STUN
 #undef BIRTH_PAIN_STRAIN
 #undef BIRTH_CONTRACTION_PLEASURE
 #undef BIRTH_CONTRACTION_CLIMAX

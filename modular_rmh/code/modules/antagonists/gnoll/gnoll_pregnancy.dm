@@ -7,7 +7,7 @@
 	incubation_stage_duration = 5 MINUTES
 	poll_for_ghost = FALSE
 	require_ghost_to_hatch = FALSE
-	hatch_inside_host = TRUE
+	hatch_mode = OVI_HATCH_INSIDE
 	auto_hatch_when_laid = FALSE
 	allow_manual_host_removal = FALSE
 	newborn_start_scale = 1

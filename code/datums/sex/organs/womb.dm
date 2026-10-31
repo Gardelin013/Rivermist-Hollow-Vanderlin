@@ -36,7 +36,6 @@
 	var/custom_egg_desc = ""
 	var/custom_organ_desc = ""
 	var/custom_egg_color = null
-	var/custom_auto_hatch = null
 	var/egg_scale = OVI_EGG_DEFAULT_SCALE
 	var/list/egg_traits = list()
 	var/resource_dependent_yield = FALSE
@@ -180,7 +179,7 @@
 
 	var/obj/item/oviposition_egg/egg = new
 	// Apply player custom overrides before setting type
-	egg.apply_custom_overrides(custom_egg_name, custom_egg_desc, custom_egg_color, egg_scale, egg_traits, custom_auto_hatch)
+	egg.apply_custom_overrides(custom_egg_name, custom_egg_desc, custom_egg_color, egg_scale, egg_traits)
 	if(egg_type)
 		egg.set_egg_type(egg_type)
 	egg.set_oviposition_mother(owner)

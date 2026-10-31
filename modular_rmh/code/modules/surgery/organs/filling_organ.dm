@@ -185,8 +185,20 @@
 	allows_oviposition_pregnancy = TRUE
 	oviposition_storage_component_type = /datum/component/body_storage/mouth
 	oviposition_location_name = "stomach"
-	oviposition_lay_verb = "coughs up"
-	oviposition_lay_action = "cough up"
+	oviposition_lay_verb = "passes"
+	oviposition_lay_action = "pass"
+
+/// What goes down must come out the other end: the stomach births through the rear when there is one.
+/obj/item/organ/guts/get_birth_canal()
+	var/obj/item/organ/genitals/filling_organ/anus = owner ? get_real_organ(owner, ORGAN_SLOT_ANUS) : null
+	return istype(anus) ? anus : src
+
+/// Contractions a labour from this organ adds for the way its passenger has to travel.
+/obj/item/organ/proc/get_birth_extra_contractions()
+	return 0
+
+/obj/item/organ/guts/get_birth_extra_contractions()
+	return 2
 
 /obj/item/organ/genitals/filling_organ/Insert(mob/living/M, special, drop_if_replaced, new_zone = null)
 	. = ..()
@@ -850,7 +862,9 @@
 		if(!islist(layer_contents))
 			continue
 		for(var/obj/item/stored_item as anything in layer_contents.Copy())
-			if(QDELETED(stored_item) || stored_item.loc != src)
+			// A holder with a live mob hangs off the body by design; only an item away from its place is stale.
+			var/atom/expected_loc = stored_item.body_storage_destination(src, owner) || src
+			if(QDELETED(stored_item) || stored_item.loc != expected_loc)
 				layer_contents -= stored_item
 				needs_bulk_recalculation = TRUE
 				continue

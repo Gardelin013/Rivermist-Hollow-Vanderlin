@@ -26,6 +26,10 @@
 	var/require_ghost_to_hatch = TRUE
 	var/stage_duration = OVIPOSITION_STAGE_DURATION
 	var/processing_laid_auto_hatch = FALSE
+	/// Where the ripe egg hatches, decided once it ripens; null until then.
+	var/hatch_decision = null
+	/// When a sealed host first kept this ripe egg from being laid.
+	var/blocked_since = 0
 	COOLDOWN_DECLARE(stage_time)
 	COOLDOWN_DECLARE(hatch_request_cooldown)
 	COOLDOWN_DECLARE(lay_cooldown)
@@ -173,9 +177,22 @@
 		return
 
 	revealed = TRUE
-	if(egg?.hatch_inside_host)
+	if(isnull(hatch_decision))
+		decide_hatch_place()
+	if(hatch_decision == OVI_HATCH_INSIDE)
 		INVOKE_ASYNC(src, PROC_REF(try_hatch_inside_host))
 		return
+
+	// A host sealed shut for the grace period hatches the egg where it lies instead.
+	if(is_laying_blocked())
+		if(!blocked_since)
+			blocked_since = world.time
+		else if(world.time - blocked_since >= OVI_HATCH_BLOCKED_GRACE)
+			hatch_decision = OVI_HATCH_INSIDE
+			egg.hatch_inside_host = TRUE
+			to_chat(carrier, span_warning("The egg in my [get_container_location_name()] has waited long enough. It is hatching where it lies."))
+		return
+	blocked_since = 0
 
 	if(COOLDOWN_FINISHED(src, lay_cooldown))
 		COOLDOWN_START(src, lay_cooldown, OVIPOSITION_LAY_COOLDOWN)
@@ -188,6 +205,53 @@
 				carbon_carrier.start_labour(egg, container)
 			else
 				lay_egg(get_turf(carrier), TRUE)
+
+/// Picks where the ripe egg hatches: its kind's mode, the host's consent and, for an either, a fill-swayed roll.
+/datum/component/pregnancy/proc/decide_hatch_place()
+	var/mode = egg?.get_hatch_mode() || OVI_HATCH_OUTSIDE
+	if(mode != OVI_HATCH_OUTSIDE && !carrier_allows_inside_hatching())
+		mode = OVI_HATCH_OUTSIDE
+	switch(mode)
+		if(OVI_HATCH_INSIDE)
+			hatch_decision = OVI_HATCH_INSIDE
+		if(OVI_HATCH_EITHER)
+			hatch_decision = prob(get_inside_hatch_chance()) ? OVI_HATCH_INSIDE : OVI_HATCH_OUTSIDE
+		else
+			hatch_decision = OVI_HATCH_OUTSIDE
+	if(egg)
+		egg.hatch_inside_host = (hatch_decision == OVI_HATCH_INSIDE)
+	return hatch_decision
+
+/// The kind's base chance plus what the host's fill adds: fluid and stored bulk make a nest.
+/datum/component/pregnancy/proc/get_inside_hatch_chance()
+	var/chance = egg?.get_inside_hatch_base_chance() || 0
+	if(container?.reagents?.maximum_volume)
+		chance += OVI_HATCH_FILL_FLUID_POINTS * (container.reagents.total_volume / container.reagents.maximum_volume)
+	var/datum/component/body_storage/storage = container?.GetComponent(/datum/component/body_storage)
+	if(storage)
+		var/used = 0
+		var/room = 0
+		for(var/layer in storage.available_layers)
+			used += storage.layer_storage_cur_bulk[layer]
+			room += storage.layer_storage_max_bulk[layer]
+		if(room > 0)
+			chance += OVI_HATCH_FILL_BULK_POINTS * min(1, used / room)
+	return clamp(chance, 0, OVI_HATCH_CHANCE_CAP)
+
+/// A host who turned inside hatching off gets every egg laid instead; creatures and the unset allow it.
+/datum/component/pregnancy/proc/carrier_allows_inside_hatching()
+	if(!carrier)
+		return FALSE
+	if(!carrier.client && !carrier.mind?.key)
+		return TRUE
+	return carrier.get_erp_pref(/datum/erp_preference/boolean/allow_inside_hatching)
+
+/// TRUE while the host's body itself keeps the egg from being laid: clothes, a device, a plug, a penetration, size.
+/datum/component/pregnancy/proc/is_laying_blocked()
+	if(!ishuman(carrier) || !egg || !container)
+		return FALSE
+	var/mob/living/carbon/human/human_carrier = carrier
+	return !isnull(human_carrier.get_passage_block_reason(egg, container))
 
 /// TRUE when the ripe egg would pass the carrier's opening within comfort, so the body looks forward to it.
 /datum/component/pregnancy/proc/ripe_passage_feels_good()
@@ -373,7 +437,8 @@
 		if(require_ghost_to_hatch && !player)
 			return FALSE
 
-	var/atom/movable/hatch_result = create_hatch_result()
+	// An egg inside an organ has no turf of its own; the hatchling appears where its host stands.
+	var/atom/movable/hatch_result = create_hatch_result(get_turf(carrier))
 	if(!hatch_result)
 		return FALSE
 
@@ -425,10 +490,10 @@
 
 	return pick(candidates)
 
-/datum/component/pregnancy/proc/create_hatch_result()
+/datum/component/pregnancy/proc/create_hatch_result(atom/spawn_location = null)
 	if(!egg || !hatch_result_type || !ispath(hatch_result_type, /atom/movable))
 		return null
-	var/atom/movable/hatch_result = new hatch_result_type(get_turf(egg))
+	var/atom/movable/hatch_result = new hatch_result_type(spawn_location || get_turf(egg))
 	apply_hatch_result_appearance(hatch_result)
 	return hatch_result
 
@@ -480,7 +545,11 @@
 		holder_layer = STORAGE_LAYER_DEEP
 
 	SEND_SIGNAL(hatch_container, COMSIG_BODYSTORAGE_FORCE_INSERT, holder, holder_layer)
-	holder.AddComponent(/datum/component/internal_womb_hatchling, hatch_container, hatch_carrier, location_name, egg.internal_hatch_triggers_contractions, egg.internal_hatch_auto_birth, egg.internal_hatch_birth_delay, egg.internal_contraction_message, egg.internal_birth_message)
+	// The hatchling waits in the dark: no thinking until it is out.
+	var/datum/ai_controller/hatchling_brain = hatchling.ai_controller
+	if(istype(hatchling_brain))
+		hatchling_brain.set_ai_status(AI_STATUS_OFF)
+	holder.AddComponent(/datum/component/internal_womb_hatchling, hatch_container, hatch_carrier, location_name, egg.get_inside_behaviour_type(), egg.internal_contraction_message, egg.internal_birth_message)
 
 	var/hatch_message = egg.internal_hatch_message || egg.get_hatch_message()
 	if(hatch_message)
@@ -689,15 +758,22 @@
 	var/obj/item/organ/container
 	var/mob/living/carrier
 	var/location_name = "womb"
-	var/trigger_contractions = FALSE
-	var/auto_birth = FALSE
-	var/birth_delay = 0
+	/// What the hatchling does inside, and when it leaves; null means it only waits.
+	var/datum/hatchling_inside_behaviour/behaviour
+	/// Time a struggling hatchling has shaved off its stay.
+	var/struggle_credit = 0
+	/// The holder's bulk and the newborn's scale at the hatch; growth scales the bulk up from there.
+	var/base_bulk = 2
+	var/start_scale = 1
 	var/contraction_message = null
 	var/birth_message = null
 	var/hatch_time = 0
 	COOLDOWN_DECLARE(contraction_cooldown)
+	COOLDOWN_DECLARE(pulse_cooldown)
+	COOLDOWN_DECLARE(struggle_cooldown)
+	COOLDOWN_DECLARE(climb_cooldown)
 
-/datum/component/internal_womb_hatchling/Initialize(obj/item/organ/_container, mob/living/_carrier, _location_name = "womb", _trigger_contractions = FALSE, _auto_birth = FALSE, _birth_delay = 0, _contraction_message = null, _birth_message = null)
+/datum/component/internal_womb_hatchling/Initialize(obj/item/organ/_container, mob/living/_carrier, _location_name = "womb", behaviour_type = null, _contraction_message = null, _birth_message = null)
 	if(!istype(parent, /obj/item/mob_holder/internal_womb))
 		return COMPONENT_INCOMPATIBLE
 
@@ -705,9 +781,11 @@
 	container = _container
 	carrier = _carrier
 	location_name = _location_name || "womb"
-	trigger_contractions = _trigger_contractions
-	auto_birth = _auto_birth
-	birth_delay = _birth_delay
+	if(behaviour_type)
+		behaviour = new behaviour_type
+	base_bulk = holder.body_storage_bulk
+	var/datum/component/newborn_growth/growth = holder.held_mob?.GetComponent(/datum/component/newborn_growth)
+	start_scale = growth ? growth.start_scale : 1
 	contraction_message = _contraction_message
 	birth_message = _birth_message
 	hatch_time = world.time
@@ -776,21 +854,26 @@
 /datum/component/internal_womb_hatchling/proc/handle_life(seconds)
 	SIGNAL_HANDLER
 
-	if(!holder?.held_mob || !carrier)
+	if(!holder?.held_mob || !carrier || !behaviour)
 		return
 
 	// Once labour has begun it carries the contractions and the birth itself.
 	var/mob/living/carbon/carbon_carrier = carrier
 	var/in_labour = istype(carbon_carrier) && carbon_carrier.has_status_effect(/datum/status_effect/labour)
-	if(trigger_contractions && !in_labour && COOLDOWN_FINISHED(src, contraction_cooldown))
+	if(behaviour.contraction_lines && !in_labour && COOLDOWN_FINISHED(src, contraction_cooldown))
 		COOLDOWN_START(src, contraction_cooldown, 25 SECONDS)
 		var/message = contraction_message || "My %CONTAINER% contracts tightly around the hatchling inside."
-		message = replacetext(message, "%CONTAINER%", location_name)
-		message = replacetext(message, "%CARRIER%", "[carrier]")
-		to_chat(carrier, span_warning(message))
+		to_chat(carrier, span_warning(format_inside_message(message)))
 
-	if(auto_birth && birth_delay > 0 && world.time >= hatch_time + birth_delay)
-		if(istype(carbon_carrier))
+	if(!in_labour && COOLDOWN_FINISHED(src, pulse_cooldown))
+		COOLDOWN_START(src, pulse_cooldown, behaviour.interval)
+		INVOKE_ASYNC(src, PROC_REF(pulse))
+
+	follow_growth()
+	if(!in_labour && wants_to_leave())
+		if(leaves_by_mouth())
+			INVOKE_ASYNC(src, PROC_REF(climb_out_by_mouth))
+		else if(istype(carbon_carrier))
 			carbon_carrier.start_labour(holder, container)
 		else
 			INVOKE_ASYNC(src, PROC_REF(birth_hatchling))
@@ -804,15 +887,17 @@
 	var/mob/living/birth_carrier = carrier
 	var/birth_girth = get_passenger_birth_girth(holder)
 	var/has_opening = istype(birth_hole) && birth_hole.orifice_type
-	// Inner-layer storage passes the opening on removal by itself; only deeper layers need it here.
-	var/passes_opening = has_opening && SEND_SIGNAL(birth_hole, COMSIG_BODYSTORAGE_FIND_ITEM_LAYER, holder) != STORAGE_LAYER_INNER
+	// The canal's own storage hook passes inner-layer removals; a holder held elsewhere, or deeper, passes here.
+	var/passes_opening = has_opening && (birth_hole != container || SEND_SIGNAL(birth_hole, COMSIG_BODYSTORAGE_FIND_ITEM_LAYER, holder) != STORAGE_LAYER_INNER)
 	// Judge the fit before the passage widens the opening to the newborn.
 	var/share = 0
+	var/ease = 0
 	var/datum/orifice/opening = has_opening ? birth_hole.get_orifice() : null
 	if(has_opening && iscarbon(birth_carrier))
 		var/mob/living/carbon/judging_carrier = birth_carrier
 		share = judging_carrier.get_birth_pleasure_share(opening, birth_girth)
-	if(!release_hatchling(FALSE))
+		ease = judging_carrier.get_birth_pleasure_share(opening, birth_girth, FALSE)
+	if(!release_hatchling(FALSE, ease))
 		return FALSE
 	if(QDELETED(birth_hole))
 		opening = null
@@ -823,7 +908,7 @@
 		feeling_carrier.feel_birth_passage(share, opening)
 	return TRUE
 
-/datum/component/internal_womb_hatchling/proc/release_hatchling(silent = FALSE)
+/datum/component/internal_womb_hatchling/proc/release_hatchling(silent = FALSE, ease = 0)
 	if(!holder?.held_mob)
 		return FALSE
 
@@ -833,8 +918,8 @@
 
 	holder.allow_internal_release = FALSE
 
-	// Keep the hatchling trapped until the holder is fully out of organ storage.
-	if(holder.is_in_hole_storage())
+	// Keep the hatchling trapped until the holder is fully out of organ storage; it hangs off the body, so ask the list.
+	if(holder.is_in_hole_storage() || (container && SEND_SIGNAL(container, COMSIG_BODYSTORAGE_FIND_ITEM_LAYER, holder)))
 		var/removed_from_storage = FALSE
 		if(container)
 			removed_from_storage = SEND_SIGNAL(container, COMSIG_BODYSTORAGE_TRY_REMOVE, holder, null, BODYSTORAGE_REMOVE_INTERNAL)
@@ -861,12 +946,19 @@
 		var/obj/item/organ/genitals/filling_organ/sounding_canal = container?.get_birth_canal()
 		if(!iscarbon(carrier) || !istype(sounding_canal) || !sounding_canal.orifice_type)
 			playsound(carrier, 'sound/effects/wounds/splatter.ogg', 70, TRUE)
-		carrier.Knockdown(50, TRUE, TRUE)
-		carrier.Stun(40, TRUE, TRUE)
-		carrier.adjust_stamina(90)
+		// A hard passage floors her; an easy one only takes her breath.
+		if(ease < 0.5)
+			carrier.Knockdown(50, TRUE, TRUE)
+			carrier.Stun(40, TRUE, TRUE)
+		carrier.adjust_stamina(90 * (1 - ease * 0.75))
 
+	var/mob/living/freed = holder.held_mob
 	if(!holder.release(FALSE))
 		return FALSE
+	// Out in the world it may think again.
+	var/datum/ai_controller/freed_brain = freed?.ai_controller
+	if(istype(freed_brain) && !freed.client)
+		freed_brain.set_ai_status(AI_STATUS_ON)
 	if(!silent && iscarbon(carrier))
 		var/mob/living/carbon/birth_carrier = carrier
 		birth_carrier.record_oviposition_birth()

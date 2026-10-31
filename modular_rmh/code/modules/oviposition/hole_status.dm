@@ -58,8 +58,10 @@
 			return edit_organ_text(params, user)
 		if("pick_organ_color")
 			return pick_organ_color(params, user)
-		if("toggle_egg_auto_hatch")
-			return toggle_egg_auto_hatch(params)
+		if("push_out_hatchling")
+			return push_out_hatchling(params)
+		if("retch_up")
+			return retch_up(params)
 		if("extract_egg")
 			return extract_egg(params)
 		if("extract_organ_eggs")
@@ -142,10 +144,12 @@
 	d["insert"] = build_insert(hole)
 	d["eggs"] = list()
 	d["hatchling_count"] = 0
+	d["hatchlings"] = list()
 	if(hole.supports_oviposition_pregnancy())
 		for(var/obj/item/oviposition_egg/egg as anything in hole.get_oviposition_eggs())
 			UNTYPED_LIST_ADD(d["eggs"], build_single_egg(egg))
 		d["hatchling_count"] = hole.count_internal_womb_hatchlings()
+		d["hatchlings"] = build_hatchlings(hole)
 	d["egg_count"] = length(d["eggs"])
 	return d
 
@@ -247,6 +251,7 @@
 	od["egg_count"] = length(womb_eggs)
 	od["is_egg_layer"] = is_egg_layer
 	od["hatchling_count"] = womb.count_internal_womb_hatchlings()
+	od["hatchlings"] = build_hatchlings(womb)
 	if(is_egg_layer)
 		od["egg_capacity"] = womb.oviposition_egg_production_limit
 		od["resource_dependent"] = womb.resource_dependent_yield
@@ -266,13 +271,15 @@
 	if(!organ || !organ.supports_oviposition_pregnancy())
 		return null
 	var/list/organ_eggs = organ.get_oviposition_eggs()
-	if(!length(organ_eggs))
+	if(!length(organ_eggs) && !organ.count_internal_womb_hatchlings())
 		return null
 	var/list/od = list()
 	od["id"] = ORGAN_SLOT_GUTS
 	od["title"] = uppertext(organ.get_oviposition_location_name())
 	od["icon"] = "circle"
 	od["egg_count"] = length(organ_eggs)
+	od["hatchling_count"] = organ.count_internal_womb_hatchlings()
+	od["hatchlings"] = build_hatchlings(organ)
 	od["eggs"] = list()
 	for(var/obj/item/oviposition_egg/egg as anything in organ_eggs)
 		UNTYPED_LIST_ADD(od["eggs"], build_single_egg(egg))
@@ -335,7 +342,6 @@
 	settings["custom_desc"] = ovipositor.custom_egg_desc
 	settings["custom_organ_desc"] = ovipositor.custom_organ_desc
 	settings["custom_color"] = ovipositor.custom_egg_color
-	settings["auto_hatch"] = ovipositor.custom_auto_hatch
 	settings["resource_dependent"] = ovipositor.resource_dependent_yield
 	settings["egg_scale"] = sanitize_oviposition_scale(ovipositor.egg_scale)
 	settings["egg_traits"] = islist(ovipositor.egg_traits) ? ovipositor.egg_traits.Copy() : list()
@@ -358,7 +364,6 @@
 	settings["custom_desc"] = womb.custom_egg_desc
 	settings["custom_organ_desc"] = womb.custom_organ_desc
 	settings["custom_color"] = womb.custom_egg_color
-	settings["auto_hatch"] = womb.custom_auto_hatch
 	settings["resource_dependent"] = womb.resource_dependent_yield
 	settings["egg_scale"] = sanitize_oviposition_scale(womb.egg_scale)
 	settings["egg_traits"] = islist(womb.egg_traits) ? womb.egg_traits.Copy() : list()
@@ -380,8 +385,8 @@
 	d["scale"] = egg.get_egg_scale()
 	d["traits"] = islist(egg.egg_traits) ? egg.egg_traits.Copy() : list()
 	d["can_remove"] = egg.can_remove_from_body_storage(BODYSTORAGE_REMOVE_MANUAL)
-	d["auto_hatch"] = egg.auto_hatch_when_laid
 	d["mother_name"] = egg.oviposition_mother_name
+	d["hatch"] = build_egg_hatch(egg)
 
 	var/datum/component/pregnancy/preg = egg.get_pregnancy_component()
 	if(preg)
@@ -390,8 +395,6 @@
 		d["max_stage"] = preg.max_stage
 		d["progress_pct"] = round((preg.stage / max(1, preg.max_stage)) * 100)
 		d["fertilized"] = preg.fertilized
-		d["hatch_inside"] = egg.hatch_inside_host
-		d["auto_hatch"] = egg.auto_hatch_when_laid
 		d["mother_name"] = egg.oviposition_mother_name
 		d["father_name"] = preg.father_name
 		if(preg.stage >= preg.max_stage)
@@ -412,6 +415,9 @@
 		d["status"] = "dormant"
 		d["time_left"] = 0
 
+	// Only the stomach has a way up, and only for what fits the throat.
+	var/obj/item/organ/host_organ = egg.loc
+	d["can_retch"] = istype(host_organ) && host_organ.slot == ORGAN_SLOT_GUTS && isnull(owner.get_retch_block_reason(egg, host_organ))
 	return d
 
 // ---- Actions ----
@@ -502,13 +508,6 @@
 				ovipositor.resource_dependent_yield = enabled
 			else if(istype(womb))
 				womb.resource_dependent_yield = enabled
-		if("auto_hatch")
-			var/auto_hatch = "[value]"
-			var/new_value = (auto_hatch == "profile") ? null : (auto_hatch == "true")
-			if(istype(ovipositor))
-				ovipositor.custom_auto_hatch = new_value
-			else if(istype(womb))
-				womb.custom_auto_hatch = new_value
 		else
 			return FALSE
 	return TRUE
@@ -625,20 +624,12 @@
 				return egg
 	return null
 
-/datum/hole_status_menu/proc/toggle_egg_auto_hatch(list/params)
-	var/obj/item/oviposition_egg/egg = find_owned_egg(params["egg_ref"])
-	if(!egg)
-		return FALSE
-	egg.custom_auto_hatch = !egg.auto_hatch_when_laid
-	egg.update_egg_appearance()
-	return TRUE
-
 /// Pushing an egg out takes time, costs effort and follows the body's rules; see birthing.dm.
 /datum/hole_status_menu/proc/extract_egg(list/params)
 	var/obj/item/oviposition_egg/egg = find_owned_egg(params["egg_ref"])
 	if(!egg)
 		return FALSE
-	return owner.try_push_out_egg(egg)
+	return owner.try_push_out_passenger(egg)
 
 /datum/hole_status_menu/proc/extract_organ_eggs(list/params)
 	var/obj/item/organ/organ = get_configurable_organ(params["organ_id"])
@@ -656,6 +647,72 @@
 	if(!ovipositor_component)
 		return FALSE
 	return ovipositor_component.lay_egg(get_turf(owner))
+
+/// How the egg will hatch: its kind's mode and chance, and the outcome once it is ripe.
+/datum/hole_status_menu/proc/build_egg_hatch(obj/item/oviposition_egg/egg)
+	var/list/h = list()
+	switch(egg.get_hatch_mode())
+		if(OVI_HATCH_INSIDE)
+			h["mode"] = "inside"
+		if(OVI_HATCH_EITHER)
+			h["mode"] = "either"
+		else
+			h["mode"] = "outside"
+	var/datum/component/pregnancy/preg = egg.get_pregnancy_component()
+	h["chance"] = preg ? round(preg.get_inside_hatch_chance()) : egg.get_inside_hatch_base_chance()
+	if(preg && !isnull(preg.hatch_decision))
+		h["decided"] = (preg.hatch_decision == OVI_HATCH_INSIDE) ? "inside" : "outside"
+	return h
+
+/// Hatchlings waiting inside [organ]: what they do, and whether the owner may push them out.
+/datum/hole_status_menu/proc/build_hatchlings(obj/item/organ/organ)
+	var/list/out = list()
+	var/list/layers = SEND_SIGNAL(organ, COMSIG_BODYSTORAGE_GET_LISTS)
+	if(!islist(layers))
+		return out
+	var/free = TRUE
+	var/obj/item/organ/genitals/filling_organ/canal = organ.get_birth_canal()
+	if(istype(canal) && canal.orifice_type)
+		free = isnull(owner.get_hole_toy_block_reason(canal))
+	for(var/layer in layers)
+		for(var/obj/item/mob_holder/internal_womb/holder in layers[layer])
+			var/datum/component/internal_womb_hatchling/hatchling = holder.GetComponent(/datum/component/internal_womb_hatchling)
+			UNTYPED_LIST_ADD(out, list(
+				"ref" = REF(holder),
+				"name" = holder.held_mob?.name || holder.name,
+				"word" = hatchling?.get_word() || "stirring",
+				"can_push" = free && holder.can_remove_from_body_storage(BODYSTORAGE_REMOVE_MANUAL),
+				"can_retch" = organ.slot == ORGAN_SLOT_GUTS && isnull(owner.get_retch_block_reason(holder, organ)),
+			))
+	return out
+
+/datum/hole_status_menu/proc/find_owned_hatchling(holder_ref)
+	if(!holder_ref)
+		return null
+	for(var/slot in list(ORGAN_SLOT_WOMB, ORGAN_SLOT_VAGINA, ORGAN_SLOT_ANUS, ORGAN_SLOT_GUTS))
+		var/obj/item/organ/organ = owner.getorganslot(slot)
+		var/list/layers = organ ? SEND_SIGNAL(organ, COMSIG_BODYSTORAGE_GET_LISTS) : null
+		if(!islist(layers))
+			continue
+		for(var/layer in layers)
+			for(var/obj/item/mob_holder/internal_womb/holder in layers[layer])
+				if(REF(holder) == holder_ref)
+					return holder
+	return null
+
+/// Pushing a hatchling out is a small birth: the push-out rules and the birth feel apply.
+/datum/hole_status_menu/proc/push_out_hatchling(list/params)
+	var/obj/item/mob_holder/internal_womb/holder = find_owned_hatchling(params["ref"])
+	if(!holder)
+		return FALSE
+	return owner.try_push_out_passenger(holder)
+
+/// Bringing a stomach passenger up by the mouth: a costly heave, no feel, small things only.
+/datum/hole_status_menu/proc/retch_up(list/params)
+	var/obj/item/passenger = find_owned_egg(params["ref"]) || find_owned_hatchling(params["ref"])
+	if(!passenger)
+		return FALSE
+	return owner.try_retch_up(passenger)
 
 /// Short display name for egg types.
 /proc/get_egg_type_short_name(egg_type)
