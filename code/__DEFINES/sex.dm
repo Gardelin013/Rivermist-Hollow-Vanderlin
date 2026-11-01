@@ -420,6 +420,17 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define PENIS_SLAP_KNOCKBACK_HEFT 1.5
 /// Arousal the cock's owner gets from one slap.
 #define PENIS_SLAP_AROUSAL 1
+
+// Spots on a body a crotch can grind against; a turned back reads ass, lower back and back.
+#define GRIND_SPOT_FEET "feet"
+#define GRIND_SPOT_THIGH "thigh"
+#define GRIND_SPOT_HAND "hand"
+#define GRIND_SPOT_CROTCH "crotch"
+#define GRIND_SPOT_LAP "lap"
+#define GRIND_SPOT_BELLY "belly"
+#define GRIND_SPOT_ARM "arm"
+#define GRIND_SPOT_CHEST "chest"
+#define GRIND_SPOT_FACE "face"
 /// Leak multiplier while the owner lies down; gravity helps less.
 #define FLUID_LYING_LEAK_MULT 0.5
 /// Leak multiplier for a vagina or anus while the owner holds it in.

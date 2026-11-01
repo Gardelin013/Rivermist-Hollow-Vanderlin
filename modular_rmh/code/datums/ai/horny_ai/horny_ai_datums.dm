@@ -562,6 +562,9 @@
 
 	if(has_penis || has_vagina)
 		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_body_rub)
+		// Humanoids also dry-hump; the grind's own rules pick a spot by height and posture.
+		if(ishuman(basic_mob))
+			add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/grind/partner/npc)
 
 /proc/add_portal_horny_ai_actions(list/weighted_actions, mob/living/basic_mob, mob/living/target_living)
 	var/has_penis = !!basic_mob.getorganslot(ORGAN_SLOT_PENIS)
