@@ -244,7 +244,6 @@
 		/datum/supply_pack/weapons/ranged/cannon,
 		/datum/supply_pack/apparel/bellcollar,
 		/datum/supply_pack/weapons/ammo/powder,
-		/datum/supply_pack/portals_and_fleshlight,
 		/datum/supply_pack/rogue/wardrobe/suits/stockings_white,
 		/datum/supply_pack/rogue/wardrobe/suits/stockings_black,
 		/datum/supply_pack/rogue/wardrobe/suits/stockings_blue,

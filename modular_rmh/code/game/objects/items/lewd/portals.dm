@@ -1123,10 +1123,31 @@
 /**
  * CRAFT AND SUPPLY
 */
-/datum/supply_pack/portals_and_fleshlight
-	name = "Set of Portal Smallclothes"
-	cost = 200
-	contains = list(
-		/obj/item/portallight,
-		/obj/item/clothing/undies/portalpanties
-		)
+// Both halves are arcyne work; the pair links by touching the light to the smallclothes.
+/datum/repeatable_crafting_recipe/arcyne/portal_light
+	name = "portal light"
+	reagent_requirements = list()
+	tool_usage = list()
+	requirements = list(
+		/obj/item/natural/melded/t1 = 1,
+		/obj/item/gem/amethyst = 1,
+		/obj/item/natural/glass = 1,
+	)
+	output = /obj/item/portallight
+	starting_atom = /obj/item/gem/amethyst
+	attacked_atom = /obj/item/natural/glass
+	craftdiff = 2
+
+/datum/repeatable_crafting_recipe/arcyne/portal_panties
+	name = "portal panties"
+	reagent_requirements = list()
+	tool_usage = list()
+	requirements = list(
+		/obj/item/natural/melded/t1 = 1,
+		/obj/item/gem/amethyst = 1,
+		/obj/item/natural/silk = 2,
+	)
+	output = /obj/item/clothing/undies/portalpanties
+	starting_atom = /obj/item/gem/amethyst
+	attacked_atom = /obj/item/natural/silk
+	craftdiff = 2

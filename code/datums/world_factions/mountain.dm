@@ -216,7 +216,6 @@
 		/datum/supply_pack/weapons/ranged/puffer,
 		/datum/supply_pack/weapons/ammo/bullets,
 		/datum/supply_pack/weapons/ranged/musket,
-		/datum/supply_pack/portals_and_fleshlight
 	)
 
 /datum/world_faction/mountain_clans/initialize_faction_stock()

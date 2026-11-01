@@ -374,6 +374,7 @@
 		on_orifice_cycle()
 		play_perform_breast_anim()
 		play_perform_motion()
+		play_furniture_noise()
 		send_clench_prompt()
 		if(!is_runtime_active())
 			break
