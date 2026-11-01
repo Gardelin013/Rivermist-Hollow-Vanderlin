@@ -199,3 +199,12 @@
 
 /datum/mob_descriptor/face_exp/shy
 	name = "Shy"
+
+/datum/mob_descriptor/face/custom
+	name = "Custom Face"
+	custom_index = 8
+	custom_prefix_mode = CUSTOM_PREFIX_MODE_ARTICLE
+
+/datum/mob_descriptor/face_exp/custom
+	name = "Custom Expression"
+	custom_index = 9

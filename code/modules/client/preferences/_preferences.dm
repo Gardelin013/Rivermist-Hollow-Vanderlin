@@ -1370,6 +1370,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 		"winflash" = /datum/preference/toggle/windowflashing,
 		"ambientocclusion" = /datum/preference/toggle/ambientocclusion,
 		"auto_fit_viewport" = /datum/preference/toggle/auto_fit_viewport,
+		"descriptor_color" = /datum/preference/toggle/descriptor_color,
 	)
 	var/toggle_link_type = toggle_link_types[action]
 	if(toggle_link_type)

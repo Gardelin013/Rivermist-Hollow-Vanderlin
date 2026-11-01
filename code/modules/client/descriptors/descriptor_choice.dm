@@ -33,6 +33,7 @@
 		/datum/mob_descriptor/face/weatherbitten,
 		/datum/mob_descriptor/face/wrinkled,
 		/datum/mob_descriptor/face/malformed,
+		/datum/mob_descriptor/face/custom,
 	)
 
 /datum/descriptor_choice/face_exp
@@ -75,6 +76,7 @@
 		/datum/mob_descriptor/face_exp/miserable,
 		/datum/mob_descriptor/face_exp/puzzled,
 		/datum/mob_descriptor/face_exp/shy,
+		/datum/mob_descriptor/face_exp/custom,
 	)
 
 /datum/descriptor_choice/body
@@ -110,6 +112,7 @@
 		/datum/mob_descriptor/body/thin,
 		/datum/mob_descriptor/body/willowy,
 		/datum/mob_descriptor/body/wiry,
+		/datum/mob_descriptor/body/custom,
 	)
 
 /datum/descriptor_choice/stature
@@ -136,6 +139,7 @@
 		/datum/mob_descriptor/stature/simpleton,
 		/datum/mob_descriptor/stature/cavalier,
 		/datum/mob_descriptor/stature/swashbuckler,
+		/datum/mob_descriptor/stature/custom,
 	)
 
 /datum/descriptor_choice/voice
@@ -171,6 +175,7 @@
 		/datum/mob_descriptor/voice/smoker,
 		/datum/mob_descriptor/voice/venomous,
 		/datum/mob_descriptor/voice/stuttering,
+		/datum/mob_descriptor/voice/custom,
 	)
 
 /datum/descriptor_choice/skin
@@ -196,6 +201,7 @@
 		/datum/mob_descriptor/skin/warts,
 		/datum/mob_descriptor/skin/inked,
 		/datum/mob_descriptor/skin/freckles,
+		/datum/mob_descriptor/skin/custom,
 	)
 
 /datum/descriptor_choice/height
@@ -213,6 +219,7 @@
 		/datum/mob_descriptor/height/lowslung,
 		/datum/mob_descriptor/height/statuesque,
 		/datum/mob_descriptor/height/longshanked,
+		/datum/mob_descriptor/height/custom,
 	)
 
 /datum/descriptor_choice/fur
@@ -231,6 +238,7 @@
 		/datum/mob_descriptor/fur/velvety,
 		/datum/mob_descriptor/fur/dense,
 		/datum/mob_descriptor/fur/matted,
+		/datum/mob_descriptor/skin/custom,
 	)
 
 /datum/descriptor_choice/scales
@@ -242,6 +250,7 @@
 		/datum/mob_descriptor/scales/smooth,
 		/datum/mob_descriptor/scales/plated,
 		/datum/mob_descriptor/scales/peeling,
+		/datum/mob_descriptor/skin/custom,
 	)
 
 // I'm keeping prominent_bottom for the 'Clap of my ass-cheeks alerting the guards,' jokes. -Aberra
@@ -309,7 +318,9 @@
 	/datum/mob_descriptor/prominent/hair_thin,\
 	/datum/mob_descriptor/prominent/ears_large,\
 	/datum/mob_descriptor/prominent/custom/one,\
-	/datum/mob_descriptor/prominent/custom/two
+	/datum/mob_descriptor/prominent/custom/two,\
+	/datum/mob_descriptor/prominent/custom/three,\
+	/datum/mob_descriptor/prominent/custom/four
 
 /datum/descriptor_choice/prominent_one
 	name = "Prominent #1"

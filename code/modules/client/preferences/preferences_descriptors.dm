@@ -92,23 +92,35 @@
 				return
 			entry.descriptor_type = picked_type
 		if("custom_descriptor_prefix")
-			var/static/list/translation = CUSTOM_PREFIX_TRANSLATION_LIST
-			var/static/list/input_list = CUSTOM_PREFIX_INPUT_LIST
 			var/index = text2num(href_list["index"])
+			if(!isnum(index) || index < 1 || index > min(CUSTOM_DESCRIPTOR_AMOUNT, length(custom_descriptors)))
+				return
+			var/static/list/custom_types = CUSTOM_DESCRIPTOR_TYPE_LIST
+			var/datum/mob_descriptor/custom_descriptor = MOB_DESCRIPTOR(custom_types[index])
+			var/list/input_list
+			switch(custom_descriptor?.custom_prefix_mode)
+				if(CUSTOM_PREFIX_MODE_FULL)
+					input_list = CUSTOM_PREFIX_INPUT_LIST
+				if(CUSTOM_PREFIX_MODE_ARTICLE)
+					input_list = CUSTOM_ARTICLE_INPUT_LIST
+				else
+					return
 			var/datum/custom_descriptor_entry/custom_entry = custom_descriptors[index]
-			var/current_prefix_text = translation["[custom_entry.prefix_type ]"]
-			var/new_prefix_text = browser_input_list(user, "CHOOSE A DESCRIPTOR PREFIX", "THE SELF", input_list, current_prefix_text)
+			var/new_prefix_text = browser_input_list(user, "CHOOSE A DESCRIPTOR PREFIX", "THE SELF", input_list, get_custom_descriptor_prefix_text(index))
 			if(!new_prefix_text)
 				return
-			var/new_prefix_type = input_list[new_prefix_text]
-			custom_entry.prefix_type = new_prefix_type
+			custom_entry.prefix_type = input_list[new_prefix_text]
 		if("custom_descriptor_content")
 			var/index = text2num(href_list["index"])
+			if(!isnum(index) || index < 1 || index > min(CUSTOM_DESCRIPTOR_AMOUNT, length(custom_descriptors)))
+				return
 			var/datum/custom_descriptor_entry/custom_entry = custom_descriptors[index]
 			var/new_content = browser_input_text(user, "DESCRIBE THE FEATURE", "THE SELF", custom_entry.content_text, CUSTOM_DESCRIPTOR_TEXT_LENGTH)
 			if(!new_content)
 				return
 			new_content = STRIP_HTML_SIMPLE(LOWER_TEXT(new_content), CUSTOM_DESCRIPTOR_TEXT_LENGTH)
+			if(!length(trim(new_content)))
+				return
 			custom_entry.content_text = new_content
 
 /datum/preferences/proc/print_descriptors_page()
@@ -121,15 +133,8 @@
 		var/datum/mob_descriptor/descriptor = MOB_DESCRIPTOR(entry.descriptor_type)
 		dat += "<b>[choice.name]:</b> <a href='byond://?_src_=prefs;descriptor_choice=[choice_type];preference=choose_descriptor;task=change_descriptor'>[descriptor.name]</a><br>"
 
-	for(var/i in 1 to CUSTOM_DESCRIPTOR_AMOUNT)
-		// Ugly, I know
-		if(i == 1)
-			if(!has_descriptor_type_in_entries(/datum/mob_descriptor/prominent/custom/one))
-				continue
-		else if(i == 2)
-			if(!has_descriptor_type_in_entries(/datum/mob_descriptor/prominent/custom/two))
-				continue
-		else
+	for(var/i in 1 to min(CUSTOM_DESCRIPTOR_AMOUNT, length(custom_descriptors)))
+		if(!is_custom_descriptor_selected(i))
 			continue
 		var/list/custom_data = print_custom_descriptor_customization(i)
 		if(custom_data)
@@ -139,11 +144,36 @@
 	return dat
 
 /datum/preferences/proc/print_custom_descriptor_customization(index)
-	var/static/list/translation = CUSTOM_PREFIX_TRANSLATION_LIST
+	var/static/list/custom_types = CUSTOM_DESCRIPTOR_TYPE_LIST
+	var/datum/mob_descriptor/custom_descriptor = MOB_DESCRIPTOR(custom_types[index])
 	var/list/dat = list()
 	var/datum/custom_descriptor_entry/custom_entry = custom_descriptors[index]
-	dat += "<br><b>Custom #[index]:</b> <a href='byond://?_src_=prefs;index=[index];preference=custom_descriptor_prefix;task=change_descriptor'>[translation["[custom_entry.prefix_type]"]]</a><a href='byond://?_src_=prefs;index=[index];preference=custom_descriptor_content;task=change_descriptor'>[custom_entry.content_text]</a>"
+	var/prefix_link = ""
+	var/prefix_text = get_custom_descriptor_prefix_text(index)
+	if(prefix_text)
+		prefix_link = "<a href='byond://?_src_=prefs;index=[index];preference=custom_descriptor_prefix;task=change_descriptor'>[prefix_text]</a>"
+	dat += "<br><b>[custom_descriptor.name]:</b> [prefix_link]<a href='byond://?_src_=prefs;index=[index];preference=custom_descriptor_content;task=change_descriptor'>[custom_entry.content_text]</a>"
 	return dat
+
+/// Whether the custom descriptor at this index is picked in one of the descriptor choices.
+/datum/preferences/proc/is_custom_descriptor_selected(index)
+	var/static/list/custom_types = CUSTOM_DESCRIPTOR_TYPE_LIST
+	if(index < 1 || index > length(custom_types))
+		return FALSE
+	return has_descriptor_type_in_entries(custom_types[index])
+
+/// Prefix button text for a custom descriptor, or null when its slot takes no prefix.
+/datum/preferences/proc/get_custom_descriptor_prefix_text(index)
+	var/static/list/custom_types = CUSTOM_DESCRIPTOR_TYPE_LIST
+	var/static/list/translation = CUSTOM_PREFIX_TRANSLATION_LIST
+	var/datum/mob_descriptor/custom_descriptor = MOB_DESCRIPTOR(custom_types[index])
+	var/datum/custom_descriptor_entry/custom_entry = custom_descriptors[index]
+	switch(custom_descriptor?.custom_prefix_mode)
+		if(CUSTOM_PREFIX_MODE_FULL)
+			return translation["[custom_entry.prefix_type]"]
+		if(CUSTOM_PREFIX_MODE_ARTICLE)
+			return custom_entry.prefix_type == CUSTOM_PREFIX_HAS_AN ? "an" : "a"
+	return null
 
 /datum/preferences/proc/show_descriptors_ui(mob/user)
 	validate_descriptors()

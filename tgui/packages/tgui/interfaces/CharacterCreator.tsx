@@ -227,7 +227,8 @@ type DescriptorEntry = {
 };
 type CustomDescriptor = {
   index: number;
-  prefix: string;
+  name?: string;
+  prefix?: string | null;
   text: string;
   visible: Booleanish;
 };
@@ -4000,21 +4001,23 @@ export const CharacterCreator = () => {
                 .filter((custom) => asBool(custom.visible))
                 .map((custom) => (
                   <Fragment key={custom.index}>
-                    <div className="cc-kv-label">
-                      {L.custom} #{custom.index}
+                    <div className="cc-kv-label" title={custom.name}>
+                      {custom.name || `${L.custom} #${custom.index}`}
                     </div>
                     <div className="cc-row">
-                      <Btn
-                        onClick={() =>
-                          doPref(
-                            'custom_descriptor_prefix',
-                            'change_descriptor',
-                            { index: custom.index },
-                          )
-                        }
-                      >
-                        {custom.prefix}
-                      </Btn>
+                      {custom.prefix ? (
+                        <Btn
+                          onClick={() =>
+                            doPref(
+                              'custom_descriptor_prefix',
+                              'change_descriptor',
+                              { index: custom.index },
+                            )
+                          }
+                        >
+                          {custom.prefix}
+                        </Btn>
+                      ) : null}
                       <Btn
                         className="fluid"
                         onClick={() =>
@@ -4541,6 +4544,11 @@ export const CharacterCreator = () => {
       label: 'balloon_alerts',
     },
     { key: 'runechat', action: 'runechat', label: 'runechat' },
+    {
+      key: 'descriptor_color',
+      action: 'descriptor_color',
+      label: 'descriptor_color',
+    },
     { key: 'lobby_music', action: 'lobby_music', label: 'lobby_music' },
     { key: 'hear_midis', action: 'hear_midis', label: 'hear_midis' },
     { key: 'ambience', action: 'ambience', label: 'ambience' },
@@ -4579,6 +4587,7 @@ export const CharacterCreator = () => {
         'auto_fit_viewport',
         'balloon_alerts',
         'runechat',
+        'descriptor_color',
       ],
     },
     {

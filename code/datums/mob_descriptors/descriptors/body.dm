@@ -1,6 +1,7 @@
 /datum/mob_descriptor/body
 	abstract_type = /datum/mob_descriptor/body
 	slot = MOB_DESCRIPTOR_SLOT_BODY
+	show_obscured = TRUE
 
 /datum/mob_descriptor/body/average
 	name = "Average"
@@ -95,3 +96,7 @@
 
 /datum/mob_descriptor/body/wiry
 	name = "Wiry"
+
+/datum/mob_descriptor/body/custom
+	name = "Custom Body"
+	custom_index = 6

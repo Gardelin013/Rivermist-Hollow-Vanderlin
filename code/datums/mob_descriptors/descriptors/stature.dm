@@ -1,6 +1,7 @@
 /datum/mob_descriptor/stature
 	abstract_type = /datum/mob_descriptor/stature
 	slot = MOB_DESCRIPTOR_SLOT_STATURE
+	show_obscured = TRUE
 
 /datum/mob_descriptor/stature/man
 	name = "Man/Woman"
@@ -79,3 +80,7 @@
 
 /datum/mob_descriptor/stature/swashbuckler
 	name = "Swashbuckler"
+
+/datum/mob_descriptor/stature/custom
+	name = "Custom Stature"
+	custom_index = 7

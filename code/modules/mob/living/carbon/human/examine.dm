@@ -141,21 +141,7 @@
 	if(!isobserver(user) && !user.can_perform_action(src, NEED_LIGHT))
 		return
 
-	// Descriptors identify a person by their face, so a hidden face withholds
-	// them - but ink on a bare arm or leg is still there to be read, so tattoos
-	// are gathered separately rather than sharing the faceless early return.
-	if(!HAS_TRAIT(src, TRAIT_FACELESS))
-		var/obscure_name = name == "Unknown" || name == "Unknown Man" || name == "Unknown Woman"
-		if(isobserver(user))
-			obscure_name = FALSE
-
-		var/list/descriptors = get_mob_descriptors(obscure_name, user)
-		if(length(descriptors))
-			var/list/description_lines = build_cool_description(descriptors, src)
-			if(length(description_lines))
-				. |= description_lines
-
-	// RMH EDITED START - self-written tattoos, listed head to feet after the description
+	// RMH EDITED START - self-written tattoos, listed head to feet
 	var/list/tattoo_lines = get_tattoo_description_lines()
 	if(length(tattoo_lines))
 		. |= tattoo_lines
@@ -186,13 +172,62 @@
 
 
 
+/// Descriptor lines for the first examine; a hidden face leaves only what the body and voice show.
+/mob/living/carbon/human/proc/get_body_description_lines(mob/user)
+	. = list()
+	var/face_hidden = FALSE
+	if(!isobserver(user))
+		face_hidden = HAS_TRAIT(src, TRAIT_FACELESS) || !get_face_name("", include_honoraries = FALSE)
+	var/list/descriptors = get_mob_descriptors(face_hidden, user)
+	for(var/line in build_cool_description(descriptors, src, face_hidden, user))
+		. += span_info(line)
+	. += get_rear_view_lines(user, descriptors)
+
+/// Genitals and anus a viewer behind sees past underwear that leaves the rear bare.
+/mob/living/carbon/human/proc/get_rear_view_lines(mob/user, list/shown_descriptors)
+	. = list()
+	if(!underwear?.leaves_rear_bare() || user == src || !isturf(loc))
+		return
+	var/approach_dir = get_dir(user, src)
+	if(!approach_dir || !(approach_dir in list(dir, turn(dir, 45), turn(dir, -45))))
+		return
+	for(var/obj/item/worn as anything in get_all_worn_items(src))
+		if(worn != underwear && (worn.flags_inv & (HIDEJUMPSUIT|HIDEUNDIESBOT|HIDECROTCH|HIDEBUTT)))
+			return
+	var/list/rear_descriptors = list()
+	var/obj/item/organ/genitals/penis/penis = getorganslot(ORGAN_SLOT_PENIS)
+	if(getorganslot(ORGAN_SLOT_TESTICLES) && penis?.sheath_type != SHEATH_TYPE_SLIT && !underwear.hides_organ_slot(ORGAN_SLOT_TESTICLES))
+		rear_descriptors += /datum/mob_descriptor/testicles
+	if(getorganslot(ORGAN_SLOT_VAGINA) && !underwear.hides_organ_slot(ORGAN_SLOT_VAGINA))
+		rear_descriptors += /datum/mob_descriptor/vagina
+	rear_descriptors -= shown_descriptors
+	var/list/parts = list()
+	var/list/used_verbage = list()
+	for(var/desc_type in rear_descriptors)
+		var/datum/mob_descriptor/descriptor = MOB_DESCRIPTOR(desc_type)
+		parts += descriptor.get_coalesce_text(src, used_verbage, user)
+		used_verbage |= descriptor.verbage
+	var/obj/item/organ/genitals/filling_organ/anus/anus = getorganslot(ORGAN_SLOT_ANUS)
+	if(anus && !underwear.hides_organ_slot(ORGAN_SLOT_ANUS))
+		var/list/adjectives = anus.orifice?.get_examine_adjectives()
+		var/anus_text = "an exposed anus[length(adjectives) ? ", [jointext(adjectives, ", ")]" : ""]"
+		// The anus has no descriptor, so it borrows the vagina's colour rule.
+		var/datum/mob_descriptor/vagina/color_rule = MOB_DESCRIPTOR(/datum/mob_descriptor/vagina)
+		var/anus_color = color_rule.get_descriptor_color(src, user)
+		parts += anus_color ? "<span style='color:[anus_color]'>[anus_text]</span>" : anus_text
+	if(!length(parts))
+		return
+	. += span_info("[capitalize(p_their())] [underwear.name] doesn't cover [p_them()] from behind.")
+	. += span_info(treat_mob_descriptor_string("%THEY% [length(used_verbage) ? "" : "%HAVE% "][english_list(parts)].", src))
+
 /mob/living/carbon/human/get_examine_body(mob/user, list/P, list/examine_list)
-	. = ..()
+	. = get_body_description_lines(user)
+	. += ..()
 	var/list/organ_desc = list()
 	var/show_undie_desc = FALSE
-	var/show_naked_desc = FALSE
 	var/list/arousal_data = list()
 	SEND_SIGNAL(src, COMSIG_SEX_GET_AROUSAL, arousal_data)
+	// Bare arousal is in the genital descriptor lines, so only clothed hints are listed here.
 	if(wear_pants)
 		var/obj/item/clothing/pantsies = wear_pants
 		var/obj/item/clothing/undies = underwear
@@ -209,30 +244,12 @@
 				if(getorganslot(ORGAN_SLOT_PENIS))
 					organ_desc += "[capitalize(P[THEYRE])] pitching a tent in [P[THEIR]] [underwear.name]."
 				show_undie_desc = TRUE
-		else
-			if(arousal_data["arousal"] > VISIBLE_AROUSAL_THRESHOLD)
-				if(getorganslot(ORGAN_SLOT_PENIS))
-					var/obj/item/organ/genitals/penis/pen = getorganslot(ORGAN_SLOT_PENIS)
-					organ_desc += "[capitalize(P[THEIR])] [pen.name] is visibly erect!"
-				if(getorganslot(ORGAN_SLOT_VAGINA))
-					var/obj/item/organ/genitals/filling_organ/vagina/vag = getorganslot(ORGAN_SLOT_VAGINA)
-					organ_desc += "[capitalize(P[THEIR])] [vag.name] is glistening with arousal!"
-				show_naked_desc = TRUE
 
 	else if(underwear && !show_undie_desc)
 		if(arousal_data["arousal"] > VISIBLE_AROUSAL_THRESHOLD)
 			if(getorganslot(ORGAN_SLOT_PENIS))
 				organ_desc += "[capitalize(P[THEYRE])] pitching a tent in [P[THEIR]] [underwear.name]."
 			show_undie_desc = TRUE
-
-	else if(arousal_data["arousal"] > VISIBLE_AROUSAL_THRESHOLD && !show_naked_desc)
-		if(getorganslot(ORGAN_SLOT_PENIS))
-			var/obj/item/organ/genitals/penis/pen = getorganslot(ORGAN_SLOT_PENIS)
-			organ_desc += "[capitalize(P[THEIR])] [pen.name] is visibly erect!"
-		if(getorganslot(ORGAN_SLOT_VAGINA))
-			var/obj/item/organ/genitals/filling_organ/vagina/vag = getorganslot(ORGAN_SLOT_VAGINA)
-			organ_desc += "[capitalize(P[THEIR])] [vag.name] is glistening with arousal!"
-		show_naked_desc = TRUE
 
 	organ_desc += get_fluid_stain_examine(P)
 

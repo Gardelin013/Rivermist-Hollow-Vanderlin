@@ -121,3 +121,7 @@
 
 /datum/mob_descriptor/scales/peeling
 	name = "Peeling Scales"
+
+/datum/mob_descriptor/skin/custom
+	name = "Custom Skin"
+	custom_index = 10

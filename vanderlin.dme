@@ -2833,6 +2833,7 @@
 #include "code\modules\client\preferences\datums\toggle\auto_fit_viewport.dm"
 #include "code\modules\client\preferences\datums\toggle\buttons_locked.dm"
 #include "code\modules\client\preferences\datums\toggle\crt.dm"
+#include "code\modules\client\preferences\datums\toggle\descriptor_color.dm"
 #include "code\modules\client\preferences\datums\toggle\enable_tips.dm"
 #include "code\modules\client\preferences\datums\toggle\ghost_hud.dm"
 #include "code\modules\client\preferences\datums\toggle\hotkeys.dm"
