@@ -10,8 +10,8 @@
 
 	var/obj/item/bodypart/chest = zombie.get_bodypart(BODY_ZONE_CHEST)
 	TEST_ASSERT_NOTNULL(chest, "Test setup needs a chest.")
-	chest.receive_damage(burn = 1000)
-	zombie.updatehealth()
+	zombie.apply_damage(1000, BURN, BODY_ZONE_CHEST)
+	TEST_ASSERT(chest.burn_dam >= chest.max_damage - 5, "Test setup needs a chest burnt to its limit, got [chest.burn_dam] of [chest.max_damage].")
 	TEST_ASSERT_EQUAL(zombie.stat, DEAD, "An undead whose chest is burnt to its limit must die.")
 
 /datum/unit_test/fire_deaths_living_survive_burns
@@ -20,8 +20,8 @@
 	var/mob/living/carbon/human/living = allocate(/mob/living/carbon/human)
 	var/obj/item/bodypart/chest = living.get_bodypart(BODY_ZONE_CHEST)
 	TEST_ASSERT_NOTNULL(chest, "Test setup needs a chest.")
-	chest.receive_damage(burn = 1000)
-	living.updatehealth()
+	living.apply_damage(1000, BURN, BODY_ZONE_CHEST)
+	TEST_ASSERT(chest.burn_dam >= chest.max_damage - 5, "Test setup needs a chest burnt to its limit, got [chest.burn_dam] of [chest.max_damage].")
 	TEST_ASSERT(living.stat != DEAD, "Burns alone must still not kill a living human.")
 
 /datum/unit_test/fire_deaths_simple_mob_burns_to_ash
