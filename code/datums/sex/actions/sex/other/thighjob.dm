@@ -1,5 +1,5 @@
 /datum/sex_action/sex/other/thighjob
-	name = "Jerk them off with thighs"
+	name = "Give thighjob"
 	user_menu_zone_mask = SEX_UI_ZONE_LEGS
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	requires_hole_storage = FALSE

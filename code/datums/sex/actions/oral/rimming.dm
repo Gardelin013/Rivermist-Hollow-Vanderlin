@@ -1,5 +1,5 @@
 /datum/sex_action/rimming
-	name = "Lick their anus"
+	name = "Rimjob"
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	gags_user = TRUE

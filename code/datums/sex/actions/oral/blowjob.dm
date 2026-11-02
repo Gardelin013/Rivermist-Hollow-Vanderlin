@@ -1,6 +1,6 @@
 
 /datum/sex_action/blowjob
-	name = "Suck them off"
+	name = "Blowjob"
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	requires_hole_storage = TRUE

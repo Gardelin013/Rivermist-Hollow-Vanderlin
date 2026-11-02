@@ -1,5 +1,5 @@
 /datum/sex_action/foot_lick
-	name = "Lick their feet"
+	name = "Lick feet"
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_LEGS
 	check_same_tile = FALSE

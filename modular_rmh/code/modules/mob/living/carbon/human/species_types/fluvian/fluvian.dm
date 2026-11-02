@@ -21,6 +21,8 @@
 
 	limbs_icon_m = 'modular_rmh/icons/mob/species/moth_male.dmi'
 	limbs_icon_f = 'modular_rmh/icons/mob/species/moth_female.dmi'
+	lips_state_m = "moth_male"
+	lips_state_f = "moth_female"
 	body_hair_materials = BODY_HAIR_MATERIALS_FUZZY
 
 	bodypart_features = list(

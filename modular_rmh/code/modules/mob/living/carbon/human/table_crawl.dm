@@ -9,7 +9,7 @@
 	return resting && body_position == LYING_DOWN && !buckled && mob_size < MOB_SIZE_LARGE
 
 /mob/living/carbon/human/stand_up()
-	if(try_table_crawl_bonk())
+	if(!stat && try_table_crawl_bonk())
 		return FALSE
 	return ..()
 
@@ -43,11 +43,13 @@
 /obj/structure/table/get_mechanics_examine(mob/user)
 	. = ..()
 	. += "With sneak on, click it to hide under it."
-	. += "Lie down and move into it to crawl under it. Large creatures do not fit."
+	. += "With sneak on, lie down and move into it to crawl under it. Large creatures do not fit."
 	. += "Under it, the Hide action tucks you out of sight. Moving while hidden slips you under the next table."
 
 /obj/structure/table/proc/can_crawl_under(mob/living/carbon/human/crawler)
 	if(QDELETED(src) || QDELETED(crawler) || !crawler.client || crawler.pulledby)
+		return FALSE
+	if(crawler.m_intent != MOVE_INTENT_SNEAK)
 		return FALSE
 	if(!crawler.fits_under_table() || HAS_TRAIT(crawler, TRAIT_UNDER_TABLE))
 		return FALSE
@@ -87,8 +89,13 @@
 	var/turf/table_turf = get_turf(src)
 	var/turf/next_turf = get_step(table_turf, direction)
 	var/obj/structure/table/next_table = locate() in next_turf
-	if(!next_table || next_table.occupied || !table_turf.Adjacent(next_turf))
+	if(!next_table || next_table.occupied || next_turf.density || !table_turf.Adjacent(next_turf))
 		return FALSE
+	for(var/atom/movable/blocker as anything in next_turf)
+		if(istype(blocker, /obj/structure/table))
+			continue
+		if(!blocker.CanPass(user, table_turf))
+			return FALSE
 	if(user.client)
 		user.client.move_delay = world.time + user.cached_multiplicative_slowdown
 	user.setDir(direction)

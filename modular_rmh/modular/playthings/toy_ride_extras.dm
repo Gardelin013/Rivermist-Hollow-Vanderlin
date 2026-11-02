@@ -374,7 +374,7 @@
 
 /// Rub along a standing toy without taking it; a wet pussy slicks it for the ride.
 /datum/sex_action/toy_grind
-	name = "Grind on the toy"
+	name = "Straddle toy"
 	description = "Rub yourself along a standing toy without taking it in; your wetness slicks it."
 	do_time = 3 SECONDS
 	stamina_cost = 0.3
@@ -444,7 +444,7 @@
 
 /// Slobber over a standing toy until it shines; the forced twin pushes someone else's mouth onto it.
 /datum/sex_action/toy_suck
-	name = "Suck the toy wet"
+	name = "Suck toy"
 	description = "Kneel and slobber over a standing toy until it shines."
 	do_time = 3 SECONDS
 	stamina_cost = 0.2
@@ -521,7 +521,7 @@
 		sucker.visible_message(span_love("[sucker] pulls off \the [toy], leaving it shiny with spit."), span_love("I pull off \the [toy], leaving it shiny with spit."))
 
 /datum/sex_action/toy_suck/forced
-	name = "Make them suck the toy"
+	name = "Force suck"
 	description = "Push their mouth down onto a standing toy and get it wet for them."
 	forced = TRUE
 	require_grab = TRUE
@@ -534,7 +534,7 @@
 /// Sit down on a standing plug and rise with it seated inside, by the holes window's own rules.
 /datum/sex_action/toy_seat_plug
 	abstract_type = /datum/sex_action/toy_seat_plug
-	name = "Sit on the plug"
+	name = "Seat plug"
 	continous = FALSE
 	do_time = 3 SECONDS
 	user_menu_zone_mask = SEX_UI_ZONE_GENITALS
@@ -604,12 +604,12 @@
 	to_chat(user, span_warning("\The [plug] will not go in after all."))
 
 /datum/sex_action/toy_seat_plug/anus
-	name = "Sit on the plug"
+	name = "Plug ass"
 	description = "Sit down on a standing plug and rise with it seated in your ass."
 	organ_slot = ORGAN_SLOT_ANUS
 
 /datum/sex_action/toy_seat_plug/vagina
-	name = "Sit on the plug with your pussy"
+	name = "Plug pussy"
 	description = "Sit down on a standing plug and rise with it seated in your pussy."
 	organ_slot = ORGAN_SLOT_VAGINA
 

@@ -51,7 +51,7 @@ GLOBAL_VAR_INIT(chastity_lock_serial, 0)
 	var/datum/weakref/generated_key_ref
 	/// Who wears the device right now.
 	var/mob/living/carbon/human/wearer
-	/// Whether an inward plug sits inside the device, for "Work their belt's insert".
+	/// Whether an inward plug sits inside the device, for "Work insert".
 	var/has_insert = FALSE
 
 /obj/item/clothing/undies/chastity/Initialize(mapload, ...)

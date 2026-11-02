@@ -221,7 +221,11 @@ const INTENSITY_LABELS = [
   'Very Intense',
 ];
 
-// One-click level picker: selected level shows its name, others show numbers.
+const levelName = (labels: string[], level: number) => labels[level - 1] ?? '?';
+
+const paceName = (speed: number, force: number) =>
+  `${levelName(SPEED_LABELS, speed)} / ${levelName(FORCE_LABELS, force)}`;
+
 const LevelControl = (props: {
   label: string;
   value: number;
@@ -229,6 +233,8 @@ const LevelControl = (props: {
   onSet: (level: number) => void;
 }) => {
   const { label, value, labels, onSet } = props;
+  const level = Math.min(Math.max(value || 1, 1), labels.length);
+  const nameWidth = `${Math.max(...labels.map((name) => name.length)) + 2}ch`;
   return (
     <Stack align="center">
       <Stack.Item>
@@ -236,21 +242,27 @@ const LevelControl = (props: {
           {label}
         </Box>
       </Stack.Item>
-      {labels.map((name, idx) => {
-        const level = idx + 1;
-        return (
-          <Stack.Item key={name}>
-            <Button
-              compact
-              selected={value === level}
-              tooltip={name}
-              onClick={() => onSet(level)}
-            >
-              {value === level ? name : String(level)}
-            </Button>
-          </Stack.Item>
-        );
-      })}
+      <Stack.Item>
+        <Button
+          compact
+          icon="chevron-left"
+          disabled={level <= 1}
+          onClick={() => onSet(level - 1)}
+        />
+      </Stack.Item>
+      <Stack.Item>
+        <Box textAlign="center" style={{ minWidth: nameWidth }}>
+          {levelName(labels, level)}
+        </Box>
+      </Stack.Item>
+      <Stack.Item>
+        <Button
+          compact
+          icon="chevron-right"
+          disabled={level >= labels.length}
+          onClick={() => onSet(level + 1)}
+        />
+      </Stack.Item>
     </Stack>
   );
 };
@@ -662,7 +674,10 @@ export const SexScene = () => {
                                   </Stack.Item>
                                   <Stack.Item>
                                     <Box color="label" fontSize="9px">
-                                      S{connection.speed} / F{connection.force}
+                                      {paceName(
+                                        connection.speed,
+                                        connection.force,
+                                      )}
                                     </Box>
                                   </Stack.Item>
                                   {asBool(connection.can_stop) ? (

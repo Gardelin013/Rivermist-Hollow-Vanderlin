@@ -66,15 +66,16 @@
 		return
 	if(contents.len)
 		var/obj/item/book/choice = input(user, "Which book would you like to remove from the shelf?") as null|obj in contents.Copy()
-		if(choice)
-			if(!(user.mobility_flags & MOBILITY_USE) || user.stat != CONSCIOUS || HAS_TRAIT(user, TRAIT_HANDS_BLOCKED) || !in_range(loc, user))
-				return
-			if(ishuman(user))
-				if(!user.get_active_held_item())
-					user.put_in_hands(choice)
-			else
-				choice.forceMove(drop_location())
-			update_appearance(UPDATE_ICON_STATE)
+		if(!choice || QDELETED(src) || QDELETED(user) || choice.loc != src)
+			return
+		if(!(user.mobility_flags & MOBILITY_USE) || user.stat != CONSCIOUS || HAS_TRAIT(user, TRAIT_HANDS_BLOCKED) || !in_range(loc, user))
+			return
+		if(ishuman(user))
+			if(!user.get_active_held_item())
+				user.put_in_hands(choice)
+		else
+			choice.forceMove(drop_location())
+		update_appearance(UPDATE_ICON_STATE)
 
 /obj/structure/bookcase/deconstruct(disassembled = TRUE)
 	for(var/obj/item/B in contents)
@@ -85,7 +86,7 @@
 	if((length(contents) >= 1) && (length(contents) <= 15))
 		icon_state = "[based][length(contents)]"
 	else
-		icon_state = "bookcase"
+		icon_state = initial(icon_state)
 	return ..()
 
 /obj/structure/bookcase/attackby(obj/item/I, mob/user, list/modifiers)
@@ -96,6 +97,8 @@
 		return
 	user.visible_message("[user] starts to put [I] into [src].", "You start to put [I] into [src].")
 	if(!do_after(user, 0.75 SECONDS, src))
+		return
+	if(QDELETED(I) || QDELETED(user) || I.loc != user)
 		return
 	I.forceMove(src)
 	update_appearance(UPDATE_ICON_STATE)

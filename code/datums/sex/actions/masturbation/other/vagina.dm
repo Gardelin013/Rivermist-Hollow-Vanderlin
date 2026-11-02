@@ -1,5 +1,6 @@
 /datum/sex_action/masturbate/other/vagina
-	name = "Finger their pussy"
+	name = "Pussy fingering"
+	remote_phrase = "Finger their pussy"
 	check_same_tile = FALSE
 
 /datum/sex_action/masturbate/other/vagina/shows_on_menu(mob/living/user, mob/living/target)

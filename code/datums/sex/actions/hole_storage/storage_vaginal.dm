@@ -1,6 +1,6 @@
 
 /datum/sex_action/hole_storage/vagina_store
-	name = "Store items in vagina"
+	name = "Stuff pussy"
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/hole_storage/vagina_store/shows_on_menu(mob/living/user, mob/living/target)
@@ -141,7 +141,7 @@
 	handle_passive_ejaculation()
 
 /datum/sex_action/hole_storage/vagina_remove
-	name = "Remove items from vagina"
+	name = "Empty pussy"
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/hole_storage/vagina_remove/shows_on_menu(mob/living/user, mob/living/target)
@@ -236,7 +236,7 @@
 
 
 /datum/sex_action/hole_storage/vagina_remove_deep
-	name = "Push out items from deep inside pussy"
+	name = "Deep-empty pussy"
 	hole_id = ORGAN_SLOT_VAGINA
 	var/fail_counter = 0
 	var/list/stored_items_layer

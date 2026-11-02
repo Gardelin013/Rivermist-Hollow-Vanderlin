@@ -1,7 +1,7 @@
 // Horny NPCs can jerk off over someone, aiming at a spot so their spurts paint down the body.
 
 /datum/sex_action/npc/npc_jerk_over
-	name = "NPC Jerk over them"
+	name = "NPC jerking"
 
 /datum/sex_action/npc/npc_jerk_over/shows_on_menu(mob/living/user, mob/living/target)
 	return FALSE

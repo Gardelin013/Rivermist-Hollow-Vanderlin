@@ -21,6 +21,7 @@ export default {
   cards: {
     front: 'Front',
     rear: 'Rear',
+    breasts: 'Breasts',
     stomach: 'Stomach',
     ovipositor: 'Ovipositor',
     womb: 'Womb',
@@ -79,6 +80,8 @@ export default {
     takeOut: 'Take out',
     pushDeeper: 'Push deeper',
     insert: 'Work in',
+    tuckIn: 'Tuck in',
+    cleavage: 'Cleavage',
     holding: 'In hand',
     fit: 'fit',
     seconds: 's',

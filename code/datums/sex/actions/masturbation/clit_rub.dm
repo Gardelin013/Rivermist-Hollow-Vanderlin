@@ -63,7 +63,8 @@
 	return ORGASM_LOCATION_SELF
 
 /datum/sex_action/masturbate/other/clit_rub
-	name = "Rub their clit"
+	name = "Clit rubbing"
+	remote_phrase = "Rub their clit"
 	check_same_tile = FALSE
 
 /datum/sex_action/masturbate/other/clit_rub/shows_on_menu(mob/living/user, mob/living/target)

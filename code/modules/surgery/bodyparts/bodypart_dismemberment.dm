@@ -471,6 +471,7 @@
 		var/mob/living/carbon/human/H = C
 		H.lip_style = lip_style
 		H.lip_color = lip_color
+		H.lip_alpha = lip_alpha
 	if(real_name)
 		C.real_name = real_name
 	real_name = ""

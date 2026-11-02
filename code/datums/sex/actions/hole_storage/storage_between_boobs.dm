@@ -1,6 +1,6 @@
 
 /datum/sex_action/hole_storage/boobs_store
-	name = "Store items between boobs"
+	name = "Stuff cleavage"
 	target_menu_zone_mask = SEX_UI_ZONE_BODY
 	hole_id = ORGAN_SLOT_BREASTS
 
@@ -96,7 +96,7 @@
 	handle_passive_ejaculation()
 
 /datum/sex_action/hole_storage/boobs_remove //do_time
-	name = "Remove items from between boobs"
+	name = "Empty cleavage"
 	target_menu_zone_mask = SEX_UI_ZONE_BODY
 	hole_id = ORGAN_SLOT_BREASTS
 

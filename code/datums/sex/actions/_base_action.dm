@@ -152,6 +152,7 @@
 	var/mage_hand_allowed = FALSE
 	/// Overlay zone used by Mage Hand while this action is active.
 	var/mage_hand_overlay_zone = null
+	var/remote_phrase
 	var/sex_volume = 50 //volume for plaps
 	/// User organ slots this action works on beyond its hole and stored penis; a covered organ disables it.
 	var/list/uses_user_organs

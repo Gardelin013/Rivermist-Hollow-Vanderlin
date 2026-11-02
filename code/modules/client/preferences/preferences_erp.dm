@@ -226,12 +226,13 @@
 	dat += "</a><br>"
 
 	if(enabled)
+		var/static/list/intensity_names = list("Very Light", "Light", "Moderate", "Intense", "Very Intense")
+		var/level = clamp(floor(intensity), 1, length(intensity_names))
+		var/intensity_href = "byond://?_src_=prefs;task=erp_pref;preference=kink;kink_name=[url_encode(kink.name)];action=set_intensity;intensity="
 		dat += "<b>Intensity:</b> "
-		for(var/i = 1 to 5)
-			if(i == intensity)
-				dat += "<b>[i]</b> "
-			else
-				dat += "<a href='byond://?_src_=prefs;task=erp_pref;preference=kink;kink_name=[url_encode(kink.name)];action=set_intensity;intensity=[i]'>[i]</a> "
+		dat += level > 1 ? "<a href='[intensity_href][level - 1]'>&lt;</a>" : "<a class='linkOff'>&lt;</a>"
+		dat += "<a class='linkOff'>[intensity_names[level]]</a>"
+		dat += level < length(intensity_names) ? "<a href='[intensity_href][level + 1]'>&gt;</a>" : "<a class='linkOff'>&gt;</a>"
 		dat += "<br>"
 
 		dat += "<b>Notes:</b> "

@@ -195,6 +195,7 @@ export type HoleStatusLocale = {
   cards: {
     front: string;
     rear: string;
+    breasts: string;
     stomach: string;
     ovipositor: string;
     womb: string;
@@ -231,6 +232,8 @@ export type HoleStatusLocale = {
     takeOut: string;
     pushDeeper: string;
     insert: string;
+    tuckIn: string;
+    cleavage: string;
     holding: string;
     fit: string;
     seconds: string;
@@ -369,7 +372,8 @@ export const HoleStatusView = (props: { locale: HoleStatusLocale }) => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('status');
   const vagina = holes.find((hole) => hole.id === 'vagina') || null;
   const anus = holes.find((hole) => hole.id === 'anus') || null;
-  const nothing = !vagina && !anus && !stomach && !ovipositor;
+  const breasts = holes.find((hole) => hole.id === 'breasts') || null;
+  const nothing = !vagina && !anus && !breasts && !stomach && !ovipositor;
 
   return (
     <Window
@@ -468,6 +472,23 @@ export const HoleStatusView = (props: { locale: HoleStatusLocale }) => {
                 />
               </Section>
             )}
+            {breasts && (
+              <Section
+                title={
+                  <Box inline>
+                    <Icon name="heart" mr={1} />
+                    {locale.cards.breasts}
+                  </Box>
+                }
+              >
+                <HoleBody
+                  act={act}
+                  hole={breasts}
+                  holdingIn={holding_in}
+                  locale={locale}
+                />
+              </Section>
+            )}
             {stomach && (
               <Section
                 title={
@@ -555,7 +576,6 @@ export const HoleStatusView = (props: { locale: HoleStatusLocale }) => {
   );
 };
 
-/** Wear and tear, fill and stored items of one hole. */
 const HoleBody = (props: {
   act: any;
   hole: HoleData;
@@ -564,42 +584,52 @@ const HoleBody = (props: {
 }) => {
   const { act, hole, holdingIn, locale } = props;
   const wear = hole.wear;
+  const cleavage = hole.id === 'breasts';
   return (
     <>
-      {wear && (
-        <LabeledList>
-          <LabeledList.Item label={locale.wear.tightness}>
-            {word(locale.wear.tightnessWords, wear.tightness) ||
-              locale.labels.unknown}
-          </LabeledList.Item>
-          <LabeledList.Item
-            label={locale.wear.feels}
-            color={wear.gaped ? 'bad' : wear.stretch_pct >= 110 ? 'average' : undefined}
-          >
-            {word(locale.wear.stretchWords, wear.stretch)}
-            {wear.stretch_pct > 100 ? ` (${wear.stretch_pct}%)` : ''}
-            {wear.gaping_soon ? ` - ${locale.wear.gapingSoon}` : ''}
-          </LabeledList.Item>
-          <LabeledList.Item label={locale.wear.lube}>
-            {word(locale.wear.lubeWords, wear.lube)}
-          </LabeledList.Item>
-          <LabeledList.Item
-            label={locale.wear.soreness}
-            color={wear.soreness ? 'bad' : 'good'}
-          >
-            {wear.soreness
-              ? word(locale.wear.sorenessWords, wear.soreness)
-              : locale.wear.fine}
-          </LabeledList.Item>
-          <LabeledList.Item label={locale.fill.title}>
-            <FillLine fill={hole.fill} locale={locale} />
-            {hole.can_hold_in && holdingIn ? ` - ${locale.fill.holdingIn}` : ''}
-          </LabeledList.Item>
-          <LabeledList.Item label={locale.items.title}>
-            <ItemLines act={act} items={hole.items} locale={locale} />
-          </LabeledList.Item>
-        </LabeledList>
-      )}
+      <LabeledList>
+        {wear && (
+          <>
+            <LabeledList.Item label={locale.wear.tightness}>
+              {word(locale.wear.tightnessWords, wear.tightness) ||
+                locale.labels.unknown}
+            </LabeledList.Item>
+            <LabeledList.Item
+              label={locale.wear.feels}
+              color={wear.gaped ? 'bad' : wear.stretch_pct >= 110 ? 'average' : undefined}
+            >
+              {word(locale.wear.stretchWords, wear.stretch)}
+              {wear.stretch_pct > 100 ? ` (${wear.stretch_pct}%)` : ''}
+              {wear.gaping_soon ? ` - ${locale.wear.gapingSoon}` : ''}
+            </LabeledList.Item>
+            <LabeledList.Item label={locale.wear.lube}>
+              {word(locale.wear.lubeWords, wear.lube)}
+            </LabeledList.Item>
+            <LabeledList.Item
+              label={locale.wear.soreness}
+              color={wear.soreness ? 'bad' : 'good'}
+            >
+              {wear.soreness
+                ? word(locale.wear.sorenessWords, wear.soreness)
+                : locale.wear.fine}
+            </LabeledList.Item>
+          </>
+        )}
+        <LabeledList.Item label={locale.fill.title}>
+          <FillLine fill={hole.fill} locale={locale} />
+          {hole.can_hold_in && holdingIn ? ` - ${locale.fill.holdingIn}` : ''}
+        </LabeledList.Item>
+        <LabeledList.Item
+          label={cleavage ? locale.items.cleavage : locale.items.title}
+        >
+          <ItemLines
+            act={act}
+            items={hole.items}
+            locale={locale}
+            flat={cleavage}
+          />
+        </LabeledList.Item>
+      </LabeledList>
       {hole.insert && (
         <Box mt={0.5}>
           <Button
@@ -615,7 +645,8 @@ const HoleBody = (props: {
             }
             onClick={() => act('insert_item', { hole: hole.id })}
           >
-            {locale.items.insert}: {hole.insert.name}
+            {cleavage ? locale.items.tuckIn : locale.items.insert}:{' '}
+            {hole.insert.name}
           </Button>
         </Box>
       )}
@@ -642,8 +673,9 @@ const ItemLines = (props: {
   act: any;
   items: ItemData[];
   locale: HoleStatusLocale;
+  flat?: boolean;
 }) => {
-  const { act, items, locale } = props;
+  const { act, items, locale, flat } = props;
   if (!items.length) {
     return <>{locale.items.none}</>;
   }
@@ -657,10 +689,12 @@ const ItemLines = (props: {
         }
         return (
           <Box key={layer}>
-            <Box inline color="label">
-              {locale.items[layer]}
-              {': '}
-            </Box>
+            {!flat && (
+              <Box inline color="label">
+                {locale.items[layer]}
+                {': '}
+              </Box>
+            )}
             {entries.map((item) => (
               <Box key={item.ref} inline mr={1}>
                 {item.name}

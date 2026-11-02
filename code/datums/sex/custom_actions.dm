@@ -17,7 +17,7 @@
 
 /datum/sex_custom_action_template/blank_partner
 	template_id = "blank_partner"
-	template_name = "Blank Partner Action"
+	template_name = "Partner Action"
 	template_summary = "A clean slate for actions aimed at another participant."
 
 /datum/sex_custom_action_template/blank_partner/apply_to(datum/sex_custom_action_data/draft)
@@ -31,7 +31,7 @@
 
 /datum/sex_custom_action_template/blank_self
 	template_id = "blank_self"
-	template_name = "Blank Solo Action"
+	template_name = "Solo Action"
 	template_summary = "A clean slate for actions you perform on yourself."
 
 /datum/sex_custom_action_template/blank_self/apply_to(datum/sex_custom_action_data/draft)

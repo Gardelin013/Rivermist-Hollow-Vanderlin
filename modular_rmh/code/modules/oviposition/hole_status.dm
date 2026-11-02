@@ -83,7 +83,7 @@
 /datum/hole_status_menu/proc/find_owned_toy(item_ref)
 	if(!item_ref)
 		return null
-	for(var/slot in list(ORGAN_SLOT_VAGINA, ORGAN_SLOT_ANUS))
+	for(var/slot in list(ORGAN_SLOT_VAGINA, ORGAN_SLOT_ANUS, ORGAN_SLOT_BREASTS))
 		var/obj/item/organ/hole = get_real_organ(owner, slot)
 		var/list/layers = hole ? SEND_SIGNAL(hole, COMSIG_BODYSTORAGE_GET_LISTS) : null
 		if(!islist(layers))
@@ -114,6 +114,9 @@
 	var/obj/item/organ/genitals/filling_organ/anus/anus = get_real_organ(owner, ORGAN_SLOT_ANUS)
 	if(istype(anus))
 		UNTYPED_LIST_ADD(data["holes"], build_hole(anus, "anus"))
+	var/obj/item/organ/genitals/filling_organ/breasts/breasts = get_real_organ(owner, ORGAN_SLOT_BREASTS)
+	if(istype(breasts))
+		UNTYPED_LIST_ADD(data["holes"], build_hole(breasts, "breasts"))
 	data["womb"] = build_womb()
 	data["stomach"] = build_stomach()
 	data["ovipositor"] = build_ovipositor()

@@ -1,5 +1,5 @@
 /datum/sex_action/npc/npc_throat_sex
-	name = "NPC Fuck their throat"
+	name = "NPC throat"
 	check_same_tile = FALSE
 	hole_id = BODY_ZONE_PRECISE_MOUTH
 	gags_target = TRUE

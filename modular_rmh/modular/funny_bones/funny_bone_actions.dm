@@ -1,7 +1,7 @@
 // The horny AI's acts for a skeleton with a funny bone; same mechanics as the flesh versions, bonier words.
 
 /datum/sex_action/npc/npc_throat_sex/funny_bone
-	name = "NPC Rattle a funny bone down their throat"
+	name = "Rattle throat"
 
 /datum/sex_action/npc/npc_throat_sex/funny_bone/get_perform_message(mob/living/user, mob/living/target)
 	return "[user] [get_generic_force_adjective()] rattles [user.p_their()] funny bone down [target]'s throat."
@@ -18,7 +18,7 @@
 	return ORGASM_LOCATION_SELF
 
 /datum/sex_action/npc/npc_anal_sex/funny_bone
-	name = "NPC Rattle a funny bone in their ass"
+	name = "Rattle ass"
 
 /datum/sex_action/npc/npc_anal_sex/funny_bone/get_start_message(mob/living/user, mob/living/target)
 	return "[user] wedges [user.p_their()] funny bone into [target]'s ass with a creak!"
@@ -39,7 +39,7 @@
 	return ORGASM_LOCATION_SELF
 
 /datum/sex_action/npc/npc_vaginal_sex/funny_bone
-	name = "NPC Rattle a funny bone in their cunt"
+	name = "Rattle cunt"
 
 /datum/sex_action/npc/npc_vaginal_sex/funny_bone/get_start_message(mob/living/user, mob/living/target)
 	return "[user] slides [user.p_their()] funny bone into [target]'s cunt with a creak!"
@@ -60,7 +60,7 @@
 	return ORGASM_LOCATION_SELF
 
 /datum/sex_action/npc/npc_jerk_over/funny_bone
-	name = "NPC Polish a funny bone over them"
+	name = "Polish bone"
 
 /datum/sex_action/npc/npc_jerk_over/funny_bone/get_start_message(mob/living/user, mob/living/target)
 	return "[user] grips [user.p_their()] funny bone and points it at [target]..."
@@ -77,7 +77,7 @@
 
 /// What a skeleton with nothing below the belt does instead: cold, rattling pets.
 /datum/sex_action/npc/npc_bony_petting
-	name = "NPC Pet them with bony fingers"
+	name = "Bony petting"
 
 /datum/sex_action/npc/npc_bony_petting/shows_on_menu(mob/living/user, mob/living/target)
 	return FALSE

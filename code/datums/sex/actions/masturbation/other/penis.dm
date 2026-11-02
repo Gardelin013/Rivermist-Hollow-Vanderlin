@@ -1,5 +1,6 @@
 /datum/sex_action/masturbate/other/penis
-	name = "Jerk them off"
+	name = "Handjob"
+	remote_phrase = "Jerk them off"
 	check_same_tile = FALSE
 
 /datum/sex_action/masturbate/other/penis/shows_on_menu(mob/living/user, mob/living/target)

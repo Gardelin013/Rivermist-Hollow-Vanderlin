@@ -1,5 +1,6 @@
 /datum/sex_action/masturbate/other/anus
-	name = "Finger their butt"
+	name = "Butt fingering"
+	remote_phrase = "Finger their butt"
 	check_same_tile = FALSE
 	mage_hand_overlay_zone = MAGE_HAND_ZONE_BUTT
 

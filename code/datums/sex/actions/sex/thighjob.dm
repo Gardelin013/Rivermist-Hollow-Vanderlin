@@ -1,5 +1,5 @@
 /datum/sex_action/sex/thighjob
-	name = "Use their thighs to get off"
+	name = "Fuck thighs"
 	target_menu_zone_mask = SEX_UI_ZONE_LEGS
 	requires_hole_storage = FALSE
 	knot_on_finish = FALSE
