@@ -1,5 +1,5 @@
 /datum/sex_action/npc/npc_facesitting
-	name = "NPC Sit on their face with cunt"
+	name = "NPC facesitting"
 	check_same_tile = FALSE
 	hole_id = BODY_ZONE_PRECISE_MOUTH
 	gags_target = TRUE

@@ -24,6 +24,8 @@ GLOBAL_LIST_EMPTY(roundstart_species)
 	var/default_body_build_f
 	/// BODY_PALETTE_* sprite set the builds draw from.
 	var/body_build_palette = BODY_PALETTE_SKIN
+	var/lips_state_m
+	var/lips_state_f
 	/// if alien colors are disabled, this is the color that will be used by that race
 	var/default_color = "#FFF"
 	/// List of ages that can be selected in prefs for this species
@@ -102,6 +104,8 @@ GLOBAL_LIST_EMPTY(roundstart_species)
 		OFFSET_TESTICLES = list(0,0),\
 		OFFSET_VAGINA = list(0,-4),\
 	)
+
+	var/list/held_item_dir_offsets
 
 	/// Type of damage overlay to use
 	var/damage_overlay_type = "human"
@@ -1009,6 +1013,9 @@ GLOBAL_LIST_EMPTY(roundstart_species)
 	on_gender_update(C)
 	C.update_organ_requirements() //post species trait gains
 
+	if(held_item_dir_offsets)
+		RegisterSignal(C, COMSIG_ATOM_POST_DIR_CHANGE, PROC_REF(on_holder_dir_change))
+
 	if(!(C.status_flags & BUILDING_ORGANS))
 		C.regenerate_icons()
 
@@ -1061,27 +1068,33 @@ GLOBAL_LIST_EMPTY(roundstart_species)
 		for(var/i in inherent_factions)
 			C.set_faction(C.get_faction() - i)
 
+	if(held_item_dir_offsets)
+		UnregisterSignal(C, COMSIG_ATOM_POST_DIR_CHANGE)
+
 	SEND_SIGNAL(C, COMSIG_SPECIES_LOSS, src)
+
+/datum/species/proc/get_held_item_offset(mob/living/carbon/holder, hand_index)
+	var/list/hand_offsets = held_item_dir_offsets?["[holder.dir]"]
+	if(!hand_offsets)
+		return null
+	return hand_offsets[(hand_index % 2) ? 1 : 2]
+
+/datum/species/proc/on_holder_dir_change(mob/living/carbon/holder, old_dir, new_dir)
+	SIGNAL_HANDLER
+	if(old_dir == new_dir || !(locate(/obj/item) in holder.held_items))
+		return
+	holder.update_inv_hands()
 
 /datum/species/proc/handle_body(mob/living/carbon/human/H)
 	H.remove_overlay(BODY_LAYER)
 	H.remove_overlay(ABOVE_BODY_FRONT_LAYER)
 
-	var/list/offsets = H.get_offset_features()
-
 	var/list/standing = list()
 
-	var/obj/item/bodypart/head/HD = H.get_bodypart(BODY_ZONE_HEAD)
-
-	if(HD && !(HAS_TRAIT(H, TRAIT_HUSK)) && !HD.skeletonized)
-		// lipstick
-		if(H.lip_style && (LIPS in species_traits))
-			var/mutable_appearance/lip_overlay = mutable_appearance('icons/mob/human_face.dmi', "lips_[H.lip_style]", -BODY_LAYER)
-			lip_overlay.color = H.lip_color
-			if(LAZYACCESS(offsets, OFFSET_FACE))
-				lip_overlay.pixel_x += offsets[OFFSET_FACE][1]
-				lip_overlay.pixel_y += offsets[OFFSET_FACE][2]
-			standing += lip_overlay
+	// lipstick
+	var/mutable_appearance/lip_overlay = H.get_lips_overlay()
+	if(lip_overlay)
+		standing += lip_overlay
 
 	//Underwear
 	/*if(!(NO_UNDERWEAR in species_traits))

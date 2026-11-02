@@ -1,5 +1,5 @@
 /datum/sex_action/kissing
-	name = "Make out with them"
+	name = "Make out"
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	check_same_tile = FALSE

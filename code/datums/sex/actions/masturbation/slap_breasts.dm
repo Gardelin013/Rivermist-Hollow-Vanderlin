@@ -63,7 +63,8 @@
 	user.visible_message(span_warning("[user] lowers [user.p_their()] hand from [user.p_their()] chest."))
 
 /datum/sex_action/masturbate/other/slap_breasts
-	name = "Slap their breasts"
+	name = "Breast slapping"
+	remote_phrase = "Slap their breasts"
 	target_menu_zone_mask = SEX_UI_ZONE_BODY
 	do_time = 2.5 SECONDS
 	stamina_cost = 0

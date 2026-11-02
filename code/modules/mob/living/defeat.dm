@@ -117,6 +117,8 @@
 		return FALSE
 	if(!iscarbon(src))
 		return FALSE
+	if((mob_biotypes & MOB_UNDEAD) && (!mind?.key || IS_DEADITE(src)))
+		return FALSE
 	// A lair's captive NPC is scenery for its denizens: no defeat, no kidnap of its own.
 	if(GetComponent(/datum/component/npc_in_distress))
 		return FALSE

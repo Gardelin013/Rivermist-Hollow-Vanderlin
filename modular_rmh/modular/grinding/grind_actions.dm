@@ -199,7 +199,7 @@
 // ---- Against a partner ----
 
 /datum/sex_action/grind/partner
-	name = "Grind against them"
+	name = "Grind against"
 	description = "Grind your crotch against the part of them you aim at. Height and posture decide what you reach."
 	target_menu_zone_mask = SEX_UI_ZONE_MOUTH | SEX_UI_ZONE_GENITALS | SEX_UI_ZONE_ARMS | SEX_UI_ZONE_LEGS | SEX_UI_ZONE_BODY
 	/// The targeting-doll zone the grinder aims at.
@@ -215,12 +215,15 @@
 	update_menu_name(controller.user, controller.target)
 	return TRUE
 
-/// The panel names the spot the targeting doll will land on: "Grind against her thigh".
+/// The panel names the spot the targeting doll will land on: "Grind thigh".
 /datum/sex_action/grind/partner/proc/update_menu_name(mob/living/user, mob/living/target)
 	if(!user || !target || user == target || user.get_grind_refusal(target, asked_zone))
 		return
 	var/new_spot = user.resolve_grind_spot(target, asked_zone)
-	name = "Grind against [target.p_their()] [get_grind_spot_name(new_spot, target, user.is_grinding_from_behind(target))]"
+	name = get_spot_menu_name(new_spot, target, user.is_grinding_from_behind(target))
+
+/datum/sex_action/grind/partner/proc/get_spot_menu_name(spot, mob/living/target, behind)
+	return "Grind [replacetext(get_grind_spot_name(spot, target, behind), " ", "-")]"
 
 /datum/sex_action/grind/partner/shows_on_menu(mob/living/user, mob/living/target)
 	return user != target && ishuman(target)
@@ -247,7 +250,7 @@
 	spot = new_spot
 	from_behind = new_behind
 	if(spot)
-		name = "Grind against [target.p_their()] [get_grind_spot_name(spot, target, from_behind)]"
+		name = get_spot_menu_name(spot, target, from_behind)
 
 /datum/sex_action/grind/partner/on_start(mob/living/user, mob/living/target)
 	refresh_spot(user, target)
@@ -356,7 +359,7 @@
 
 /// Horny NPCs grind on their target; the spot is picked among those in reach, mostly the crotch.
 /datum/sex_action/grind/partner/npc
-	name = "NPC Grind against them"
+	name = "NPC grind"
 	check_incapacitated = FALSE
 	stamina_cost = 0.1
 
@@ -390,7 +393,7 @@
 // ---- Against a thing ----
 
 /datum/sex_action/grind/thing
-	name = "Grind against something"
+	name = "Grind object"
 	description = "Grind your crotch against a thing next to you; the panel picks what you face first."
 
 /// Without the hips, the panel picks the nearest thing worth grinding on and names it.
@@ -401,8 +404,17 @@
 	if(!grind_thing && controller.user == controller.target)
 		set_grind_thing(controller.user.find_grind_thing())
 	if(grind_thing)
-		name = "Grind against [controller.user.get_grind_thing_spot(grind_thing)]"
+		name = get_thing_menu_name(grind_thing)
 	return TRUE
+
+/datum/sex_action/grind/thing/proc/get_thing_menu_name(atom/thing)
+	var/kind = get_grind_kind(thing)
+	switch(kind)
+		if("soft")
+			kind = "cloth"
+		if("thing")
+			kind = "object"
+	return "Grind [kind]"
 
 /datum/sex_action/grind/thing/shows_on_menu(mob/living/user, mob/living/target)
 	return user == target && !!grind_thing
@@ -493,7 +505,7 @@
 // ---- Pillows ----
 
 /datum/sex_action/grind/pillow
-	name = "Hump the pillow"
+	name = "Hump pillow"
 	description = "Straddle the pillows on your tile, or clamp them between your thighs lying down."
 
 /datum/sex_action/grind/pillow/prepare_proposal(datum/sex_scene_controller/controller)
@@ -592,7 +604,7 @@
 // ---- The seat under you ----
 
 /datum/sex_action/grind/seat
-	name = "Grind against your seat"
+	name = "Grind seated"
 	description = "Rock your hips against the seat you sit on, as quietly as you can."
 	do_time = 3.6 SECONDS
 	stamina_cost = 0.2

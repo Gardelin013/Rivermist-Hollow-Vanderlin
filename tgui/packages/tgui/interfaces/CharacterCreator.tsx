@@ -4473,21 +4473,42 @@ export const CharacterCreator = () => {
                       >
                         {enabled ? L.yes : L.no}
                       </Btn>
-                      {enabled
-                        ? [1, 2, 3, 4, 5].map((level) => (
-                            <Btn
-                              key={level}
-                              className={`square ${kink.intensity === level ? 'selected' : ''}`}
-                              onClick={() =>
-                                kinkAct(kink.name, 'set_intensity', {
-                                  intensity: level,
-                                })
-                              }
-                            >
-                              {level}
-                            </Btn>
-                          ))
-                        : null}
+                      {enabled ? (
+                        <>
+                          <Btn
+                            className="square"
+                            icon="chevron-left"
+                            disabled={kink.intensity <= 1}
+                            onClick={() =>
+                              kinkAct(kink.name, 'set_intensity', {
+                                intensity: kink.intensity - 1,
+                              })
+                            }
+                          />
+                          <div className="cc-row" style={{ gap: 2 }}>
+                            {[1, 2, 3, 4, 5].map((level) => (
+                              <Icon
+                                key={level}
+                                name="circle"
+                                style={{
+                                  fontSize: 8,
+                                  opacity: level <= kink.intensity ? 1 : 0.25,
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <Btn
+                            className="square"
+                            icon="chevron-right"
+                            disabled={kink.intensity >= 5}
+                            onClick={() =>
+                              kinkAct(kink.name, 'set_intensity', {
+                                intensity: kink.intensity + 1,
+                              })
+                            }
+                          />
+                        </>
+                      ) : null}
                       {enabled ? (
                         <Btn
                           icon="pen"

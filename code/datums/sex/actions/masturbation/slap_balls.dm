@@ -63,7 +63,8 @@
 	add_sex_lock(user, ORGAN_SLOT_TESTICLES, null, FALSE)
 
 /datum/sex_action/masturbate/other/slap_balls
-	name = "Slap their balls"
+	name = "Ball slapping"
+	remote_phrase = "Slap their balls"
 	description = "Slap their balls, ranging from a teasing tap to a punishing smack."
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	do_time = 2.5 SECONDS

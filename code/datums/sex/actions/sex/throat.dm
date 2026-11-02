@@ -1,5 +1,5 @@
 /datum/sex_action/sex/throat
-	name = "Fuck their throat"
+	name = "Fuck throat"
 	target_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	hole_id = BODY_ZONE_PRECISE_MOUTH
 	stamina_cost = 0.5

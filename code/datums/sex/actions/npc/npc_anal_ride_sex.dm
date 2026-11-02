@@ -5,7 +5,7 @@
 	requires_hole_storage = FALSE
 
 /datum/sex_action/npc/npc_anal_ride_sex
-	name = "NPC Ride them anally"
+	name = "NPC anal-ride"
 	stamina_cost = 0
 	check_same_tile = FALSE
 	hole_id = ORGAN_SLOT_ANUS

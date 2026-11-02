@@ -1,6 +1,6 @@
 
 /datum/sex_action/hole_storage/anus_store
-	name = "Store items in anus"
+	name = "Stuff ass"
 	hole_id = ORGAN_SLOT_ANUS
 
 /datum/sex_action/hole_storage/anus_store/shows_on_menu(mob/living/user, mob/living/target)
@@ -141,7 +141,7 @@
 	handle_passive_ejaculation()
 
 /datum/sex_action/hole_storage/anus_remove
-	name = "Remove items from anus"
+	name = "Empty ass"
 	hole_id = ORGAN_SLOT_ANUS
 
 /datum/sex_action/hole_storage/anus_remove/shows_on_menu(mob/living/user, mob/living/target)
@@ -236,7 +236,7 @@
 
 
 /datum/sex_action/hole_storage/anus_remove_deep
-	name = "Push out items from deep inside ass"
+	name = "Deep-empty ass"
 	hole_id = ORGAN_SLOT_ANUS
 	var/fail_counter = 0
 	var/list/stored_items_layer

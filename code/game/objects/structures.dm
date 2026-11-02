@@ -195,7 +195,7 @@
 
 /obj/structure/examine(mob/user)
 	. = ..()
-	if(in_range(user, src) && user.loc != src && hiddenguy)
+	if(isliving(user) && in_range(user, src) && user.loc != src && hiddenguy)
 		unhide(hiddenguy)
 
 	if(!(resistance_flags & INDESTRUCTIBLE))

@@ -9,7 +9,7 @@
 
 /datum/sex_action/object_fuck/ride
 	abstract_type = /datum/sex_action/object_fuck/ride
-	name = "Ride the toy"
+	name = "Toy ride"
 	description = "Sink down onto a toy standing on your tile."
 	toy_in_hand = FALSE
 	requires_free_hands = FALSE
@@ -323,12 +323,12 @@
 // ---- The four rides ----
 
 /datum/sex_action/object_fuck/ride/vagina
-	name = "Ride the toy"
+	name = "Ride toy"
 	description = "Sink your pussy down onto a toy standing on your tile."
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/object_fuck/ride/anus
-	name = "Ride the toy with your ass"
+	name = "Anal ride"
 	description = "Ease your ass down onto a toy standing on your tile."
 	hole_id = ORGAN_SLOT_ANUS
 
@@ -340,12 +340,12 @@
 	user_menu_zone_mask = SEX_UI_ZONE_ARMS
 
 /datum/sex_action/object_fuck/ride/forced/vagina
-	name = "Force them down onto the toy"
+	name = "Impale pussy"
 	description = "Hold them and push their pussy down onto a standing toy beside them."
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/object_fuck/ride/forced/anus
-	name = "Force them down onto the toy (ass)"
+	name = "Impale ass"
 	description = "Hold them and push their ass down onto a standing toy beside them."
 	hole_id = ORGAN_SLOT_ANUS
 
@@ -353,7 +353,7 @@
 
 /// Two toys on one tile: one in the pussy, one in the ass.
 /datum/sex_action/object_fuck/ride/both
-	name = "Ride both toys"
+	name = "Double ride"
 	description = "Two toys stand side by side: sink down onto both, one in each hole."
 	hole_id = ORGAN_SLOT_VAGINA
 	stamina_cost = 0.7
@@ -474,7 +474,7 @@
 
 /// Slicks a standing toy within reach from a held lube, else with spit.
 /datum/sex_action/lube_up/standing_toy
-	name = "Lube up the standing toy"
+	name = "Lube standing-toy"
 	description = "Work a held balm or oil, or spit, over a toy standing beside you."
 	target_menu_zone_mask = SEX_UI_ZONE_ARMS
 	organ_slot = null
@@ -493,7 +493,7 @@
 
 /// Lifts someone stuck on a standing toy off it: a knot comes out with a pop.
 /datum/sex_action/toy_lift_off
-	name = "Lift them off the toy"
+	name = "Lift off"
 	description = "Haul someone stuck on a standing toy up off it."
 	continous = FALSE
 	do_time = 3 SECONDS

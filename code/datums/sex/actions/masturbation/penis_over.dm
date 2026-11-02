@@ -1,5 +1,5 @@
 /datum/sex_action/masturbate/penis_over
-	name = "Jerk over them"
+	name = "Jerk over"
 	check_same_tile = FALSE
 	target_menu_zone_mask = SEX_UI_ZONE_MISC
 

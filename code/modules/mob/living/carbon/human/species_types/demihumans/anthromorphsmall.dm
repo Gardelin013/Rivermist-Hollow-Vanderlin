@@ -37,6 +37,7 @@
 
 	limbs_icon_m = 'modular_rmh/icons/mob/species/anthro_small_malea.dmi'
 	limbs_icon_f = 'modular_rmh/icons/mob/species/anthro_small_femalea.dmi'
+	lips_state_m = "anthro_small_male"
 	body_hair_materials = BODY_HAIR_MATERIALS_FURRED
 	dam_icon_m = 'icons/roguetown/mob/bodies/dam/dam_male.dmi'
 	dam_icon_f = 'icons/roguetown/mob/bodies/dam/dam_female.dmi'

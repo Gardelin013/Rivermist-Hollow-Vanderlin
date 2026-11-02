@@ -60,7 +60,8 @@
 	user.visible_message(span_warning("[user] stops teasing [user.p_their()] labia."))
 
 /datum/sex_action/masturbate/other/labia
-	name = "Pull their labia"
+	name = "Labia pulling"
+	remote_phrase = "Pull their labia"
 	check_same_tile = FALSE
 
 /datum/sex_action/masturbate/other/labia/shows_on_menu(mob/living/user, mob/living/target)

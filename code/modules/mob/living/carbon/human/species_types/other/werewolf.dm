@@ -93,6 +93,16 @@
 	bleed_mod = 0.6
 	pain_mod = 0.2
 
+/datum/species/werewolf/New()
+	. = ..()
+	var/static/list/paw_offsets = list(
+		"[SOUTH]" = list(list(5, 2), list(-4, 2)),
+		"[NORTH]" = list(list(-4, 2), list(5, 2)),
+		"[EAST]" = list(list(5, 5), list(-6, 2)),
+		"[WEST]" = list(list(6, 2), list(-5, 5)),
+	)
+	held_item_dir_offsets = paw_offsets
+
 /datum/species/werewolf/send_voice(mob/living/carbon/human/H)
 	playsound(H, pick('sound/vo/mobs/wwolf/wolftalk1.ogg', 'sound/vo/mobs/wwolf/wolftalk2.ogg'), 100, TRUE, -1)
 

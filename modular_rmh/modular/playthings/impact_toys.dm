@@ -52,7 +52,7 @@
 
 /datum/sex_action/impact_play
 	parent_type = /datum/sex_action/held_item_zone
-	name = "Strike selected area with a held toy"
+	name = "Impact play"
 	description = "Use a held crop, paddle or flogger on the body zone selected on your combat doll."
 	action_item_type = /obj/item/impact_toy
 	check_same_tile = FALSE

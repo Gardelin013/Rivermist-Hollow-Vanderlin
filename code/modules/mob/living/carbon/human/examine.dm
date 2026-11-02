@@ -90,16 +90,9 @@
 
 	. += ..()
 
-	if(lip_style)
-		switch(lip_color)
-			if("red")
-				. += span_info("[capitalize(P[THEYRE])] wearing red lipstick.")
-			if("purple")
-				. += span_info("[capitalize(P[THEYRE])] wearing purple lipstick.")
-			if("lime")
-				. += span_info("[capitalize(P[THEYRE])] wearing lime lipstick.")
-			if("black")
-				. += span_info("[capitalize(P[THEYRE])] wearing black lipstick.")
+	if(lip_style && !is_mouth_covered())
+		var/lip_shade = GLOB.lipstick_shades[LOWER_TEXT(lip_color)]
+		. += span_info("[capitalize(P[THEYRE])] wearing [lip_shade ? "[lip_shade] " : ""]lipstick.")
 
 	if(!self_inspect)
 		if(family_datum == SSfamilytree.ruling_family && length(culinary_preferences) && HAS_CHARACTER_TRAIT(user, TRAIT_ROYALSERVANT))

@@ -72,7 +72,8 @@
 	user.visible_message(span_warning("[user] stops touching [user.p_their()] nipples."))
 
 /datum/sex_action/masturbate/other/nipples
-	name = "Rub their nipples"
+	name = "Nipple rubbing"
+	remote_phrase = "Rub their nipples"
 	description = "Rub their nipples, with flavor matching the shape of their chest."
 	target_menu_zone_mask = SEX_UI_ZONE_BODY
 	mage_hand_overlay_zone = MAGE_HAND_ZONE_CHEST

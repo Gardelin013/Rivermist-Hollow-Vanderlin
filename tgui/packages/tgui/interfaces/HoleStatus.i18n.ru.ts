@@ -21,6 +21,7 @@ export default {
   cards: {
     front: 'Спереди',
     rear: 'Сзади',
+    breasts: 'Грудь',
     stomach: 'Живот',
     ovipositor: 'Яйцеклад',
     womb: 'Матка',
@@ -79,6 +80,8 @@ export default {
     takeOut: 'Достать',
     pushDeeper: 'Протолкнуть глубже',
     insert: 'Ввести',
+    tuckIn: 'Вложить',
+    cleavage: 'В ложбинке',
     holding: 'В руке',
     fit: 'посадка',
     seconds: 'с',

@@ -462,12 +462,12 @@
 
 /datum/sex_action/portal_base/portal_hand
 	parent_type = /datum/sex_action/portal_base/portal_hand_base
-	name = "Portal Finger Pussy"
+	name = "Portal Fingering"
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/portal_base/portal_hand_anal
 	parent_type = /datum/sex_action/portal_base/portal_hand_base
-	name = "Portal Finger Ass"
+	name = "Portal Anal-fingering"
 	hole_id = ORGAN_SLOT_ANUS
 	target_orgasm_amt = 2
 	start_message_user = "You start fingering your target's backside through the portal."
@@ -650,7 +650,7 @@
 
 /datum/sex_action/portal_base/portal_penis_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_penis_base
-	name = "Portal Pussy Fuck"
+	name = "Portal Vaginal"
 	hole_id = ORGAN_SLOT_VAGINA
 	start_message_user = "You slide your cock into the portal, reaching your target's pussy."
 	start_message_target = "You feel something penetrating your pussy through the portal!"
@@ -660,7 +660,7 @@
 
 /datum/sex_action/portal_base/portal_penis_anal
 	parent_type = /datum/sex_action/portal_base/portal_penis_base
-	name = "Portal Ass Fuck"
+	name = "Portal Anal"
 	hole_id = ORGAN_SLOT_ANUS
 	start_message_user = "You slide your cock into the portal, reaching your target's ass."
 	start_message_target = "You feel something penetrating your ass through the portal!"
@@ -741,7 +741,7 @@
 
 /datum/sex_action/portal_base/portal_vagina_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_vagina_base
-	name = "Portal Grind Pussy"
+	name = "Portal Grinding"
 	required_user_organ = ORGAN_SLOT_VAGINA
 	hole_id = ORGAN_SLOT_VAGINA
 	start_message_user = "You grind your cunt against the portal, reaching your target's pussy."
@@ -751,7 +751,7 @@
 
 /datum/sex_action/portal_base/portal_vagina_anal
 	parent_type = /datum/sex_action/portal_base/portal_vagina_base
-	name = "Portal Grind Ass"
+	name = "Portal Anal-grinding"
 	required_user_organ = ORGAN_SLOT_ANUS
 	hole_id = ORGAN_SLOT_ANUS
 	start_message_user = "You press your backside to the portal, teasing your target's ass."
@@ -903,13 +903,13 @@
 
 /datum/sex_action/portal_base/portal_store_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_store_base
-	name = "Portal Store Pussy"
+	name = "Portal Stuffing"
 	hole_id = ORGAN_SLOT_VAGINA
 	base_pain_amt = 2
 
 /datum/sex_action/portal_base/portal_store_anal
 	parent_type = /datum/sex_action/portal_base/portal_store_base
-	name = "Portal Store Ass"
+	name = "Portal Anal-stuffing"
 	hole_id = ORGAN_SLOT_ANUS
 	base_pain_amt = 4
 
@@ -1014,18 +1014,18 @@
 
 /datum/sex_action/portal_base/portal_remove_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_remove_base
-	name = "Portal Retrieve Pussy"
+	name = "Portal Retrieval"
 	hole_id = ORGAN_SLOT_VAGINA
 	base_pain_amt = 1
 
 /datum/sex_action/portal_base/portal_remove_anal
 	parent_type = /datum/sex_action/portal_base/portal_remove_base
-	name = "Portal Retrieve Ass"
+	name = "Portal Anal-retrieval"
 	hole_id = ORGAN_SLOT_ANUS
 	base_pain_amt = 2
 /*
 /datum/sex_action/portal_base/portal_object_fuck
-	name = "Fuck portal with object"
+	name = "Portal Toy"
 	var/ouchietext = "owie"
 	do_time = 4 SECONDS //slower on your own but not as much as ass since this is on your front.
 

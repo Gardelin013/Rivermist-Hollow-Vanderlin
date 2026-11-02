@@ -1,5 +1,5 @@
 /datum/sex_action/cunnilingus
-	name = "Suck their cunt off"
+	name = "Cunnilingus"
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	gags_user = TRUE

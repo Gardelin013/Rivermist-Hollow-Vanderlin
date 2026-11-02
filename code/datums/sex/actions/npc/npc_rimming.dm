@@ -1,5 +1,5 @@
 /datum/sex_action/npc/npc_rimming
-	name = "NPC Rim them"
+	name = "NPC rimjob"
 	check_same_tile = FALSE
 	gags_user = TRUE
 	scene_interaction = SEX_SCENE_INTERACTION_ORAL
