@@ -59,82 +59,73 @@
 /datum/mob_descriptor/face/full
 	name = "Full"
 
-/datum/mob_descriptor/face/cat
-	name = "Cat-like"
-
-/datum/mob_descriptor/face/pig
-	name = "Piggish"
-
-/datum/mob_descriptor/face/rat
-	name = "Rat-like"
-
-/datum/mob_descriptor/face/hollow
-	name = "Hollow-cheeked"
-
-/datum/mob_descriptor/face/weatherbitten
-	name = "Weather-bitten"
+/datum/mob_descriptor/face/narrow
+	name = "Narrow"
 
 /datum/mob_descriptor/face/wrinkled
 	name = "Wrinkled"
 
-/datum/mob_descriptor/face/malformed
-	name = "Malformed"
+/datum/mob_descriptor/face/emaciated
+	name = "Emaciated"
+
+/datum/mob_descriptor/face/skeletal
+	name = "Skeletal"
+
+/datum/mob_descriptor/face/long
+	name = "Long"
+
+/datum/mob_descriptor/face/custom
+	name = "Custom Face"
+	prefix = null
+	custom_index = 9
+
+/datum/mob_descriptor/face/custom/can_describe(mob/living/described)
+	return length(described.custom_descriptors) >= custom_index
+
+/datum/mob_descriptor/face/custom/get_description(mob/living/described)
+	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
+	return entry.content_text
+
+/datum/mob_descriptor/face/custom/get_pre_string(mob/living/described)
+	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
+	switch(entry.prefix_type)
+		if(CUSTOM_PREFIX_HAS_A)
+			return "a "
+		if(CUSTOM_PREFIX_HAS_AN)
+			return "an "
+	return null
 
 /datum/mob_descriptor/face_exp
 	abstract_type = /datum/mob_descriptor/face_exp
 	suffix = "face"
 	slot = MOB_DESCRIPTOR_SLOT_FACE_EXPRESSION
 
-/datum/mob_descriptor/face_exp/bright
-	name = "Bright"
-
-/datum/mob_descriptor/face_exp/bitchy
-	name = "Bitchy"
-
-
-/datum/mob_descriptor/face_exp/cocky
-	name = "Cocky"
-
-/datum/mob_descriptor/face_exp/coy
-	name = "Coy"
-
-
-/datum/mob_descriptor/face_exp/contemptous
-	name = "Contemptous"
-
-/datum/mob_descriptor/face_exp/cold
-	name = "Cold"
-
-/datum/mob_descriptor/face_exp/dreamy
-	name = "Dreamy"
+/datum/mob_descriptor/face_exp/refined
+	name = "Refined"
 
 /datum/mob_descriptor/face_exp/disinterested
 	name = "Disinterested"
 
-/datum/mob_descriptor/face_exp/fake
-	name = "Fake"
+/datum/mob_descriptor/face_exp/sour
+	name = "Sour"
+
+/datum/mob_descriptor/face_exp/bright
+	name = "Bright"
+
+/datum/mob_descriptor/face_exp/starry_eyed
+	name = "Starry-eyed"
+
+/datum/mob_descriptor/face_exp/cold
+	name = "Cold"
 
 /datum/mob_descriptor/face_exp/haggard
 	name = "Haggard"
 
-/datum/mob_descriptor/face_exp/knowing
-	name = "Knowing"
+/datum/mob_descriptor/face_exp/fake
+	name = "Fake"
 
-/datum/mob_descriptor/face_exp/mocking
-	name = "Mocking"
-
-
-/datum/mob_descriptor/face_exp/refined
-	name = "Refined"
-
-/datum/mob_descriptor/face_exp/salacious
-	name = "Salacious"
-
-/datum/mob_descriptor/face_exp/sour
-	name = "Sour"
-
-/datum/mob_descriptor/face_exp/starry_eyed
-	name = "Starry-eyed"
+/datum/mob_descriptor/face_exp/bitchy
+	name = "Bitchy"
 
 /datum/mob_descriptor/face_exp/spiteful
 	name = "Spiteful"
@@ -142,8 +133,100 @@
 /datum/mob_descriptor/face_exp/warm
 	name = "Warm"
 
+/datum/mob_descriptor/face_exp/salacious
+	name = "Salacious"
+
+/datum/mob_descriptor/face_exp/contemptous
+	name = "Contemptous"
+
+/datum/mob_descriptor/face_exp/mocking
+	name = "Mocking"
+
+/datum/mob_descriptor/face_exp/knowing
+	name = "Knowing"
+
+/datum/mob_descriptor/face_exp/cocky
+	name = "Cocky"
+
+/datum/mob_descriptor/face_exp/coy
+	name = "Coy"
+
 /datum/mob_descriptor/face_exp/frustrated
 	name = "Frustrated"
+
+// Gnoll muzzle shapes — slot FACE_SHAPE; output e.g. "a scarred muzzle"
+/datum/mob_descriptor/face/gnoll
+	abstract_type = /datum/mob_descriptor/face/gnoll
+	suffix = "muzzle"
+
+/datum/mob_descriptor/face/gnoll/long_muzzle
+	name = "Long"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/short_muzzle
+	name = "Short"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/broad_muzzle
+	name = "Broad"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/narrow_muzzle
+	name = "Narrow"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/scarred_muzzle
+	name = "Scarred"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/sharp_muzzle
+	name = "Sharp"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/worn_muzzle
+	name = "Worn"
+	prefix = "a"
+
+/datum/mob_descriptor/face/gnoll/disfigured_muzzle
+	name = "Disfigured"
+	prefix = "a"
+
+// Gnoll expressions — slot FACE_EXPRESSION; output e.g. "a predatory look"
+/datum/mob_descriptor/face_exp/gnoll
+	abstract_type = /datum/mob_descriptor/face_exp/gnoll
+	suffix = "look"
+
+/datum/mob_descriptor/face_exp/gnoll/alert
+	name = "Alert"
+	prefix = "an"
+
+/datum/mob_descriptor/face_exp/gnoll/snarling
+	name = "Snarling"
+	prefix = "a"
+
+/datum/mob_descriptor/face_exp/gnoll/predatory
+	name = "Predatory"
+	prefix = "a"
+
+/datum/mob_descriptor/face_exp/gnoll/hollow
+	name = "Hollow"
+	prefix = "a"
+
+/datum/mob_descriptor/face_exp/gnoll/fierce
+	name = "Fierce"
+	prefix = "a"
+
+/datum/mob_descriptor/face_exp/gnoll/vacant
+	name = "Vacant"
+	prefix = "a"
+
+/datum/mob_descriptor/face_exp/gnoll/groveling
+	name = "Groveling"
+	prefix = "a"
+
+/datum/mob_descriptor/face_exp/gnoll/leering
+	name = "Leering"
+	prefix = "a"
 
 /datum/mob_descriptor/face_exp/stern
 	name = "Stern"
@@ -153,6 +236,12 @@
 
 /datum/mob_descriptor/face_exp/jaded
 	name = "Jaded"
+
+/datum/mob_descriptor/face_exp/hardened
+	name = "Hardened"
+
+/datum/mob_descriptor/face_exp/hopeful
+	name = "Hopeful"
 
 /datum/mob_descriptor/face_exp/inquisitive
 	name = "Inquisitive"
@@ -181,30 +270,34 @@
 /datum/mob_descriptor/face_exp/smug
 	name = "Smug"
 
-/datum/mob_descriptor/face_exp/curious
-	name = "Curious"
+/datum/mob_descriptor/face_exp/serene
+	name = "Serene"
 
+/datum/mob_descriptor/face_exp/compassionate
+	name = "Compassionate"
 
-/datum/mob_descriptor/face_exp/mild
-	name = "Mild"
+/datum/mob_descriptor/face_exp/odious
+	name = "Odious"
 
-/datum/mob_descriptor/face_exp/glowering
-	name = "Glowering"
+/datum/mob_descriptor/face_exp/selfassured
+	name = "Self-assured"
 
-/datum/mob_descriptor/face_exp/miserable
-	name = "Miserable"
+/datum/mob_descriptor/face_exp/confident
+	name = "Confident"
 
-/datum/mob_descriptor/face_exp/puzzled
-	name = "Puzzled"
+/datum/mob_descriptor/face_exp/nervous
+	name = "Nervous"
 
-/datum/mob_descriptor/face_exp/shy
-	name = "Shy"
-
-/datum/mob_descriptor/face/custom
-	name = "Custom Face"
-	custom_index = 8
-	custom_prefix_mode = CUSTOM_PREFIX_MODE_ARTICLE
+/datum/mob_descriptor/face_exp/worried
+	name = "Worried"
 
 /datum/mob_descriptor/face_exp/custom
 	name = "Custom Expression"
-	custom_index = 9
+	custom_index = 10
+
+/datum/mob_descriptor/face_exp/custom/can_describe(mob/living/described)
+	return length(described.custom_descriptors) >= custom_index
+
+/datum/mob_descriptor/face_exp/custom/get_description(mob/living/described)
+	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
+	return entry.content_text

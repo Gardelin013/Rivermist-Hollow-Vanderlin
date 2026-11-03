@@ -152,6 +152,7 @@
 		/datum/body_marking/eyeliner,
 	)
 	descriptor_choices = list(
+		/datum/descriptor_choice/trait,
 		/datum/descriptor_choice/stature,
 		/datum/descriptor_choice/height,
 		/datum/descriptor_choice/body,
