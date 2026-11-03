@@ -16,13 +16,16 @@
 	name = "Rugged Skin"
 
 /datum/mob_descriptor/skin/diseased
-	name = "Diseased Skin"
+	name = "Diseased, flaking skin"
 
 /datum/mob_descriptor/skin/dry
 	name = "Dry Skin"
 
 /datum/mob_descriptor/skin/fine
 	name = "Fine Skin"
+
+/datum/mob_descriptor/skin/fair
+	name = "Fair Skin"
 
 /datum/mob_descriptor/skin/wrinkled
 	name = "Wrinkled Skin"
@@ -40,42 +43,23 @@
 	name = "Dusky Skin"
 
 /datum/mob_descriptor/skin/irritated
-	name = "Irritated Skin"
+	name = "Blemished Skin"
 
 /datum/mob_descriptor/skin/ashen
 	name = "Ashen Skin"
 
-/datum/mob_descriptor/skin/custom
-	name = "Custom Skin"
-	suffix = "skin"
-	custom_index = 11
+/datum/mob_descriptor/skin/calloused
+	name = "Calloused hands"
 
-/datum/mob_descriptor/skin/custom/can_describe(mob/living/described)
-	return length(described.custom_descriptors) >= custom_index
+/datum/mob_descriptor/skin/warts
+	name = "Several Warts"
 
-/datum/mob_descriptor/skin/custom/get_description(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	return entry.content_text
+/datum/mob_descriptor/skin/inked
+	name = "Ink-stained hands"
 
-/datum/mob_descriptor/scales
-	abstract_type = /datum/mob_descriptor/scales
-	slot = MOB_DESCRIPTOR_SLOT_SKIN
-	verbage = "%HAVE%"
+/datum/mob_descriptor/skin/freckles
+	name = "Freckles"
 
-/datum/mob_descriptor/scales/plain
-	name = "Plain Scales"
-
-/datum/mob_descriptor/scales/rough
-	name = "Rough Scales"
-
-/datum/mob_descriptor/scales/smooth
-	name = "Smooth Scales"
-
-/datum/mob_descriptor/scales/plated
-	name = "Plated Scales"
-
-/datum/mob_descriptor/scales/peeling
-	name = "Peeling Scales"
 
 /datum/mob_descriptor/fur
 	abstract_type = /datum/mob_descriptor/fur
@@ -118,6 +102,26 @@
 /datum/mob_descriptor/fur/matted
 	name = "Matted Fur"
 
+/datum/mob_descriptor/scales
+	abstract_type = /datum/mob_descriptor/scales
+	slot = MOB_DESCRIPTOR_SLOT_SKIN
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/scales/plain
+	name = "Plain Scales"
+
+/datum/mob_descriptor/scales/rough
+	name = "Rough Scales"
+
+/datum/mob_descriptor/scales/smooth
+	name = "Smooth Scales"
+
+/datum/mob_descriptor/scales/plated
+	name = "Plated Scales"
+
+/datum/mob_descriptor/scales/peeling
+	name = "Peeling Scales"
+
 /datum/mob_descriptor/feathers
 	abstract_type = /datum/mob_descriptor/feathers
 	slot = MOB_DESCRIPTOR_SLOT_SKIN
@@ -151,3 +155,7 @@
 
 /datum/mob_descriptor/chitin/fine
 	name = "Fine Chitin"
+
+/datum/mob_descriptor/skin/custom
+	name = "Custom Skin"
+	custom_index = 10

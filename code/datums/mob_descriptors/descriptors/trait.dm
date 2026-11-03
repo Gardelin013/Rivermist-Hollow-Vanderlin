@@ -3,6 +3,12 @@
 	slot = MOB_DESCRIPTOR_SLOT_TRAIT
 	verbage = "%ARE%"
 
+/datum/mob_descriptor/trait/none
+	name = "None"
+
+/datum/mob_descriptor/trait/none/can_describe(mob/living/described)
+	return FALSE
+
 /datum/mob_descriptor/trait/moderate
 	name = "Moderate"
 	prefix = "very"
@@ -247,11 +253,4 @@
 
 /datum/mob_descriptor/trait/custom
 	name = "Custom Trait"
-	custom_index = 5
-
-/datum/mob_descriptor/trait/custom/can_describe(mob/living/described)
-	return length(described.custom_descriptors) >= custom_index
-
-/datum/mob_descriptor/trait/custom/get_description(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	return entry.content_text
+	custom_index = 12

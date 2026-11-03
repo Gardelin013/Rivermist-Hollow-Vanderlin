@@ -12,11 +12,11 @@
 #define MOB_DESCRIPTOR_SLOT_BREASTS 12
 #define MOB_DESCRIPTOR_SLOT_VAGINA 13
 #define MOB_DESCRIPTOR_SLOT_HEIGHT 14
-#define MOB_DESCRIPTOR_SLOT_TRAIT 15
-#define MOB_DESCRIPTOR_SLOT_BUTT 16
-#define MOB_DESCRIPTOR_SLOT_ARMPITS 17
+#define MOB_DESCRIPTOR_SLOT_BUTT 15
+#define MOB_DESCRIPTOR_SLOT_ARMPITS 16
+#define MOB_DESCRIPTOR_SLOT_TRAIT 17
 
-#define CUSTOM_DESCRIPTOR_AMOUNT 11
+#define CUSTOM_DESCRIPTOR_AMOUNT 12
 #define CUSTOM_DESCRIPTOR_TEXT_LENGTH 32
 
 /// Custom descriptor types by custom_index; append new ones so saved slots keep their text.
@@ -25,14 +25,14 @@
 	/datum/mob_descriptor/prominent/custom/two,\
 	/datum/mob_descriptor/prominent/custom/three,\
 	/datum/mob_descriptor/prominent/custom/four,\
-	/datum/mob_descriptor/trait/custom,\
 	/datum/mob_descriptor/height/custom,\
 	/datum/mob_descriptor/body/custom,\
 	/datum/mob_descriptor/stature/custom,\
 	/datum/mob_descriptor/face/custom,\
 	/datum/mob_descriptor/face_exp/custom,\
 	/datum/mob_descriptor/skin/custom,\
-	/datum/mob_descriptor/voice/custom\
+	/datum/mob_descriptor/voice/custom,\
+	/datum/mob_descriptor/trait/custom\
 )
 
 #define CUSTOM_PREFIX_MODE_NONE 0

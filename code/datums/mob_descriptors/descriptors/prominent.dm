@@ -9,31 +9,8 @@
 	return FALSE
 
 /datum/mob_descriptor/prominent/custom
-
-/datum/mob_descriptor/prominent/custom/can_describe(mob/living/described)
-	return length(described.custom_descriptors) >= custom_index
-
-/datum/mob_descriptor/prominent/custom/get_description(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	return entry.content_text
-
-/datum/mob_descriptor/prominent/custom/get_pre_string(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	switch(entry.prefix_type)
-		if(CUSTOM_PREFIX_HAS_A)
-			return "a "
-		if(CUSTOM_PREFIX_HAS_AN)
-			return "an "
-	return null
-
-/datum/mob_descriptor/prominent/custom/get_verbage(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	switch(entry.prefix_type)
-		if(CUSTOM_PREFIX_IS)
-			return "%ARE%"
-		if(CUSTOM_PREFIX_LOOKS)
-			return "%LOOK%"
-	return "%HAVE%"
+	abstract_type = /datum/mob_descriptor/prominent/custom
+	custom_prefix_mode = CUSTOM_PREFIX_MODE_FULL
 
 /datum/mob_descriptor/prominent/custom/one
 	name = "Custom #1"
@@ -53,8 +30,8 @@
 
 /datum/mob_descriptor/prominent/hunched_over
 	name = "Hunched Over"
-	verbage = "%ARE%"
 	show_obscured = TRUE
+	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/crooked_nose
 	name = "Crooked Nose"
@@ -84,28 +61,28 @@
 
 /datum/mob_descriptor/prominent/twitchy
 	name = "Twitchy"
-	verbage = "%ARE%"
 	show_obscured = TRUE
+	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/clumsy
 	name = "Clumsy"
-	verbage = "%ARE%"
 	show_obscured = TRUE
+	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/unkempt
 	name = "Unkempt"
-	verbage = "%ARE%"
 	show_obscured = TRUE
+	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/tidy
 	name = "Tidy"
-	verbage = "%ARE%"
 	show_obscured = TRUE
+	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/eloquent
 	name = "Eloquent"
-	verbage = "%ARE%"
 	show_obscured = TRUE
+	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/thick_tail
 	name = "Thick Tail"
@@ -128,6 +105,7 @@
 
 /datum/mob_descriptor/prominent/physically_deformed
 	name = "Physically Deformed"
+	show_obscured = TRUE
 	verbage = "%ARE%"
 
 /datum/mob_descriptor/prominent/extensive_scars
@@ -137,6 +115,8 @@
 /datum/mob_descriptor/prominent/move_strange
 	name = "Moves Strangely"
 	show_obscured = TRUE
+	verbage = "%MOVE%"
+	describe = "strangely"
 
 /datum/mob_descriptor/prominent/ghoulish_appearance
 	name = "Ghoulish Appearance"
@@ -145,40 +125,36 @@
 
 /datum/mob_descriptor/prominent/prominent_chest
 	name = "Prominent Chest"
+	show_obscured = TRUE
 	verbage = "%HAVE%"
 	prefix = "a"
-	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/prominent_bottom
 	name = "Prominent Posterior"
+	show_obscured = TRUE
 	verbage = "%HAVE%"
 	prefix = "a"
-	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/prominent_potbelly
-	name = "Prominent Potbelly"
+	name = "Potbelly"
+	show_obscured = TRUE
 	verbage = "%HAVE%"
 	prefix = "a"
-	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/prominent_thighs
-	name = "Prominent Thighs"
-	verbage = "%HAVE%"
+	name = "Fat Thighs"
 	show_obscured = TRUE
+	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/prominent_shoulders
-	name = "Prominent Shoulders"
-	verbage = "%HAVE%"
+	name = "Broad Shoulders"
 	show_obscured = TRUE
+	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/prominent_jawline
-	name = "Prominent Jawline"
+	name = "Jutting Jawline"
 	verbage = "%HAVE%"
 	prefix = "a"
-
-/datum/mob_descriptor/prominent/prominent_ears
-	name = "Prominent Ears"
-	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/cold_gaze
 	name = "Cold Gaze"
@@ -195,22 +171,17 @@
 	verbage = "%HAVE%"
 	prefix = "an"
 
-/datum/mob_descriptor/prominent/promiscuous_mannerisms
-	name = "Sensual Manners"
-	verbage = "%HAVE%"
-	show_obscured = TRUE
-
 /datum/mob_descriptor/prominent/intimidating_presence
 	name = "Intimidating Presence"
+	show_obscured = TRUE
 	verbage = "%HAVE%"
 	prefix = "an"
-	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/meek_presence
 	name = "Meek Presence"
+	show_obscured = TRUE
 	verbage = "%HAVE%"
 	prefix = "a"
-	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/adorable_presence
 	name = "Adorable Presence"
@@ -220,9 +191,9 @@
 
 /datum/mob_descriptor/prominent/lordly_presence
 	name = "Lordly Presence"
+	show_obscured = TRUE
 	verbage = "%HAVE%"
 	prefix = "a"
-	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/doting_presence
 	name = "Doting Presence"
@@ -231,7 +202,7 @@
 	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/aristocratic_haughtiness
-	name = "Aristocratic Haughtiness"
+	name = "Aristocratic Disdain"
 	verbage = "%HAVE%"
 	prefix = "an"
 	show_obscured = TRUE
@@ -266,15 +237,14 @@
 	prefix = "a"
 
 /datum/mob_descriptor/prominent/haughty_atmosphere
-	name = "Haughty Atmosphere"
-	verbage = "%HAVE%"
-	prefix = "a"
+	name = "Haughty Mannerisms"
 	show_obscured = TRUE
+	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/untrustworthy
 	name = "Untrustworthy"
-	verbage = "appears"
 	show_obscured = TRUE
+	verbage = "%APPEAR%"
 
 /datum/mob_descriptor/prominent/ratty_hair
 	name = "Ratty Hair"
@@ -287,8 +257,8 @@
 
 /datum/mob_descriptor/prominent/chaste_mannerism
 	name = "Chaste Mannerisms"
-	verbage = "%HAVE%"
 	show_obscured = TRUE
+	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/whimsy
 	name = "Air of Whimsy"
@@ -301,6 +271,115 @@
 	name = "Dim Look"
 	verbage = "%HAVE%"
 	prefix = "a"
+
+/datum/mob_descriptor/prominent/keen_look
+	name = "Keen Look"
+	verbage = "%HAVE%"
+	prefix = "a"
+
+
+/datum/mob_descriptor/prominent/presence_stoic
+	name = "Stoic Prescence"
+	show_obscured = TRUE
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/hands_platters
+	name = "Hands like platters"
+	show_obscured = TRUE
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/hands_delicate
+	name = "Delicate hands"
+	show_obscured = TRUE
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/fingers_long
+	name = "Long fingers"
+	show_obscured = TRUE
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/teeth_fine
+	name = "Fine Teeth"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/teeth_rotting
+	name = "Rotting Teeth"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/teeth_missing
+	name = "Missing Teeth"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/teeth_fine
+	name = "Fine Teeth"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/laugh_donkey
+	name = "Donkey-like Laugh"
+	show_obscured = TRUE
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/nose_crooked
+	name = "Crooked Nose"
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/nose_broken
+	name = "Broken Nose"
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/nose_button
+	name = "Button Nose"
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/nose_hawk
+	name = "Hawkish Nose"
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/nose_aquiline
+	name = "Aquiline Nose"
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/neck_bull
+	name = "Bull Neck"
+	show_obscured = TRUE
+	verbage = "%HAVE%"
+	prefix = "a"
+
+/datum/mob_descriptor/prominent/hair_perfumed
+	name = "Perfumed Hair"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/hair_oiled
+	name = "Oiled Hair"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/hair_curly
+	name = "Curly Hair"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/hair_coarse
+	name = "Coarse Hair"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/hair_thin
+	name = "Thin Hair"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/ears_large
+	name = "Large Ears"
+	verbage = "%HAVE%"
+
+/datum/mob_descriptor/prominent/promiscuous_mannerisms
+	name = "Sensual Manners"
+	verbage = "%HAVE%"
+	show_obscured = TRUE
 
 /datum/mob_descriptor/prominent/canine_features
 	name = "Canine Features"
@@ -359,7 +438,7 @@
 	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/insectoid_features
-	name = "Instectoid Features"
+	name = "Insectoid Features"
 	verbage = "%HAVE%"
 
 /datum/mob_descriptor/prominent/marine_features
@@ -368,8 +447,4 @@
 
 /datum/mob_descriptor/prominent/vulpine_features
 	name = "Vulpine Features"
-	verbage = "%HAVE%"
-
-/datum/mob_descriptor/prominent/prominent_ears
-	name = "Prominent Ears"
 	verbage = "%HAVE%"

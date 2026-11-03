@@ -10,7 +10,7 @@
 	if(described.gender == MALE)
 		return "man"
 	else
-		return"woman"
+		return "woman"
 
 /datum/mob_descriptor/stature/gentleman
 	name = "Gentleman/Gentlewoman"
@@ -20,6 +20,66 @@
 		return "gentleman"
 	else
 		return "gentlewoman"
+
+/datum/mob_descriptor/stature/thug
+	name = "Thug"
+
+/datum/mob_descriptor/stature/snob
+	name = "Snob"
+
+/datum/mob_descriptor/stature/slob
+	name = "Slob"
+
+/datum/mob_descriptor/stature/brute
+	name = "Brute"
+
+/datum/mob_descriptor/stature/highbrow
+	name = "Highbrow"
+
+/datum/mob_descriptor/stature/stooge
+	name = "Stooge"
+
+/datum/mob_descriptor/stature/fool
+	name = "Fool"
+
+/datum/mob_descriptor/stature/bookworm
+	name = "Bookworm"
+
+/datum/mob_descriptor/stature/lowlife
+	name = "Lowlife"
+
+/datum/mob_descriptor/stature/dignitary
+	name = "Dignitary"
+
+/datum/mob_descriptor/stature/trickster
+	name = "Trickster"
+
+/datum/mob_descriptor/stature/vagabond
+	name = "Orphan"
+
+/datum/mob_descriptor/stature/foreigner
+	name = "Foreigner"
+
+/datum/mob_descriptor/stature/scoundrel
+	name = "Scoundrel"
+
+/datum/mob_descriptor/stature/scoundrel/get_description(mob/living/described)
+	if(described.gender == MALE)
+		return "scoundrel"
+	else
+		return "wench"
+
+/datum/mob_descriptor/stature/commoner
+	name = "Commoner"
+
+/datum/mob_descriptor/stature/simpleton
+	name = "Simpleton"
+
+/datum/mob_descriptor/stature/cavalier
+	name = "Cavalier"
+
+/datum/mob_descriptor/stature/swashbuckler
+	name = "Swashbuckler"
 
 /datum/mob_descriptor/stature/patriarch
 	name = "Patriarch/Matriarch"
@@ -48,26 +108,11 @@
 	else
 		return "villainess"
 
-/datum/mob_descriptor/stature/thug
-	name = "Thug"
-
 /datum/mob_descriptor/stature/knave
 	name = "Knave"
 
 /datum/mob_descriptor/stature/wench
 	name = "Wench"
-
-/datum/mob_descriptor/stature/snob
-	name = "Snob"
-
-/datum/mob_descriptor/stature/slob
-	name = "Slob"
-
-/datum/mob_descriptor/stature/brute
-	name = "Brute"
-
-/datum/mob_descriptor/stature/highbrow
-	name = "Highbrow"
 
 /datum/mob_descriptor/stature/scholar
 	name = "Scholar"
@@ -98,21 +143,6 @@
 
 /datum/mob_descriptor/stature/stoic
 	name = "Stoic"
-
-/datum/mob_descriptor/stature/stooge
-	name = "Stooge"
-
-/datum/mob_descriptor/stature/fool
-	name = "Fool"
-
-/datum/mob_descriptor/stature/bookworm
-	name = "Bookworm"
-
-/datum/mob_descriptor/stature/lowlife
-	name = "Lowlife"
-
-/datum/mob_descriptor/stature/dignitary
-	name = "Dignitary"
 
 /datum/mob_descriptor/stature/degenerate
 	name = "Degenerate"
@@ -237,13 +267,6 @@
 /datum/mob_descriptor/stature/widower
 	name = "Widower/Widow"
 
-// Gnoll stature — always returns "gnoll" regardless of pronouns
-/datum/mob_descriptor/stature/gnoll
-	name = "Gnoll"
-
-/datum/mob_descriptor/stature/gnoll/get_description(mob/living/described)
-	return "gnoll"
-
 /datum/mob_descriptor/stature/widower/get_description(mob/living/described)
 	if(described.gender == MALE)
 		return "widower"
@@ -271,7 +294,6 @@
 	else
 		return "broad"
 
-
 /datum/mob_descriptor/stature/wanderer
 	name = "Wanderer"
 
@@ -295,11 +317,4 @@
 
 /datum/mob_descriptor/stature/custom
 	name = "Custom Stature"
-	custom_index = 6
-
-/datum/mob_descriptor/stature/custom/can_describe(mob/living/described)
-	return length(described.custom_descriptors) >= custom_index
-
-/datum/mob_descriptor/stature/custom/get_description(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	return entry.content_text
+	custom_index = 7

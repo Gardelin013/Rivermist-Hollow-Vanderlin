@@ -7,10 +7,6 @@
 	name = "Moderate"
 	prefix = "a"
 
-/datum/mob_descriptor/height/middling
-	name = "Middling"
-	prefix = "a"
-
 /datum/mob_descriptor/height/tall
 	name = "Tall"
 	prefix = "a"
@@ -23,12 +19,36 @@
 	name = "Towering"
 	prefix = "a"
 
-/datum/mob_descriptor/height/giant
-	name = "Giant"
-	prefix = "a"
-
 /datum/mob_descriptor/height/tiny
 	name = "Tiny"
+	prefix = "a"
+
+/datum/mob_descriptor/height/shortly
+	name = "Slightly shorter"
+	prefix = "a"
+	
+/datum/mob_descriptor/height/tallish
+	name = "Somewhat taller"
+	prefix = "a"
+
+/datum/mob_descriptor/height/average	
+	name = "Average"
+	prefix = "a"
+
+/datum/mob_descriptor/height/lowslung
+	name = "Low-slung"
+	prefix = "a"
+
+/datum/mob_descriptor/height/statuesque
+	name = "Statuesque"
+	prefix = "a"
+
+/datum/mob_descriptor/height/longshanked
+	name = "Long-shanked"
+	prefix = "a"
+
+/datum/mob_descriptor/height/middling
+	name = "Middling"
 	prefix = "a"
 
 /datum/mob_descriptor/height/giant
@@ -37,20 +57,5 @@
 
 /datum/mob_descriptor/height/custom
 	name = "Custom Height"
-	custom_index = 7
-
-/datum/mob_descriptor/height/custom/can_describe(mob/living/described)
-	return length(described.custom_descriptors) >= custom_index
-
-/datum/mob_descriptor/height/custom/get_description(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	return entry.content_text
-
-/datum/mob_descriptor/height/custom/get_pre_string(mob/living/described)
-	var/datum/custom_descriptor_entry/entry = described.custom_descriptors[custom_index]
-	switch(entry.prefix_type)
-		if(CUSTOM_PREFIX_HAS_A)
-			return "a "
-		if(CUSTOM_PREFIX_HAS_AN)
-			return "an "
-	return null
+	custom_index = 5
+	custom_prefix_mode = CUSTOM_PREFIX_MODE_ARTICLE

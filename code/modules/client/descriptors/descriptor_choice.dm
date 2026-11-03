@@ -31,6 +31,12 @@
 		/datum/mob_descriptor/face/emaciated,
 		/datum/mob_descriptor/face/skeletal,
 		/datum/mob_descriptor/face/long,
+		/datum/mob_descriptor/face/cat,
+		/datum/mob_descriptor/face/pig,
+		/datum/mob_descriptor/face/rat,
+		/datum/mob_descriptor/face/hollow,
+		/datum/mob_descriptor/face/weatherbitten,
+		/datum/mob_descriptor/face/malformed,
 		/datum/mob_descriptor/face/custom,
 	)
 
@@ -76,6 +82,13 @@
 		/datum/mob_descriptor/face_exp/confident,
 		/datum/mob_descriptor/face_exp/nervous,
 		/datum/mob_descriptor/face_exp/worried,
+		/datum/mob_descriptor/face_exp/curious,
+		/datum/mob_descriptor/face_exp/dreamy,
+		/datum/mob_descriptor/face_exp/mild,
+		/datum/mob_descriptor/face_exp/glowering,
+		/datum/mob_descriptor/face_exp/miserable,
+		/datum/mob_descriptor/face_exp/puzzled,
+		/datum/mob_descriptor/face_exp/shy,
 		/datum/mob_descriptor/face_exp/custom,
 	)
 
@@ -113,6 +126,11 @@
 		/datum/mob_descriptor/body/broadshoulder,
 		/datum/mob_descriptor/body/waspwaist,
 		/datum/mob_descriptor/body/burly,
+		/datum/mob_descriptor/body/barrel,
+		/datum/mob_descriptor/body/bowleg,
+		/datum/mob_descriptor/body/portly,
+		/datum/mob_descriptor/body/willowy,
+		/datum/mob_descriptor/body/wiry,
 		/datum/mob_descriptor/body/custom,
 	)
 
@@ -188,6 +206,14 @@
 		/datum/mob_descriptor/stature/freek,
 		/datum/mob_descriptor/stature/weerdoe,
 		/datum/mob_descriptor/stature/plump,
+		/datum/mob_descriptor/stature/trickster,
+		/datum/mob_descriptor/stature/vagabond,
+		/datum/mob_descriptor/stature/foreigner,
+		/datum/mob_descriptor/stature/scoundrel,
+		/datum/mob_descriptor/stature/commoner,
+		/datum/mob_descriptor/stature/simpleton,
+		/datum/mob_descriptor/stature/cavalier,
+		/datum/mob_descriptor/stature/swashbuckler,
 		/datum/mob_descriptor/stature/custom,
 	)
 
@@ -223,6 +249,7 @@
 		/datum/mob_descriptor/voice/snide,
 		/datum/mob_descriptor/voice/smoker,
 		/datum/mob_descriptor/voice/venomous,
+		/datum/mob_descriptor/voice/stuttering,
 		/datum/mob_descriptor/voice/custom,
 	)
 
@@ -237,6 +264,7 @@
 		/datum/mob_descriptor/skin/diseased,
 		/datum/mob_descriptor/skin/dry,
 		/datum/mob_descriptor/skin/fine,
+		/datum/mob_descriptor/skin/fair,
 		/datum/mob_descriptor/skin/wrinkled,
 		/datum/mob_descriptor/skin/sunkissed,
 		/datum/mob_descriptor/skin/aged,
@@ -244,6 +272,10 @@
 		/datum/mob_descriptor/skin/dusky,
 		/datum/mob_descriptor/skin/irritated,
 		/datum/mob_descriptor/skin/ashen,
+		/datum/mob_descriptor/skin/calloused,
+		/datum/mob_descriptor/skin/warts,
+		/datum/mob_descriptor/skin/inked,
+		/datum/mob_descriptor/skin/freckles,
 		/datum/mob_descriptor/skin/custom,
 	)
 
@@ -309,14 +341,20 @@
 		/datum/mob_descriptor/height/towering,
 		/datum/mob_descriptor/height/giant,
 		/datum/mob_descriptor/height/tiny,
-		/datum/mob_descriptor/height/giant,
+		/datum/mob_descriptor/height/shortly,
+		/datum/mob_descriptor/height/tallish,
+		/datum/mob_descriptor/height/average,
+		/datum/mob_descriptor/height/lowslung,
+		/datum/mob_descriptor/height/statuesque,
+		/datum/mob_descriptor/height/longshanked,
 		/datum/mob_descriptor/height/custom,
 	)
 
 /datum/descriptor_choice/trait
 	name = "Physical Descriptor"
-	default_descriptor = /datum/mob_descriptor/trait/moderate
+	default_descriptor = /datum/mob_descriptor/trait/none
 	descriptors = list(
+		/datum/mob_descriptor/trait/none,
 		/datum/mob_descriptor/trait/moderate,
 		/datum/mob_descriptor/trait/mundane,
 		/datum/mob_descriptor/trait/middling,
@@ -391,6 +429,7 @@
 		/datum/mob_descriptor/skin/diseased,
 		/datum/mob_descriptor/skin/dry,
 		/datum/mob_descriptor/skin/fine,
+		/datum/mob_descriptor/skin/fair,
 		/datum/mob_descriptor/skin/wrinkled,
 		/datum/mob_descriptor/skin/sunkissed,
 		/datum/mob_descriptor/skin/aged,
@@ -398,6 +437,10 @@
 		/datum/mob_descriptor/skin/dusky,
 		/datum/mob_descriptor/skin/irritated,
 		/datum/mob_descriptor/skin/ashen,
+		/datum/mob_descriptor/skin/calloused,
+		/datum/mob_descriptor/skin/warts,
+		/datum/mob_descriptor/skin/inked,
+		/datum/mob_descriptor/skin/freckles,
 		/datum/mob_descriptor/scales/plain,
 		/datum/mob_descriptor/scales/rough,
 		/datum/mob_descriptor/scales/smooth,
@@ -425,7 +468,7 @@
 
 /datum/descriptor_choice/skin_lamia
 	name = "Skin & Scales"
-	default_descriptor = /datum/mob_descriptor/fur/plain
+	default_descriptor = /datum/mob_descriptor/scales/plain
 	descriptors = list(
 		/datum/mob_descriptor/skin/normal,
 		/datum/mob_descriptor/skin/soft,
@@ -433,6 +476,7 @@
 		/datum/mob_descriptor/skin/diseased,
 		/datum/mob_descriptor/skin/dry,
 		/datum/mob_descriptor/skin/fine,
+		/datum/mob_descriptor/skin/fair,
 		/datum/mob_descriptor/skin/wrinkled,
 		/datum/mob_descriptor/skin/sunkissed,
 		/datum/mob_descriptor/skin/aged,
@@ -440,6 +484,10 @@
 		/datum/mob_descriptor/skin/dusky,
 		/datum/mob_descriptor/skin/irritated,
 		/datum/mob_descriptor/skin/ashen,
+		/datum/mob_descriptor/skin/calloused,
+		/datum/mob_descriptor/skin/warts,
+		/datum/mob_descriptor/skin/inked,
+		/datum/mob_descriptor/skin/freckles,
 		/datum/mob_descriptor/scales/plain,
 		/datum/mob_descriptor/scales/rough,
 		/datum/mob_descriptor/scales/smooth,
@@ -458,6 +506,7 @@
 		/datum/mob_descriptor/skin/diseased,
 		/datum/mob_descriptor/skin/dry,
 		/datum/mob_descriptor/skin/fine,
+		/datum/mob_descriptor/skin/fair,
 		/datum/mob_descriptor/skin/wrinkled,
 		/datum/mob_descriptor/skin/sunkissed,
 		/datum/mob_descriptor/skin/aged,
@@ -465,6 +514,10 @@
 		/datum/mob_descriptor/skin/dusky,
 		/datum/mob_descriptor/skin/irritated,
 		/datum/mob_descriptor/skin/ashen,
+		/datum/mob_descriptor/skin/calloused,
+		/datum/mob_descriptor/skin/warts,
+		/datum/mob_descriptor/skin/inked,
+		/datum/mob_descriptor/skin/freckles,
 		/datum/mob_descriptor/feathers/fine,
 		/datum/mob_descriptor/feathers/stiff,
 		/datum/mob_descriptor/feathers/frayed,
@@ -473,6 +526,7 @@
 		/datum/mob_descriptor/skin/custom,
 	)
 
+// I'm keeping prominent_bottom for the 'Clap of my ass-cheeks alerting the guards,' jokes. -Aberra
 #define PROMINENT_DESCRIPTORS \
 	/datum/mob_descriptor/prominent/hunched_over,\
 	/datum/mob_descriptor/prominent/drooling,\
@@ -520,6 +574,27 @@
 	/datum/mob_descriptor/prominent/chaste_mannerism,\
 	/datum/mob_descriptor/prominent/whimsy,\
 	/datum/mob_descriptor/prominent/dim_look,\
+	/datum/mob_descriptor/prominent/keen_look,\
+	/datum/mob_descriptor/prominent/presence_stoic,\
+	/datum/mob_descriptor/prominent/hands_platters,\
+	/datum/mob_descriptor/prominent/laugh_donkey,\
+	/datum/mob_descriptor/prominent/fingers_long,\
+	/datum/mob_descriptor/prominent/hands_delicate,\
+	/datum/mob_descriptor/prominent/teeth_fine,\
+	/datum/mob_descriptor/prominent/teeth_rotting,\
+	/datum/mob_descriptor/prominent/teeth_missing,\
+	/datum/mob_descriptor/prominent/nose_crooked,\
+	/datum/mob_descriptor/prominent/nose_broken,\
+	/datum/mob_descriptor/prominent/nose_button,\
+	/datum/mob_descriptor/prominent/nose_hawk,\
+	/datum/mob_descriptor/prominent/nose_aquiline,\
+	/datum/mob_descriptor/prominent/neck_bull,\
+	/datum/mob_descriptor/prominent/hair_perfumed,\
+	/datum/mob_descriptor/prominent/hair_oiled,\
+	/datum/mob_descriptor/prominent/hair_curly,\
+	/datum/mob_descriptor/prominent/hair_coarse,\
+	/datum/mob_descriptor/prominent/hair_thin,\
+	/datum/mob_descriptor/prominent/ears_large,\
 	/datum/mob_descriptor/prominent/custom/one,\
 	/datum/mob_descriptor/prominent/custom/two,\
 	/datum/mob_descriptor/prominent/custom/three,\
