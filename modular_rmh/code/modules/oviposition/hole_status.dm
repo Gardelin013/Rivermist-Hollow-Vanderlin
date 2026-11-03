@@ -46,6 +46,8 @@
 	if(.)
 		return
 	var/mob/user = ui?.user
+	if(action == "toggle_art")
+		return toggle_hole_art(user)
 	if(!owner || QDELETED(owner) || user != owner)
 		return FALSE
 
@@ -105,6 +107,7 @@
 	if(!owner || QDELETED(owner))
 		return data
 
+	data["show_art"] = hole_art_enabled(user)
 	data["nutriment"] = round(owner.get_reagent_amount(/datum/reagent/consumable/nutriment), 0.1)
 	data["holding_in"] = owner.is_holding_fluids_in()
 	data["holes"] = list()
@@ -148,6 +151,8 @@
 	d["eggs"] = list()
 	d["hatchling_count"] = 0
 	d["hatchlings"] = list()
+	if(istype(hole, /obj/item/organ/genitals/filling_organ/breasts))
+		d["size"] = clamp(round(hole.organ_size), MIN_BREASTS_SIZE, MAX_BREASTS_SIZE)
 	if(hole.supports_oviposition_pregnancy())
 		for(var/obj/item/oviposition_egg/egg as anything in hole.get_oviposition_eggs())
 			UNTYPED_LIST_ADD(d["eggs"], build_single_egg(egg))
@@ -170,6 +175,7 @@
 	w["soreness"] = opening.get_soreness_id()
 	w["gaped"] = opening.gaped
 	w["gaping_soon"] = !opening.gaped && opening.get_gape_strain() >= ORIFICE_GAPE_WARN_STRAIN
+	w["open_frac"] = round(opening.get_open_fraction(), 0.01)
 	return w
 
 /datum/hole_status_menu/proc/build_fill(obj/item/organ/genitals/filling_organ/organ)
@@ -753,3 +759,94 @@
 		if(OVI_EGG_TRAIT_FAST_GROWTH)
 			return "Accelerated"
 	return "[trait_flag]"
+
+// ---- Pictures ----
+
+/datum/preference/toggle/hole_view_pictures
+	savefile_key = "hole_view_pictures"
+	savefile_identifier = PREF_PLAYER
+	category = "gameplay"
+	can_randomize = FALSE
+	should_update_preview = FALSE
+	default_value = TRUE
+
+/// Whether viewer sees the organ pictures in the holes window; on unless they turned it off.
+/proc/hole_art_enabled(mob/viewer)
+	var/datum/preferences/prefs = viewer?.client?.prefs
+	if(!prefs)
+		return TRUE
+	return prefs.read_preference(/datum/preference/toggle/hole_view_pictures)
+
+/datum/hole_status_menu/proc/toggle_hole_art(mob/viewer)
+	var/datum/preferences/prefs = viewer?.client?.prefs
+	if(!prefs)
+		return FALSE
+	prefs.toggle_preference(/datum/preference/toggle/hole_view_pictures)
+	prefs.save_preferences()
+	return TRUE
+
+/datum/hole_status_menu/ui_assets(mob/user)
+	return list(get_asset_datum(/datum/asset/simple/hole_art))
+
+/// 0 to 1: the girth now, from the tightest rest girth to the loosest one stretched to a gape.
+/datum/orifice/proc/get_open_fraction()
+	var/low = rest_steps[1]
+	var/high = rest_steps[length(rest_steps)] * gape_ratio
+	return clamp((get_current_girth() - low) / max(high - low, 1), 0, 1)
+
+/// Organ pictures for the holes window; built by hole_art_generator, credits in hole_art/attributions.txt.
+/datum/asset/simple/hole_art
+	assets = list(
+		"hole_anus_0.png" = 'modular_rmh/icons/hole_art/hole_anus_0.png',
+		"hole_anus_1.png" = 'modular_rmh/icons/hole_art/hole_anus_1.png',
+		"hole_anus_2.png" = 'modular_rmh/icons/hole_art/hole_anus_2.png',
+		"hole_anus_3.png" = 'modular_rmh/icons/hole_art/hole_anus_3.png',
+		"hole_anus_4.png" = 'modular_rmh/icons/hole_art/hole_anus_4.png',
+		"hole_anus_gaped_vagina.png" = 'modular_rmh/icons/hole_art/hole_anus_gaped_vagina.png',
+		"hole_anus_slit.png" = 'modular_rmh/icons/hole_art/hole_anus_slit.png',
+		"hole_breasts_0.png" = 'modular_rmh/icons/hole_art/hole_breasts_0.png',
+		"hole_breasts_1.png" = 'modular_rmh/icons/hole_art/hole_breasts_1.png',
+		"hole_breasts_2.png" = 'modular_rmh/icons/hole_art/hole_breasts_2.png',
+		"hole_breasts_3.png" = 'modular_rmh/icons/hole_art/hole_breasts_3.png',
+		"hole_breasts_4.png" = 'modular_rmh/icons/hole_art/hole_breasts_4.png',
+		"hole_breasts_5.png" = 'modular_rmh/icons/hole_art/hole_breasts_5.png',
+		"hole_vagina_0.png" = 'modular_rmh/icons/hole_art/hole_vagina_0.png',
+		"hole_vagina_1.png" = 'modular_rmh/icons/hole_art/hole_vagina_1.png',
+		"hole_vagina_10.png" = 'modular_rmh/icons/hole_art/hole_vagina_10.png',
+		"hole_vagina_11.png" = 'modular_rmh/icons/hole_art/hole_vagina_11.png',
+		"hole_vagina_2.png" = 'modular_rmh/icons/hole_art/hole_vagina_2.png',
+		"hole_vagina_3.png" = 'modular_rmh/icons/hole_art/hole_vagina_3.png',
+		"hole_vagina_4.png" = 'modular_rmh/icons/hole_art/hole_vagina_4.png',
+		"hole_vagina_5.png" = 'modular_rmh/icons/hole_art/hole_vagina_5.png',
+		"hole_vagina_6.png" = 'modular_rmh/icons/hole_art/hole_vagina_6.png',
+		"hole_vagina_7.png" = 'modular_rmh/icons/hole_art/hole_vagina_7.png',
+		"hole_vagina_8.png" = 'modular_rmh/icons/hole_art/hole_vagina_8.png',
+		"hole_vagina_9.png" = 'modular_rmh/icons/hole_art/hole_vagina_9.png',
+		"hole_womb.png" = 'modular_rmh/icons/hole_art/hole_womb.png',
+		"hole_womb_eggs_1.png" = 'modular_rmh/icons/hole_art/hole_womb_eggs_1.png',
+		"hole_womb_eggs_2.png" = 'modular_rmh/icons/hole_art/hole_womb_eggs_2.png',
+		"hole_womb_eggs_3.png" = 'modular_rmh/icons/hole_art/hole_womb_eggs_3.png',
+		"hole_womb_eggs_4.png" = 'modular_rmh/icons/hole_art/hole_womb_eggs_4.png',
+		"hole_womb_eggs_5.png" = 'modular_rmh/icons/hole_art/hole_womb_eggs_5.png',
+		"hole_womb_fill_1.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_1.png',
+		"hole_womb_fill_10.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_10.png',
+		"hole_womb_fill_2.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_2.png',
+		"hole_womb_fill_3.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_3.png',
+		"hole_womb_fill_4.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_4.png',
+		"hole_womb_fill_5.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_5.png',
+		"hole_womb_fill_6.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_6.png',
+		"hole_womb_fill_7.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_7.png',
+		"hole_womb_fill_8.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_8.png',
+		"hole_womb_fill_9.png" = 'modular_rmh/icons/hole_art/hole_womb_fill_9.png',
+		"hole_womb_preg_1.png" = 'modular_rmh/icons/hole_art/hole_womb_preg_1.png',
+		"hole_womb_preg_2.png" = 'modular_rmh/icons/hole_art/hole_womb_preg_2.png',
+		"hole_womb_preg_3.png" = 'modular_rmh/icons/hole_art/hole_womb_preg_3.png',
+		"hole_womb_preg_4.png" = 'modular_rmh/icons/hole_art/hole_womb_preg_4.png',
+		"hole_womb_preg_5.png" = 'modular_rmh/icons/hole_art/hole_womb_preg_5.png',
+		"hole_womb_preg_6.png" = 'modular_rmh/icons/hole_art/hole_womb_preg_6.png',
+		"hole_womb_stuffed_1.png" = 'modular_rmh/icons/hole_art/hole_womb_stuffed_1.png',
+		"hole_womb_stuffed_2.png" = 'modular_rmh/icons/hole_art/hole_womb_stuffed_2.png',
+		"hole_womb_stuffed_3.png" = 'modular_rmh/icons/hole_art/hole_womb_stuffed_3.png',
+		"hole_womb_stuffed_4.png" = 'modular_rmh/icons/hole_art/hole_womb_stuffed_4.png',
+		"hole_womb_stuffed_5.png" = 'modular_rmh/icons/hole_art/hole_womb_stuffed_5.png'
+	)

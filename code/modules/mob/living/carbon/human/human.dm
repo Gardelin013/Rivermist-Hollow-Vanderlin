@@ -1197,6 +1197,9 @@
 		clean_lips()
 		. = TRUE
 
+	if(wash_lipstick_marks())
+		. = TRUE
+
 	if(!(obscured[SLOT_CHECK_REGULAR] & ITEM_SLOT_SHIRT) && wear_shirt?.wash(clean_types))
 		update_inv_shirt()
 		. = TRUE

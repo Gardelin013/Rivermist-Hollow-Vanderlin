@@ -3,7 +3,7 @@
 /datum/sex_scene_controller/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
 	if(!ui)
-		ui = new(user, src, "SexScene", "Sate Desire", 900, 560)
+		ui = new(user, src, "SexScene", "Sate Desire", 760, 520)
 		ui.set_autoupdate(FALSE)
 		ui.open()
 
@@ -160,6 +160,8 @@
 			"user_zones" = action.user_menu_zone_mask,
 			"target_zones" = action.target_menu_zone_mask,
 			"fit_hint" = target ? action.get_orifice_fit_hint(user, target) : null,
+			"category" = action.menu_category,
+			"tip" = action.menu_tip,
 		))
 	for(var/datum/sex_action/action_template as anything in get_all_menu_actions())
 		if(is_action_active(action_template))
@@ -178,6 +180,8 @@
 			"user_zones" = action.user_menu_zone_mask,
 			"target_zones" = action.target_menu_zone_mask,
 			"fit_hint" = target ? action.get_orifice_fit_hint(user, target) : null,
+			"category" = action.menu_category,
+			"tip" = action.menu_tip,
 		))
 		qdel(proposal)
 	return actions_out
@@ -236,6 +240,7 @@
 		your_erp_data = your_prefs.character_setup_erp_data(user)
 		out["yours"] = your_erp_data["categories"]
 		out["lock_reason"] = your_erp_data["lock_reason"]
+		out["your_kinks"] = your_erp_data["kink_categories"]
 
 	var/list/their_erp_data = your_erp_data
 	if(target != user)
@@ -257,6 +262,28 @@
 				categories_out += list(list("name" = category["name"], "kinks" = kinks_out))
 		out["their_kinks"] = categories_out
 	return out
+
+/// Applies the Kinks tab draft to the user's prefs, writes the slot's ERP block and refreshes the cache.
+/datum/sex_scene_controller/proc/save_own_kinks(list/changes)
+	var/datum/preferences/prefs = user?.client?.prefs
+	if(!prefs || !islist(changes) || length(changes) > length(GLOB.available_kinks))
+		return FALSE
+	var/lock_reason = prefs.get_erp_preference_edit_lock_reason(user)
+	if(lock_reason)
+		to_chat(user, span_warning(lock_reason))
+		return TRUE
+	var/changed = FALSE
+	for(var/list/change in changes)
+		if(prefs.set_kink_preference(change["name"], change["enabled"], change["intensity"], change["notes"]))
+			changed = TRUE
+	if(!changed)
+		return TRUE
+	prefs.mark_erp_preferences_dirty()
+	if(prefs.save_erp_preferences())
+		to_chat(user, span_notice("My kinks are saved."))
+	else
+		to_chat(user, span_warning("My kinks changed, but could not be saved to the character."))
+	return TRUE
 
 /datum/sex_scene_controller/proc/get_notes_ui_data()
 	var/list/yours_out = list()
@@ -391,15 +418,22 @@
 			belly_comp.set_selected_action(null, user)
 			return TRUE
 		if("erp_pref")
-			if(!user.client?.prefs)
+			var/datum/preferences/prefs = user.client?.prefs
+			if(!prefs)
 				return FALSE
 			// handle_erp_pref_topic reads href-style text values; tgui sends
 			// JSON numbers, so stringify every param (text2num(number) runtimes).
 			var/list/href_list = list()
 			for(var/key in params)
 				href_list[key] = "[params[key]]"
-			user.client.prefs.handle_erp_pref_topic(user, href_list)
+			var/revision = prefs.erp_preferences_revision
+			prefs.handle_erp_pref_topic(user, href_list)
+			// An accepted edit bumps the revision; write it to the character, as the Kinks tab's Save does.
+			if(prefs.erp_preferences_revision != revision)
+				prefs.save_erp_preferences()
 			return TRUE
+		if("save_kinks")
+			return save_own_kinks(params["changes"])
 		if("note_add")
 			var/note_title = trim("[params["title"]]")
 			var/note_content = trim("[params["content"]]")

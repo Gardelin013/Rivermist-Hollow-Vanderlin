@@ -1095,6 +1095,7 @@ GLOBAL_LIST_EMPTY(roundstart_species)
 	var/mutable_appearance/lip_overlay = H.get_lips_overlay()
 	if(lip_overlay)
 		standing += lip_overlay
+	standing += H.get_lipstick_mark_overlays()
 
 	//Underwear
 	/*if(!(NO_UNDERWEAR in species_traits))

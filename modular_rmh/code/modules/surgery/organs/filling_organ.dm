@@ -701,6 +701,9 @@
 	var/mob/living/carbon/carbon_owner = owner
 	var/list/covers = list()
 	if(additional_blocker == "bra")
+		// A pulled-open top leaves the breasts bare, so leaks drip past it.
+		if(carbon_owner.has_bared_chest())
+			return covers
 		covers += carbon_owner.bra
 		if(carbon_owner.underwear?.covers_breasts)
 			covers += carbon_owner.underwear

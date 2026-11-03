@@ -43,13 +43,11 @@
 /obj/structure/table/get_mechanics_examine(mob/user)
 	. = ..()
 	. += "With sneak on, click it to hide under it."
-	. += "With sneak on, lie down and move into it to crawl under it. Large creatures do not fit."
+	. += "Lie down and move into it to crawl under it. Large creatures do not fit."
 	. += "Under it, the Hide action tucks you out of sight. Moving while hidden slips you under the next table."
 
 /obj/structure/table/proc/can_crawl_under(mob/living/carbon/human/crawler)
 	if(QDELETED(src) || QDELETED(crawler) || !crawler.client || crawler.pulledby)
-		return FALSE
-	if(crawler.m_intent != MOVE_INTENT_SNEAK)
 		return FALSE
 	if(!crawler.fits_under_table() || HAS_TRAIT(crawler, TRAIT_UNDER_TABLE))
 		return FALSE

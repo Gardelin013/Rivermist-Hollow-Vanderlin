@@ -18,6 +18,10 @@ export default {
     settings: 'Настройки',
     genetics: 'Генетика',
   },
+  art: {
+    show: 'Показать рисунки органов',
+    hide: 'Скрыть рисунки органов',
+  },
   cards: {
     front: 'Спереди',
     rear: 'Сзади',

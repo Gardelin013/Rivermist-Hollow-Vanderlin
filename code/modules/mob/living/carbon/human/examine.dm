@@ -93,6 +93,7 @@
 	if(lip_style && !is_mouth_covered())
 		var/lip_shade = GLOB.lipstick_shades[LOWER_TEXT(lip_color)]
 		. += span_info("[capitalize(P[THEYRE])] wearing [lip_shade ? "[lip_shade] " : ""]lipstick.")
+	. += get_face_lipstick_mark_lines(user, P)
 
 	if(!self_inspect)
 		if(family_datum == SSfamilytree.ruling_family && length(culinary_preferences) && HAS_CHARACTER_TRAIT(user, TRAIT_ROYALSERVANT))
@@ -245,6 +246,7 @@
 			show_undie_desc = TRUE
 
 	organ_desc += get_fluid_stain_examine(P)
+	organ_desc += get_body_lipstick_mark_lines(user, P)
 
 	if(length(organ_desc))
 		. += span_love("[organ_desc.Join("\n")]")

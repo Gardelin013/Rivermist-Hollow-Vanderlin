@@ -372,6 +372,7 @@
 		suppress_visible_messages = begin_remote_visible_message_suppression()
 		on_perform(action_user, action_target)
 		end_remote_visible_message_suppression(suppress_visible_messages)
+		leave_perform_lipstick_marks()
 		on_orifice_cycle()
 		play_perform_breast_anim()
 		play_perform_motion()

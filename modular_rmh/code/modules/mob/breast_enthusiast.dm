@@ -181,6 +181,8 @@
 
 /// How visible a person's breasts are: "bare", "clothed" (shaped by breast-sized clothing) or null (hidden).
 /proc/get_breast_exposure(mob/living/carbon/human/target)
+	if(target.has_bared_chest())
+		return "bare"
 	if(!breasts_visible_under_clothes(target))
 		return null
 	if(target.undershirt)

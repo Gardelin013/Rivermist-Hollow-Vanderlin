@@ -18,6 +18,10 @@ export default {
     settings: 'Settings',
     genetics: 'Genetics',
   },
+  art: {
+    show: 'Show organ pictures',
+    hide: 'Hide organ pictures',
+  },
   cards: {
     front: 'Front',
     rear: 'Rear',

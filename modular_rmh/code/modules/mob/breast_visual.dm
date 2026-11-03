@@ -484,7 +484,8 @@ GLOBAL_LIST_INIT(breast_emote_shots, list(
 		if(animation?.visual)
 			active = TRUE
 			running = animation.running
-	return "[.]_anim[active]_run[running]_jiggle[jiggling]"
+	// Breasts shown above clothes draw on another layer, so they need their own cache slot.
+	return "[.]_anim[active]_run[running]_jiggle[jiggling]_vis[visible_through_clothes]"
 
 #undef BREAST_VISUAL_ICON
 #undef BREAST_VISUAL_LAYER

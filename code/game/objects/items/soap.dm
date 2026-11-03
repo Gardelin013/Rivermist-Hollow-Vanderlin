@@ -126,6 +126,7 @@
 		reagents.trans_to(target, reagents.total_volume, transfered_by = user, method = INGEST)
 		log_combat(user, target, "fed", /datum/reagent/soap)
 		target.clean_lips()
+		target.clear_lipstick_marks_on_zone(BODY_ZONE_PRECISE_MOUTH)
 		decreaseUses(user, 5)
 
 		return ITEM_INTERACT_SUCCESS

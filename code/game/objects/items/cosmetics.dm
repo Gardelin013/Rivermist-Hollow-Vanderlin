@@ -131,13 +131,10 @@ GLOBAL_LIST_INIT(lipstick_shades, list(
 	if(!ishuman(interacting_with))
 		return NONE
 
-	if(user.zone_selected != BODY_ZONE_PRECISE_MOUTH)
-		return NONE
-
 	var/mob/living/carbon/human/H = interacting_with
 
-	if(!H.lip_style)
-		return NONE
+	if(user.zone_selected != BODY_ZONE_PRECISE_MOUTH || !H.lip_style)
+		return H.try_wipe_lipstick_mark(src, user)
 
 	if(H == user)
 		to_chat(user, "<span class='notice'>I wipe off the lipstick with [src].</span>")
@@ -150,5 +147,6 @@ GLOBAL_LIST_INIT(lipstick_shades, list(
 							"<span class='notice'>I wipe off [H]'s lipstick.</span>")
 
 	H.clean_lips()
+	H.clear_lipstick_marks_on_zone(BODY_ZONE_PRECISE_MOUTH)
 
 	return ITEM_INTERACT_SUCCESS

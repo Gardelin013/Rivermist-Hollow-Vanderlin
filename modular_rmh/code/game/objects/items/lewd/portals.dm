@@ -443,6 +443,7 @@
 	perform_sex_action(target, user, target_arousal_amt, target_pain_amt, target_orgasm_amt)
 	handle_passive_ejaculation(target)
 	playsound(user, 'sound/misc/mat/fingering.ogg', 30, TRUE, -2, ignore_walls = FALSE)
+	portal_touch_feedback(user, target)
 
 /datum/sex_action/portal_base/portal_hand_base/handle_climax_message(mob/living/carbon/human/user, mob/living/carbon/human/target, must_flip)
 	if(must_flip)
@@ -531,6 +532,7 @@
 
 	perform_sex_action(target, user, target_arousal_amt, target_pain_amt, target_orgasm_amt)
 	handle_passive_ejaculation(target)
+	portal_touch_feedback(user, target)
 
 	if(user_arousal_amt || user_pain_amt || user_orgasm_amt)
 		perform_sex_action(user, target, user_arousal_amt, user_pain_amt, user_orgasm_amt)
@@ -623,6 +625,7 @@
 	handle_passive_ejaculation(target)
 	handle_passive_ejaculation(user)
 	playsound(user, get_force_sound(), 50, TRUE, -2, ignore_walls = FALSE)
+	portal_touch_feedback(user, target)
 
 /datum/sex_action/portal_base/portal_penis_base/handle_climax_message(mob/living/user, mob/living/carbon/human/target, must_flip)
 	if(must_flip)
@@ -718,6 +721,7 @@
 	perform_sex_action(user, target, user_arousal_amt, user_pain_amt, user_orgasm_amt)
 	perform_sex_action(target, user, target_arousal_amt, target_pain_amt, target_orgasm_amt)
 	playsound(user, get_force_sound(), 45, TRUE, -2, ignore_walls = FALSE)
+	portal_touch_feedback(user, target)
 
 /datum/sex_action/portal_base/portal_vagina_base/handle_climax_message(mob/living/user, mob/living/carbon/human/target, must_flip)
 	if(must_flip)
@@ -886,6 +890,7 @@
 			stop_runtime()
 			return
 
+	portal_touch_feedback(user, target, "insert")
 	user.update_inv_hands()
 	user.update_a_intents()
 	perform_sex_action(user, target, 0.5, pain_amt, 0.5)
@@ -1002,6 +1007,7 @@
 		if(!user.put_in_inactive_hand(removed_item))
 			removed_item.doMove(get_turf(user))
 
+	portal_touch_feedback(user, target, "remove")
 	perform_sex_action(user, target, 0.5, base_pain_amt, 0.5)
 	handle_passive_ejaculation()
 	pending_toy = choose_toy_to_reach(hole, STORAGE_LAYER_INNER)

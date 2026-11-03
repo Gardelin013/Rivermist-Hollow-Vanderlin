@@ -64,10 +64,6 @@
 /obj/item/natural/worms/leech/counts_as_stored_toy()
 	return FALSE
 
-/// Batch 4 fills this: the toggleable shake for toys, eggs and births moving inside; [kind] names the cause.
-/mob/living/proc/hole_shake_hook(kind, strength = 1)
-	return
-
 // ---- Stirring ----
 
 /// Each flow tick the toys inside stir: pleasure by size and depth, and now and then a line.
