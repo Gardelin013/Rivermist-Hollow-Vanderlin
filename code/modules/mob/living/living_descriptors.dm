@@ -81,6 +81,7 @@
 		lines += build_coalesce_description(desc_copy, described, list(MOB_DESCRIPTOR_SLOT_HEIGHT, MOB_DESCRIPTOR_SLOT_BODY, MOB_DESCRIPTOR_SLOT_STATURE, MOB_DESCRIPTOR_SLOT_FACE_SHAPE, MOB_DESCRIPTOR_SLOT_FACE_EXPRESSION), "You see %DESC1%, %DESC2% %DESC3% with %DESC4%, %DESC5%.", watcher)
 		lines += build_coalesce_description(desc_copy, described, list(MOB_DESCRIPTOR_SLOT_AGE, MOB_DESCRIPTOR_SLOT_SKIN, MOB_DESCRIPTOR_SLOT_VOICE), "%THEY% %DESC1%, %DESC2% and %DESC3%.", watcher)
 
+	lines += build_coalesce_description(desc_copy, described, list(MOB_DESCRIPTOR_SLOT_TRAIT), "%THEY% %DESC1%.", watcher)
 	lines += build_joined_description(desc_copy, described, list(MOB_DESCRIPTOR_SLOT_PROMINENT, MOB_DESCRIPTOR_SLOT_PROMINENT), watcher)
 	lines += build_joined_description(desc_copy, described, list(MOB_DESCRIPTOR_SLOT_PROMINENT, MOB_DESCRIPTOR_SLOT_PROMINENT), watcher)
 	lines += build_coalesce_description(desc_copy, described, list(MOB_DESCRIPTOR_SLOT_ARMPITS), "%THEY% %DESC1%.", watcher)
