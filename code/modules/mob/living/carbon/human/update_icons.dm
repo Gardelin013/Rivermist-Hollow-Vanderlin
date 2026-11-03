@@ -1994,6 +1994,9 @@ generate/load female uniform sprites matching all previously decided variables
 			. += organ.accessory_type
 			. += organ.accessory_colors
 			. += organ.get_render_key_state()
+			var/lipstick_key = get_lipstick_organ_key(organ)
+			if(lipstick_key)
+				. += lipstick_key
 			if(underwear?.hides_organ_slot(organ.slot))
 				. += "underwear_hidden"
 
