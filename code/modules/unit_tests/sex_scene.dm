@@ -604,9 +604,15 @@
 	var/datum/ai_behavior/horny/horny_behavior = new
 	TEST_ASSERT(horny_behavior.setup(controller, BB_BASIC_MOB_CURRENT_HORNY_TARGET, BB_TARGETTING_DATUM) != FALSE, "the horny behavior should acquire its opted-in target")
 	TEST_ASSERT_NULL(horny_npc.sex_scene, "the chase should not bind a sex scene before the NPC reaches its target")
-	horny_behavior.perform(1, controller, BB_BASIC_MOB_CURRENT_HORNY_TARGET, BB_TARGETTING_DATUM)
-	var/datum/sex_scene_controller/scene_controller = horny_npc.sex_scene?.get_controller(horny_npc)
-	TEST_ASSERT_NOTNULL(scene_controller, "the horny NPC should bind an actor-owned scene controller after reaching its target")
+	// The phased hunt seizes, holds and preps over several beats before the act starts.
+	var/datum/sex_scene_controller/scene_controller
+	for(var/beat in 1 to 12)
+		horny_npc.next_move = 0
+		horny_behavior.perform(1, controller, BB_BASIC_MOB_CURRENT_HORNY_TARGET, BB_TARGETTING_DATUM)
+		scene_controller = horny_npc.sex_scene?.get_controller(horny_npc)
+		if(length(scene_controller?.get_active_actions()))
+			break
+	TEST_ASSERT_NOTNULL(scene_controller, "the horny NPC should bind an actor-owned scene controller after reaching its target (phase [controller.blackboard[BB_HORNY_PHASE]])")
 	TEST_ASSERT_EQUAL(controller.blackboard[BB_BASIC_MOB_CURRENT_HORNY_TARGET], target, "scene acquisition should not cancel the horny behavior")
 	var/list/active_actions = scene_controller.get_active_actions()
 	TEST_ASSERT_EQUAL(length(active_actions), 1, "the horny NPC should start one runtime action after reaching its target")
