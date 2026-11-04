@@ -261,6 +261,8 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_ZOMBIE_IMMUNE "zombie_immune"
 /// prevents biting
 #define TRAIT_NO_BITE "no_bite"
+/// Can bite while a helmet or mask covers the mouth.
+#define TRAIT_BITERHELM "helmet_biter"
 /// is this guy a foreigner?
 #define TRAIT_FOREIGNER "Foreigner"
 /// mob cannot be ambushed for any reason
