@@ -64,6 +64,10 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	var/pack_cap = HORNY_PACK_CAP
 	/// Spits its ranged web as a trap when angered.
 	var/spits_web = FALSE
+	/// How long a knotted hunter stays tied before it lets go.
+	var/tie_time = 45 SECONDS
+	/// Hunters with hands get the hand acts and the hand-held lines.
+	var/has_hands = TRUE
 
 /datum/horny_family_profile/New()
 	. = ..()
@@ -125,6 +129,17 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 		"done" = "[hunter] binds [target]'s wrists with rope!",
 		"done_target" = "[hunter] binds my wrists with rope!",
 		"done_hear" = "I hear rope knotting.",
+	)
+
+/// Tie beats while knotted, keyed tug, tug_me, tug_hear, release, release_me, release_hear.
+/datum/horny_family_profile/proc/get_tie_lines(mob/living/hunter, mob/living/target)
+	return list(
+		"tug" = "[hunter] rocks against [target], knot swollen tight inside [target.p_them()].",
+		"tug_me" = "[hunter] rocks against me, [hunter.p_their()] knot swollen tight inside me.",
+		"tug_hear" = "I hear a low grunt and a wet shift.",
+		"release" = "[hunter]'s knot slackens and slips free of [target].",
+		"release_me" = "[hunter]'s knot slackens and slips free of me.",
+		"release_hear" = "I hear a wet pop.",
 	)
 
 /// A pounce family leaving the ground.
@@ -190,8 +205,9 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 			add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_anal_sex)
 		if(target_has_vagina && npc_penetration_can_fit(hunter, target, ORGAN_SLOT_VAGINA))
 			add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_vaginal_sex, 3)
-		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_handjob)
-		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_jerk_over)
+		if(has_hands)
+			add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_handjob)
+			add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_jerk_over)
 
 	if(has_vagina)
 		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_facesitting, 2)
@@ -236,6 +252,10 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 			return pick("Heh.", "Not bad.", "That'll do.", "Run along now.")
 		if(HORNY_BARK_LOST)
 			return pick("Bah!", "Get back here!", "Next time...")
+		if(HORNY_BARK_ACT_START)
+			return pick("Hold still.", "There we go.", "Take it.")
+		if(HORNY_BARK_ACT_CLIMAX)
+			return pick("Nngh.", "Hah.", "Good.")
 	return null
 
 /datum/horny_family_profile/undead
@@ -268,6 +288,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 /datum/horny_family_profile/lycans
 	family_flag = HORNY_MOB_TYPE_LYCANS
+	has_hands = FALSE
 	hurt_limit = 0.4
 	break_off = HORNY_BREAK_OFF_CIRCLE
 	can_sprint = TRUE
@@ -278,6 +299,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	circles_behind = TRUE
 	follows_scent = TRUE
 	pack_call = TRUE
+	tie_time = 90 SECONDS
 
 /datum/horny_family_profile/lycans/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s ears prick toward [target] and its lips peel back from its teeth."
@@ -312,8 +334,19 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/lycans/get_pack_call_hear_message(mob/living/hunter)
 	return "I hear a howl."
 
+/datum/horny_family_profile/lycans/get_tie_lines(mob/living/hunter, mob/living/target)
+	return list(
+		"tug" = "[hunter] growls and hauls on [target]'s hips, claws digging in, its knot locked deep inside [target.p_them()].",
+		"tug_me" = "[hunter] growls and hauls on my hips, claws digging in, its knot locked deep inside me.",
+		"tug_hear" = "I hear a low growl and claws scraping skin.",
+		"release" = "[hunter]'s knot softens and it drags itself free of [target], growling.",
+		"release_me" = "[hunter]'s knot softens and it drags itself free of me, growling.",
+		"release_hear" = "I hear a wet pop and a low growl.",
+	)
+
 /datum/horny_family_profile/beasts
 	family_flag = HORNY_MOB_TYPE_BEASTS
+	has_hands = FALSE
 	pain_factor = 1.2
 	hurt_limit = 0.4
 	break_off = HORNY_BREAK_OFF_CIRCLE
@@ -326,6 +359,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	circles_behind = TRUE
 	follows_scent = TRUE
 	pack_call = TRUE
+	tie_time = 60 SECONDS
 
 /datum/horny_family_profile/beasts/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] lifts its head, nostrils flaring toward [target], and a low growl rolls out."
@@ -360,8 +394,19 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/beasts/get_pack_call_hear_message(mob/living/hunter)
 	return "I hear a howl."
 
+/datum/horny_family_profile/beasts/get_tie_lines(mob/living/hunter, mob/living/target)
+	return list(
+		"tug" = "[hunter] shifts its weight, its knot dragging inside [target].",
+		"tug_me" = "[hunter] shifts its weight, its knot dragging inside me.",
+		"tug_hear" = "I hear panting and a whine.",
+		"release" = "[hunter]'s knot goes slack and it pulls free of [target] with a wet pop.",
+		"release_me" = "[hunter]'s knot goes slack and it pulls free of me with a wet pop.",
+		"release_hear" = "I hear a wet pop and a satisfied huff.",
+	)
+
 /datum/horny_family_profile/spiders
 	family_flag = HORNY_MOB_TYPE_SPIDERS
+	has_hands = FALSE
 	pain_factor = 1.5
 	hurt_limit = 0.3
 	break_off = HORNY_BREAK_OFF_FLEE
@@ -411,6 +456,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 /datum/horny_family_profile/bog_bugs
 	family_flag = HORNY_MOB_TYPE_BOG_BUGS
+	has_hands = FALSE
 	pain_factor = 1.5
 	hurt_limit = 0.3
 	break_off = HORNY_BREAK_OFF_FLEE
@@ -521,6 +567,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 /datum/horny_family_profile/lamias
 	family_flag = HORNY_MOB_TYPE_LAMIAS
+	has_hands = FALSE
 	break_off = HORNY_BREAK_OFF_FLEE
 	restraint_type = null
 	seize_move = HORNY_MOVE_COIL
@@ -555,6 +602,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 /datum/horny_family_profile/lizards
 	family_flag = HORNY_MOB_TYPE_LIZARDS
+	has_hands = FALSE
 	pain_factor = 0.8
 	break_off = HORNY_BREAK_OFF_CIRCLE
 	restraint_type = null
@@ -705,3 +753,355 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 			add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_vaginal_sex/tentacle/maneater, 3)
 	if(target.getorganslot(ORGAN_SLOT_PENIS))
 		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/tentacle_jerk/maneater, 2)
+
+// --- Act words ----------------------------------------------------------------------------------
+
+/datum/horny_family_profile/undead/get_act_words(mob/living/user, mob/living/target)
+	var/their = user.p_their()
+	return list(
+		"part" = "cold cock",
+		"article" = their,
+		"their" = their,
+		"them" = user.p_them(),
+		"body" = "hips",
+		"mount" = "lurches on top and pushes",
+		"thrusts" = list("works", "grinds", "fucks"),
+		"tied" = list("room" = "grinds [their] swollen knot deeper into", "me" = "grinds [their] swollen knot deeper into me"),
+		"hold" = "locks cold hands on [target]'s hips",
+		"body_tails" = list(
+			list("id" = "cold_hands", "room" = ", cold hands locked on [target]'s hips", "me" = ", cold hands locked on my hips"),
+			list("id" = "no_breath", "room" = ", no breath on [target]'s neck", "me" = ", no breath on my neck"),
+		),
+		"spill" = "jerks and goes still",
+		"spill_room" = "spilling cold seed",
+		"spill_me" = "cold seed spills",
+		"hear" = "dry rasping",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and a dry rasp",
+			"anal" = "a strangled grunt and a dry rasp",
+			"throat" = "choking and a dry rasp",
+			"ride" = "a low moan and a dry rattle",
+			"facesitting" = "muffled sounds and a dry rasp",
+			"handjob" = "skin sliding on cold skin",
+			"jerk_over" = "quick strokes and a dry rasp",
+			"body_rub" = "cold skin dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/lycans/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "cock",
+		"article" = "its",
+		"their" = "its",
+		"them" = "it",
+		"body" = "haunches",
+		"mount" = "rears up and drives",
+		"start_vaginal" = list("room" = "[user] mounts [target] from behind and drives its cock into [target.p_their()] %HOLE%!", "me" = "[user] mounts me from behind and drives into my %HOLE%!"),
+		"thrusts" = list("drives", "ruts", "hammers"),
+		"tied" = list("room" = "growls and hauls back on its swollen knot, buried in", "me" = "growls and hauls back on its swollen knot, buried in me"),
+		"hold" = "sinks its claws into [target]'s hips",
+		"body_tails" = list(
+			list("id" = "claws", "room" = ", claws pricking [target]'s hips", "me" = ", claws pricking my hips"),
+			list("id" = "fur", "room" = ", coarse fur scraping [target]'s back", "me" = ", coarse fur scraping my back"),
+		),
+		"spill" = "buries itself to the root",
+		"spill_room" = "flooding",
+		"spill_me" = "heat floods",
+		"hear" = "a rising growl",
+		"hear_acts" = list(
+			"vaginal" = "a sharp yelp and a rising growl",
+			"anal" = "a strangled grunt and a growl",
+			"throat" = "choking and a low growl",
+			"ride" = "a low moan and a growl",
+			"facesitting" = "muffled sounds and panting",
+			"handjob" = "a growl and skin on fur",
+			"jerk_over" = "panting and quick, wet strokes",
+			"body_rub" = "fur dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/beasts/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "cock",
+		"article" = "its",
+		"their" = "its",
+		"them" = "it",
+		"body" = "haunches",
+		"mount" = "rears up and drives",
+		"start_vaginal" = list("room" = "[user] mounts [target] from behind and thrusts its cock into [target.p_their()] %HOLE%!", "me" = "[user] mounts me from behind and thrusts into my %HOLE%!"),
+		"thrusts" = list("hammers", "ruts", "humps"),
+		"tied" = list("room" = "humps in short jerks, its knot swollen fat inside", "me" = "humps in short jerks, its knot swollen fat inside me"),
+		"hold" = "plants its forepaws on [target]'s back",
+		"body_tails" = list(
+			list("id" = "forepaws", "room" = ", forepaws planted on [target]'s back", "me" = ", forepaws planted on my back"),
+			list("id" = "jaws", "room" = ", its jaws closed on [target]'s shoulder", "me" = ", its jaws closed on my shoulder"),
+		),
+		"spill" = "slams in and locks tight",
+		"spill_room" = "pumping",
+		"spill_me" = "heat pumps",
+		"hear" = "growling and panting",
+		"hear_acts" = list(
+			"vaginal" = "a sharp yelp and panting",
+			"anal" = "a strangled grunt and growling",
+			"throat" = "choking and panting",
+			"ride" = "a low moan and panting",
+			"facesitting" = "muffled sounds and panting",
+			"handjob" = "panting and skin on fur",
+			"jerk_over" = "panting and quick, wet strokes",
+			"body_rub" = "fur dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/spiders/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "cock",
+		"article" = "its",
+		"their" = "its",
+		"them" = "it",
+		"body" = "abdomen",
+		"mount" = "clamps on and pushes",
+		"thrusts" = list("pumps", "works", "fucks"),
+		"tied" = list("room" = "grinds its swollen knot deeper into", "me" = "grinds its swollen knot deeper into me"),
+		"hold" = "wraps its bristling legs around [target]",
+		"body_tails" = list(
+			list("id" = "legs", "room" = ", bristling legs locked around [target]", "me" = ", bristling legs locked around me"),
+			list("id" = "mandibles", "room" = ", mandibles clicking at [target]'s ear", "me" = ", mandibles clicking at my ear"),
+		),
+		"spill" = "goes rigid, legs clenching",
+		"spill_room" = "pulsing seed",
+		"spill_me" = "seed pulses",
+		"hear" = "chittering",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and chittering",
+			"anal" = "a strangled grunt and chittering",
+			"throat" = "choking and chittering",
+			"ride" = "a low moan and chittering",
+			"facesitting" = "muffled sounds and chittering",
+			"handjob" = "chittering and skin on chitin",
+			"jerk_over" = "chittering and quick, wet strokes",
+			"body_rub" = "chitin dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/bog_bugs/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "cock",
+		"article" = "its",
+		"their" = "its",
+		"them" = "it",
+		"body" = "abdomen",
+		"mount" = "clamps on and jabs",
+		"thrusts" = list("jabs", "pumps", "fucks"),
+		"tied" = list("room" = "grinds its swollen knot deeper into", "me" = "grinds its swollen knot deeper into me"),
+		"hold" = "clamps its forelegs around [target]'s waist",
+		"body_tails" = list(
+			list("id" = "forelegs", "room" = ", forelegs clamped around [target]'s waist", "me" = ", forelegs clamped around my waist"),
+			list("id" = "antennae", "room" = ", antennae twitching against [target]'s neck", "me" = ", antennae twitching against my neck"),
+		),
+		"spill" = "clamps tight and shudders",
+		"spill_room" = "pulsing seed",
+		"spill_me" = "seed pulses",
+		"hear" = "clicking",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and clicking",
+			"anal" = "a strangled grunt and clicking",
+			"throat" = "choking and clicking",
+			"ride" = "a low moan and clicking",
+			"facesitting" = "muffled sounds and clicking",
+			"handjob" = "clicking and skin on chitin",
+			"jerk_over" = "clicking and quick, wet strokes",
+			"body_rub" = "chitin dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/trolls/get_act_words(mob/living/user, mob/living/target)
+	var/their = user.p_their()
+	return list(
+		"part" = "thick cock",
+		"article" = their,
+		"their" = their,
+		"them" = user.p_them(),
+		"body" = "hips",
+		"mount" = "bears down and forces",
+		"thrusts" = list("pumps", "ruts", "pounds"),
+		"tied" = list("room" = "grinds [their] swollen knot deeper into", "me" = "grinds [their] swollen knot deeper into me"),
+		"hold" = "pins [target] under [their] bulk",
+		"body_tails" = list(
+			list("id" = "bulk", "room" = ", [their] bulk crushing [target] into the ground", "me" = ", [their] bulk crushing me into the ground"),
+			list("id" = "ground", "room" = ", the ground thudding under the weight", "me" = ", the ground thudding under me"),
+		),
+		"spill" = "roars and slams in deep",
+		"spill_room" = "flooding",
+		"spill_me" = "heat floods",
+		"hear" = "heavy grunts",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and heavy grunts",
+			"anal" = "a strangled cry and heavy grunts",
+			"throat" = "choking and heavy grunts",
+			"ride" = "a low moan and heavy grunts",
+			"facesitting" = "muffled sounds and heavy grunts",
+			"handjob" = "heavy grunts and skin on skin",
+			"jerk_over" = "heavy grunts and wet strokes",
+			"body_rub" = "skin dragging on hide",
+		),
+	)
+
+/datum/horny_family_profile/minotaurs/get_act_words(mob/living/user, mob/living/target)
+	var/their = user.p_their()
+	return list(
+		"part" = "thick cock",
+		"article" = their,
+		"their" = their,
+		"them" = user.p_them(),
+		"body" = "hips",
+		"mount" = "bears down and rams",
+		"thrusts" = list("pumps", "drives", "pounds"),
+		"tied" = list("room" = "grinds [their] swollen knot deeper into", "me" = "grinds [their] swollen knot deeper into me"),
+		"hold" = "hooks an arm around [target]'s waist",
+		"body_tails" = list(
+			list("id" = "hooves", "room" = ", hooves scraping the stone", "me" = ", hooves scraping the stone beside me"),
+			list("id" = "snort", "room" = ", a hot snort against [target]'s neck", "me" = ", a hot snort against my neck"),
+		),
+		"spill" = "bellows and slams in deep",
+		"spill_room" = "flooding",
+		"spill_me" = "heat floods",
+		"hear" = "hooves on stone",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and a snort",
+			"anal" = "a strangled cry and a snort",
+			"throat" = "choking and a snort",
+			"ride" = "a low moan and hooves on stone",
+			"facesitting" = "muffled sounds and a snort",
+			"handjob" = "a snort and skin on skin",
+			"jerk_over" = "snorting and quick, wet strokes",
+			"body_rub" = "hide dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/lamias/get_act_words(mob/living/user, mob/living/target)
+	var/their = user.p_their()
+	return list(
+		"part" = "cock",
+		"article" = their,
+		"their" = their,
+		"them" = user.p_them(),
+		"body" = "coils",
+		"mount" = "coils close and sinks",
+		"start_vaginal" = list("room" = "[user] coils around [target] and sinks [their] cock into [target.p_their()] %HOLE%!", "me" = "[user] coils around me and sinks into my %HOLE%!"),
+		"start_throat" = list("room" = "[user] coils around [target] and sinks [their] cock down [target.p_their()] throat!", "me" = "[user] coils around me and sinks [their] cock down my throat!"),
+		"thrusts" = list("works", "grinds", "fucks"),
+		"tied" = list("room" = "grinds [their] swollen knot deeper into", "me" = "grinds [their] swollen knot deeper into me"),
+		"hold" = "draws [their] coils tight around [target]",
+		"body_tails" = list(
+			list("id" = "coils", "room" = ", coils tightening around [target]", "me" = ", coils tightening around me"),
+			list("id" = "scales", "room" = ", cool scales sliding over [target]'s thighs", "me" = ", cool scales sliding over my thighs"),
+		),
+		"spill" = "locks [their] coils tight",
+		"spill_room" = "flooding",
+		"spill_me" = "heat floods",
+		"hear" = "scales rasping",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and scales rasping",
+			"anal" = "a strangled grunt and scales rasping",
+			"throat" = "choking and a hiss",
+			"ride" = "a low moan and scales rasping",
+			"facesitting" = "muffled sounds and a hiss",
+			"handjob" = "scales rasping on skin",
+			"jerk_over" = "a hiss and quick, wet strokes",
+			"body_rub" = "scales dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/lizards/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "cock",
+		"article" = "its",
+		"their" = "its",
+		"them" = "it",
+		"body" = "haunches",
+		"mount" = "crawls on top and pushes",
+		"thrusts" = list("pumps", "ruts", "humps"),
+		"tied" = list("room" = "grinds its swollen knot deeper into", "me" = "grinds its swollen knot deeper into me"),
+		"hold" = "pins [target] under its scaly weight",
+		"body_tails" = list(
+			list("id" = "tail", "room" = ", its tail lashing behind it", "me" = ", its tail lashing behind me"),
+			list("id" = "claws", "room" = ", claws raking the dirt beside [target]", "me" = ", claws raking the dirt beside me"),
+		),
+		"spill" = "hisses and shoves in deep",
+		"spill_room" = "flooding",
+		"spill_me" = "heat floods",
+		"hear" = "hissing",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and hissing",
+			"anal" = "a strangled grunt and hissing",
+			"throat" = "choking and hissing",
+			"ride" = "a low moan and hissing",
+			"facesitting" = "muffled sounds and hissing",
+			"handjob" = "hissing and skin on scales",
+			"jerk_over" = "hissing and quick, wet strokes",
+			"body_rub" = "scales dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/tentacles/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "slick tentacle",
+		"article" = "a",
+		"their" = "its",
+		"them" = "it",
+		"body" = "coils",
+		"mount" = "pushes",
+		"start_vaginal" = list("room" = "[user] pushes a slick tentacle into [target]'s %HOLE%!", "me" = "[user] pushes a slick tentacle into my %HOLE%!"),
+		"thrusts" = list("pumps", "writhes", "fucks"),
+		"tied" = list("room" = "grinds its swollen knot deeper into", "me" = "grinds its swollen knot deeper into me"),
+		"hold" = "winds more tentacles around [target]'s limbs",
+		"body_tails" = list(
+			list("id" = "limbs", "room" = ", more tentacles winding [target]'s limbs", "me" = ", more tentacles winding my limbs"),
+			list("id" = "slime", "room" = ", slime dripping down [target]'s thighs", "me" = ", slime dripping down my thighs"),
+		),
+		"spill" = "swells deep inside",
+		"spill_room" = "pulsing thick fluid",
+		"spill_me" = "thick fluid pulses",
+		"hear" = "wet writhing",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and wet writhing",
+			"anal" = "a strangled grunt and wet writhing",
+			"throat" = "choking and wet writhing",
+			"ride" = "a low moan and wet writhing",
+			"facesitting" = "muffled sounds and wet writhing",
+			"handjob" = "wet writhing and slick strokes",
+			"jerk_over" = "wet writhing and slick strokes",
+			"body_rub" = "slime dragging on skin",
+		),
+	)
+
+/datum/horny_family_profile/maneaters/get_act_words(mob/living/user, mob/living/target)
+	return list(
+		"part" = "flowering vine",
+		"article" = "a",
+		"their" = "its",
+		"them" = "it",
+		"body" = "vines",
+		"mount" = "winds close and pushes",
+		"thrusts" = list("roots", "works", "fucks"),
+		"tied" = list("room" = "grinds its swollen knot deeper into", "me" = "grinds its swollen knot deeper into me"),
+		"hold" = "knots its vines around [target]",
+		"body_tails" = list(
+			list("id" = "vines", "room" = ", vines knotted around [target]", "me" = ", vines knotted around me"),
+			list("id" = "sap", "room" = ", warm sap dripping down [target]'s thighs", "me" = ", warm sap dripping down my thighs"),
+		),
+		"spill" = "swells and pulses",
+		"spill_room" = "spilling warm sap and seed",
+		"spill_me" = "warm sap and seed spill",
+		"hear" = "leaves rustling",
+		"hear_acts" = list(
+			"vaginal" = "a sharp gasp and leaves rustling",
+			"anal" = "a strangled grunt and leaves rustling",
+			"throat" = "choking and leaves rustling",
+			"ride" = "a low moan and leaves rustling",
+			"facesitting" = "muffled sounds and leaves rustling",
+			"handjob" = "leaves rustling and slick strokes",
+			"jerk_over" = "leaves rustling and slick strokes",
+			"body_rub" = "sap-slick vines dragging on skin",
+		),
+	)

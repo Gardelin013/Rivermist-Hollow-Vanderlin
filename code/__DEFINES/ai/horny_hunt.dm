@@ -71,6 +71,8 @@
 #define HORNY_LOST_SIGHT_GIVE_UP (10 SECONDS)
 #define HORNY_CHASE_STALL_TIMEOUT (90 SECONDS)
 #define HORNY_INTERACTION_TIMEOUT (5 MINUTES)
+/// Time between tug beats while a knotted hunter is tied.
+#define HORNY_TIE_TUG_INTERVAL (12 SECONDS)
 #define HORNY_PREP_PAUSE (1 SECONDS)
 #define HORNY_SIGHT_RANGE 9
 #define HORNY_LUNGE_COOLDOWN (6 SECONDS)
@@ -115,3 +117,5 @@
 #define HORNY_BARK_PRESENT "present"
 #define HORNY_BARK_SATED "sated"
 #define HORNY_BARK_LOST "lost"
+#define HORNY_BARK_ACT_START "act_start"
+#define HORNY_BARK_ACT_CLIMAX "act_climax"

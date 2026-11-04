@@ -619,10 +619,8 @@
 
 		var/obj/item/organ/genitals/penis/penis = getorganslot(ORGAN_SLOT_PENIS)
 		if(!penis)
-			if(!show_genitals)
-				penis = new /obj/item/organ/genitals/penis
-			else
-				penis = new penis_organ
+			// The penis type shapes the body, so a hidden one keeps it; show_genitals only changes looks.
+			penis = new penis_organ
 			penis.length_cm = get_random_penis_length()
 			penis.organ_size = get_penis_visual_size(penis.length_cm)
 			penis.Insert(src, TRUE)
@@ -790,10 +788,8 @@
 			testicles.Insert(user, TRUE)
 		var/obj/item/organ/genitals/penis/penis = user.getorganslot(ORGAN_SLOT_PENIS)
 		if(!penis)
-			if(!show_genitals)
-				penis = new /obj/item/organ/genitals/penis
-			else
-				penis = new penis_organ
+			// The penis type shapes the body, so a hidden one keeps it; show_genitals only changes looks.
+			penis = new penis_organ
 			penis.length_cm = get_random_penis_length()
 			penis.organ_size = get_penis_visual_size(penis.length_cm)
 			penis.Insert(user, TRUE)
@@ -832,10 +828,8 @@
 				testicles.Insert(user, TRUE)
 			var/obj/item/organ/genitals/penis/penis = user.getorganslot(ORGAN_SLOT_PENIS)
 			if(!penis)
-				if(!show_genitals)
-					penis = new /obj/item/organ/genitals/penis
-				else
-					penis = new penis_organ
+				// The penis type shapes the body, so a hidden one keeps it; show_genitals only changes looks.
+				penis = new penis_organ
 				penis.length_cm = get_random_penis_length()
 				penis.organ_size = get_penis_visual_size(penis.length_cm)
 				penis.Insert(user, TRUE)

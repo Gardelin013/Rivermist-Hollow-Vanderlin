@@ -139,3 +139,7 @@
 #define BB_HORNY_WRESTLE_PRESSURE "BB_horny_wrestle_pressure"
 /// Set once the pin has landed on a floored target; cleared when the target is on their feet again.
 #define BB_HORNY_PINNED "BB_horny_pinned"
+/// world.time at which a knotted hunter lets its tie go; set once per tie.
+#define BB_HORNY_TIE_UNTIL "BB_horny_tie_until"
+/// world.time of the next tug beat while a knotted hunter is tied.
+#define BB_HORNY_TIE_NEXT_TUG "BB_horny_tie_next_tug"

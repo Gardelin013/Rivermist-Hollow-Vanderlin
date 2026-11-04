@@ -786,7 +786,7 @@
 	return
 
 /// A knot torn out opens the hole it was tied in.
-/datum/component/knotting/proc/gape_knotted_hole(mob/living/carbon/human/top)
+/datum/component/knotting/proc/gape_knotted_hole(mob/living/top)
 	var/obj/item/organ/genitals/filling_organ/hole = knotted_hole_ref?.resolve()
 	if(!istype(hole) || !hole.orifice_type)
 		return

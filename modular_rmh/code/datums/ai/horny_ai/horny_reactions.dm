@@ -128,3 +128,4 @@
 	SIGNAL_HANDLER
 	var/mob/living/partner = action_target == source ? action_initiator : action_target
 	source.ai_controller?.horny_react(HORNY_REACT_CLIMAX, partner, 1)
+	bark(source.ai_controller, source, partner, HORNY_BARK_ACT_CLIMAX)

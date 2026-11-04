@@ -62,6 +62,8 @@
 	controller.clear_blackboard_key(BB_HORNY_PACK_CALLED)
 	controller.clear_blackboard_key(BB_HORNY_CIRCLE_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_SCENT_UNTIL)
+	controller.clear_blackboard_key(BB_HORNY_TIE_UNTIL)
+	controller.clear_blackboard_key(BB_HORNY_TIE_NEXT_TUG)
 
 	basic_mob.visible_message(span_boldwarning(basic_mob.get_horny_seek_message(target_living)))
 
@@ -379,11 +381,16 @@
 
 /// The act. Nothing starts on a target that is still on its feet and free.
 /datum/ai_behavior/horny/proc/perform_use(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, atom/interaction_anchor, obj/item/portallight/portal_light, datum/horny_family_profile/profile, target_key)
+	var/datum/component/knotting/tied = horny_knot_between(basic_mob, target_living)
+	if(!tied)
+		controller.clear_blackboard_key(BB_HORNY_TIE_UNTIL)
+		controller.clear_blackboard_key(BB_HORNY_TIE_NEXT_TUG)
 	if(!basic_mob.Adjacent(interaction_anchor))
 		stop_active_horny_actions(basic_mob)
 		set_phase(controller, basic_mob, target_living, HORNY_PHASE_STALK)
 		return TRUE
-	if(!portal_light && !horny_target_is_subdued(basic_mob, target_living))
+	// The knot is the hold while it lasts.
+	if(!tied && !portal_light && !horny_target_is_subdued(basic_mob, target_living))
 		stop_active_horny_actions(basic_mob)
 		set_phase(controller, basic_mob, target_living, HORNY_PHASE_SEIZE)
 		return TRUE
@@ -402,6 +409,8 @@
 		return FALSE
 
 	var/interaction_timed_out = horny_start_time + HORNY_INTERACTION_TIMEOUT <= world.time
+	if(tied)
+		return perform_tied(controller, basic_mob, target_living, scene_controller, profile, target_key, tied, interaction_timed_out)
 	if(last_orgasm_time > world.time - 10 SECONDS || interaction_timed_out)
 		if(interaction_timed_out && length(scene_controller.get_active_actions()))
 			offer_target_rune_escape(target_living)
@@ -429,6 +438,35 @@
 	// Nothing fits yet: go back and strip or bind some more.
 	set_phase(controller, basic_mob, target_living, HORNY_PHASE_SUBDUE)
 	return TRUE
+
+/// Tied by a knot: tug now and then, and once the tie time is up slip free and end sated.
+/datum/ai_behavior/horny/proc/perform_tied(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, datum/sex_scene_controller/scene_controller, datum/horny_family_profile/profile, target_key, datum/component/knotting/tied, interaction_timed_out)
+	var/tie_until = controller.blackboard[BB_HORNY_TIE_UNTIL]
+	if(isnull(tie_until))
+		tie_until = world.time + profile.tie_time
+		controller.set_blackboard_key(BB_HORNY_TIE_UNTIL, tie_until)
+		controller.set_blackboard_key(BB_HORNY_TIE_NEXT_TUG, world.time + HORNY_TIE_TUG_INTERVAL)
+
+	if(world.time >= tie_until || interaction_timed_out)
+		if(interaction_timed_out && length(scene_controller.get_active_actions()))
+			offer_target_rune_escape(target_living)
+		scene_controller.stop_action()
+		// The owner may be the victim when the hunter rides a knot.
+		if(tied.knotted_owner)
+			SEND_SIGNAL(tied.knotted_owner, COMSIG_SEX_REMOVE_KNOT, FALSE, TRUE)
+		finish_action(controller, TRUE, target_key)
+		return FALSE
+
+	if(world.time < (controller.blackboard[BB_HORNY_TIE_NEXT_TUG] || 0))
+		return FALSE
+	controller.set_blackboard_key(BB_HORNY_TIE_NEXT_TUG, world.time + HORNY_TIE_TUG_INTERVAL)
+	var/list/lines = profile.get_tie_lines(basic_mob, target_living)
+	target_living.visible_message(span_love(lines["tug"]), span_love(lines["tug_me"]), span_hear(lines["tug_hear"]))
+	var/list/active_actions = scene_controller.get_active_actions()
+	if(length(active_actions))
+		var/datum/sex_action/action = active_actions[1]
+		action.perform_sex_action(target_living, basic_mob, 2, 1, 1.5)
+	return FALSE
 
 /// TRUE when temper or pain says this family stops hunting for a while.
 /datum/ai_behavior/horny/proc/should_break_off(datum/ai_controller/controller, mob/living/basic_mob, datum/horny_family_profile/profile)
@@ -577,6 +615,18 @@
 		return TRUE
 	return target.body_position == LYING_DOWN
 
+/// The knot tying a to b or b to a right now, else null.
+/proc/horny_knot_between(mob/living/a, mob/living/b)
+	if(QDELETED(a) || QDELETED(b))
+		return null
+	var/datum/component/knotting/knot = a.GetComponent(/datum/component/knotting)
+	if(knot?.knotted_recipient == b)
+		return knot
+	knot = b.GetComponent(/datum/component/knotting)
+	if(knot?.knotted_recipient == a)
+		return knot
+	return null
+
 /// Keeps a grip on the target. A handless hold prints its line and returns TRUE when newly set.
 /datum/ai_behavior/horny/proc/ensure_hold(datum/ai_controller/controller, mob/living/basic_mob, mob/living/carbon/human/human_target, datum/horny_family_profile/profile)
 	if(iscarbon(basic_mob))
@@ -610,7 +660,7 @@
 
 	var/action_type = select_horny_ai_act(controller, basic_mob, target_living, scene_controller)
 	if(!isnull(action_type))
-		scene_controller.try_start_action(action_type, "ai")
+		pace_for_knot(basic_mob, scene_controller.try_start_action(action_type, "ai"))
 	if(!length(scene_controller.get_active_actions()))
 		var/actionless_ticks = (controller.blackboard[BB_HORNY_ACTIONLESS_TICKS] || 0) + 1
 		controller.set_blackboard_key(BB_HORNY_ACTIONLESS_TICKS, actionless_ticks)
@@ -619,6 +669,7 @@
 		return FALSE
 
 	controller.set_blackboard_key(BB_HORNY_ACTIONLESS_TICKS, 0)
+	bark(controller, basic_mob, target_living, HORNY_BARK_ACT_START)
 	target_living.note_horny_scene_captor(basic_mob)
 	var/atom/interaction_anchor = get_horny_interaction_anchor(controller, basic_mob, target_living)
 	basic_mob.face_atom(interaction_anchor ? interaction_anchor : target_living)
@@ -633,6 +684,13 @@
 	else
 		target_living.apply_status_effect(/datum/status_effect/debuff/mob_fucked)
 	try_heal_horny_action_bleeding(controller, target_living)
+	return TRUE
+
+/// A knotted hunter keeps a knotting act running past its climax, so the tie can hold.
+/datum/ai_behavior/horny/proc/pace_for_knot(mob/living/basic_mob, datum/sex_action/action)
+	if(!action?.knot_on_finish || !basic_mob.GetComponent(/datum/component/knotting))
+		return FALSE
+	action.stop_on_climax = FALSE
 	return TRUE
 
 /datum/ai_behavior/horny/proc/select_horny_ai_act(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, datum/sex_scene_controller/scene_controller)
@@ -903,6 +961,11 @@
 		picked_organ = basic_mob.getorganslot(ORGAN_SLOT_VAGINA)
 		picked_organ.toggle_visibility(FALSE)
 
+	// A knot still tied comes out now: slipped free after a sated end, torn out otherwise.
+	var/datum/component/knotting/knot = isliving(finished_target) ? horny_knot_between(basic_mob, finished_target) : null
+	if(knot?.knotted_owner)
+		SEND_SIGNAL(knot.knotted_owner, COMSIG_SEX_REMOVE_KNOT, !succeeded, TRUE)
+
 	basic_mob.stop_pulling()
 	basic_mob.cmode = FALSE
 	set_hunt_speed_normal(controller, basic_mob)
@@ -938,6 +1001,8 @@
 	controller.clear_blackboard_key(BB_HORNY_PRESENT_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_WRESTLE_PRESSURE)
 	controller.clear_blackboard_key(BB_HORNY_PINNED)
+	controller.clear_blackboard_key(BB_HORNY_TIE_UNTIL)
+	controller.clear_blackboard_key(BB_HORNY_TIE_NEXT_TUG)
 	controller.clear_blackboard_key(target_key)
 	controller.clear_blackboard_key(BB_HORNY_TIME_START)
 	if(basic_mob.is_dead())
