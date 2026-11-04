@@ -571,11 +571,11 @@
 	// Creatures keep no fluid upkeep and refill at the plain fed rate.
 	if(!iscarbon(owner))
 		if(is_producing())
-			add_produced_fluid(production_rate * get_production_multiplier() * seconds)
+			add_produced_fluid(get_base_production(seconds))
 		return
 	if(HAS_TRAIT(owner, TRAIT_NOHUNGER))
 		if(is_producing())
-			add_produced_fluid(production_rate * get_nourishment_multiplier() * get_production_multiplier() * seconds)
+			add_produced_fluid(get_base_production(seconds) * get_nourishment_multiplier())
 		return
 	if(owner.nutrition < FLUID_HUNGER_NUTRITION)
 		if(hungerhelp)
@@ -583,9 +583,17 @@
 		return
 	if(!is_producing())
 		return
-	var/amount = production_rate * get_production_multiplier() * get_nourishment_multiplier() * seconds
+	var/amount = get_base_production(seconds) * get_nourishment_multiplier()
 	if(amount > 0)
 		pay_for_fluid(add_produced_fluid(amount))
+
+/// Units made over the given seconds before nourishment: base rate, fluid modifiers and fill curve.
+/obj/item/organ/genitals/filling_organ/proc/get_base_production(seconds)
+	return production_rate * get_production_multiplier() * get_fill_rate_multiplier() * seconds
+
+/// Speed share from how full the organ already is; flat unless a subtype slows as it fills.
+/obj/item/organ/genitals/filling_organ/proc/get_fill_rate_multiplier()
+	return 1
 
 /// Production speed from how fed the owner is: none when hungry, full when well fed, faster beyond.
 /obj/item/organ/genitals/filling_organ/proc/get_nourishment_multiplier()

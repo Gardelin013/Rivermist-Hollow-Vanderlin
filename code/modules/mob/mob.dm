@@ -1215,10 +1215,12 @@ GLOBAL_VAR_INIT(mobids, 1)
 	log_played_names(ckey,newname)
 
 	GLOB.chosen_names += newname
+	reserved_name = newname
 	real_name = newname
 	name = newname
 	if(mind)
 		mind.name = newname
+		mind.reserved_name = newname
 		if(mind.key)
 			log_played_names(mind.key,newname) //Just in case the mind is unsynced at the moment.
 
@@ -1237,6 +1239,29 @@ GLOBAL_VAR_INIT(mobids, 1)
 				if(obj.target?.current?.real_name == name)
 					obj.update_explanation_text()
 	return TRUE
+
+/// Frees this mob's GLOB.chosen_names entry when it leaves, so the character can return under that name.
+/mob/proc/release_reserved_name()
+	var/name_to_free = reserved_name || real_name
+	reserved_name = null
+	if(mind?.reserved_name == name_to_free)
+		mind.reserved_name = null
+	if(name_to_free)
+		GLOB.chosen_names -= name_to_free
+
+/// Applies prefs to a body remade for this character; the lost body's own reservation must not force a new name.
+/datum/mind/proc/apply_prefs_to_remade_body(datum/preferences/prefs, mob/living/carbon/human/new_body)
+	if(!prefs || !ishuman(new_body))
+		return
+	// A different prefs name means another character, so the old name stays reserved as for any death.
+	var/keeps_old_name = reserved_name && reserved_name == prefs.read_preference(/datum/preference/text/real_name)
+	if(keeps_old_name)
+		GLOB.chosen_names -= reserved_name
+	prefs.apply_prefs_to(new_body, TRUE)
+	if(!(new_body.real_name in GLOB.chosen_names))
+		GLOB.chosen_names += new_body.real_name
+		new_body.reserved_name = new_body.real_name
+		reserved_name = new_body.real_name
 
 ///Updates GLOB.data_core records with new name , see mob/living/carbon/human
 /mob/proc/replace_records_name(oldname,newname)

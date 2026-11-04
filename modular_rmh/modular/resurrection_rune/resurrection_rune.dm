@@ -471,7 +471,7 @@
 	var/mob/living/carbon/new_body = new mob_type(destination_turf)
 	var/mob/ghostie = linked_mind.get_ghost(TRUE)
 	if(ghostie?.client?.prefs)
-		ghostie.client.prefs.apply_prefs_to(new_body, TRUE)
+		linked_mind.apply_prefs_to_remade_body(ghostie.client.prefs, new_body)
 
 	// Mind transfer expects the new body to briefly be the current body first.
 	linked_mind.current = new_body

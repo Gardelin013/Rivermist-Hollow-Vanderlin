@@ -358,7 +358,7 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define ORGASM_LOCATION_SELF "self"
 #define ORGASM_LOCATION_CONTAINER "container"
 
-/// Units of fluid a female climax adds into the vagina (instead of spawning a puddle); the organ's drip system leaks it out.
+/// Units of femcum a female climax makes; what the wetness cap cannot keep gushes out at once.
 #define FEMCUM_ORGASM_VOLUME 10
 
 // Fluid modifier sources. Sources are strings so they never hold a reference.
@@ -383,6 +383,8 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define PHEROMONE_AROUSAL_FLOOR 40
 /// Plain arousal wetness drips to the floor only from this arousal up.
 #define VAGINA_DRIP_AROUSAL 80
+/// Units per second of own femcum taken back while wetness sits above its arousal target.
+#define VAGINA_WETNESS_FADE_RATE 0.02
 
 // Body fluid reagent data keys: who made it, whether makers mixed, and a hint of their last meals.
 #define FLUID_DATA_DONOR "fluid_donor"
