@@ -14,7 +14,7 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/head/helmet/heavy/vampire_ap/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#8B0000", "alpha" = 180, "size" = 1)) //Enchanted look.
 
 /obj/item/clothing/head/helmet/heavy/vampire_ap/equipped(mob/user, slot, initial = FALSE)
@@ -23,6 +23,7 @@
 		return
 	if((slot & ITEM_SLOT_HEAD))
 		active_item = TRUE
+		ADD_TRAIT(user, TRAIT_BITERHELM, REF(src))
 		to_chat(user, span_warning("The bascinet's visor chitters, and your jaw tightens with symbiotic intent.."))
 
 /obj/item/clothing/head/helmet/heavy/vampire_ap/dropped(mob/user, silent = FALSE)
@@ -30,4 +31,5 @@
 	if(!active_item)
 		return
 	active_item = FALSE
+	REMOVE_TRAIT(user, TRAIT_BITERHELM, REF(src))
 	to_chat(user, span_warning("..and like that, the bascinet's visor goes dormant once more - a strange pressure, relieved from your jaw."))

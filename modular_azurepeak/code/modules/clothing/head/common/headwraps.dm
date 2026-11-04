@@ -56,7 +56,7 @@
 	name = "durag"
 	desc = "A fashionable garment worn to protect one's hair."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "durag"
 	sewrepair = TRUE
@@ -66,7 +66,7 @@
 	name = "long veil"
 	desc = "A long, trailing veil made of cloth meant to conceal ones hair. OFten worn by soilbrides and the devout."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "headveil"
 	detail_tag = "_detail"
@@ -78,7 +78,7 @@
 	name = "tiyon"
 	desc = "A fancy cloth headdress."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "tiyon"
 	sewrepair = TRUE
@@ -88,7 +88,7 @@
 	name = "fur headband"
 	desc = "A rough thick fur headband, worn by the more rugged folk."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "fur_headband"
 	item_state = "fur_headband"

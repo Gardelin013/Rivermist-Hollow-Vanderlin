@@ -1,3 +1,28 @@
+/// Lathander amulets that are not silver; RMH silver symbols live under psycross/silver.
+/obj/item/clothing/neck/psycross/astrata
+	resistance_flags = FIRE_PROOF
+	abstract_type = /obj/item/clothing/neck/psycross/astrata
+
+/// Silvanus amulets that are not silver; RMH silver symbols live under psycross/silver.
+/obj/item/clothing/neck/psycross/dendor
+	resistance_flags = FIRE_PROOF
+	abstract_type = /obj/item/clothing/neck/psycross/dendor
+
+/// Sune amulets that are not silver; RMH silver symbols live under psycross/silver.
+/obj/item/clothing/neck/psycross/eora
+	resistance_flags = FIRE_PROOF
+	abstract_type = /obj/item/clothing/neck/psycross/eora
+
+/// Jergal amulets that are not silver; RMH silver symbols live under psycross/silver.
+/obj/item/clothing/neck/psycross/necra
+	resistance_flags = FIRE_PROOF
+	abstract_type = /obj/item/clothing/neck/psycross/necra
+
+/// Mystra amulets that are not silver; RMH silver symbols live under psycross/silver.
+/obj/item/clothing/neck/psycross/noc
+	resistance_flags = FIRE_PROOF
+	abstract_type = /obj/item/clothing/neck/psycross/noc
+
 /obj/item/clothing/neck/psycross/abyssor/g/triumph
 	name = "ornate amulet of Umberlee"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -9,7 +34,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/astrata/g/triumph
+/obj/item/clothing/neck/psycross/astrata/g/triumph
 	name = "ornate amulet of Lathander"
 	desc = "His dawn is absolute, and His light is unmarrable. Reclaim this world, child of mine, from those who'd seek to destroy it."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -19,7 +44,7 @@
 	sellprice = 77
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/dendor/g/triumph
+/obj/item/clothing/neck/psycross/dendor/g/triumph
 	name = "ornate amulet of Silvanus"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/neck.dmi'
@@ -30,7 +55,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/eora/g/triumph
+/obj/item/clothing/neck/psycross/eora/g/triumph
 	name = "ornate amulet of Sune"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/neck.dmi'
@@ -62,7 +87,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/necra/g/triumph
+/obj/item/clothing/neck/psycross/necra/g/triumph
 	name = "ornate amulet of Jergal"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/neck.dmi'
@@ -73,7 +98,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/noc/g/triumph
+/obj/item/clothing/neck/psycross/noc/g/triumph
 	name = "ornate amulet of Mystra"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/neck.dmi'
@@ -125,7 +150,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/astrata/dasfox
+/obj/item/clothing/neck/psycross/astrata/dasfox
 	name = "defiled Lathanderite periapt"
 	desc = "This golden-lashed eye atop a blade was once a periapt of Lathander, used in prayer to the Morninglord. It has been damaged heavily, near-shattered, and is bound together by cloth and silver wire. In lieu of its former purpose, it now serves as an amulet or an attachment to armour."
 	icon = 'modular_azurepeak/icons/clothing/donor_clothes.dmi'
@@ -135,7 +160,7 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/eora/rosecollar
+/obj/item/clothing/neck/psycross/eora/rosecollar
 	name = "rosestone clasped collar"
 	desc = "<font color='FFCCFF'>'To love someone is to choose to let them own a part of your spirit, and to own a part of theirs in return.'</font>"
 	icon = 'modular_azurepeak/icons/clothing/donor_clothes.dmi'
@@ -280,7 +305,7 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/neck/psycross/weeping/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#8B0000", "alpha" = 200, "size" = 1))
 
 /obj/item/clothing/neck/psycross/weeping/equipped(mob/living/user, slot, initial = FALSE)
@@ -391,7 +416,7 @@
 	salvage_amount = 1
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/astrata/bronze
+/obj/item/clothing/neck/psycross/astrata/bronze
 	name = "bronze amulet of Lathander"
 	desc = "'We are His soldiers, the Legion of the Dawn.' </br>'We are the morning, the rising of the Sun.' </br>'Fire and flame - we are one.'"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -402,7 +427,7 @@
 	ported_clothing = TRUE
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/astrata/g
+/obj/item/clothing/neck/psycross/astrata/g
 	name = "golden amulet of Lathander"
 	desc = "The sun's blinding glare, adorning the faithful and scorning the faithless."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -412,7 +437,7 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/astrata/wood
+/obj/item/clothing/neck/psycross/astrata/wood
 	name = "wooden amulet of Lathander"
 	desc = "Hope needs only the smallest ember to kindle."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -426,7 +451,7 @@
 	ported_clothing = TRUE
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/dendor/g
+/obj/item/clothing/neck/psycross/dendor/g
 	name = "golden amulet of Silvanus"
 	desc = "Nature provides in all avenues, as long as one has the faith to dig it out."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -439,7 +464,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/dendor/wood
+/obj/item/clothing/neck/psycross/dendor/wood
 	name = "wooden amulet of Silvanus"
 	desc = "The primordial life force thrumbs through your hands."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -453,7 +478,7 @@
 	ported_clothing = TRUE
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/eora/g
+/obj/item/clothing/neck/psycross/eora/g
 	name = "golden amulet of Sune"
 	desc = "Love wins."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -466,7 +491,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/eora/wood
+/obj/item/clothing/neck/psycross/eora/wood
 	name = "wooden amulet of Sune"
 	desc = "Like the wind, you're going somewhere.. so let a smile be your companion.."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -557,7 +582,7 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/neck/psycross/malum/secret/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#7878F0", "alpha" = 200, "size" = 1))
 
 /obj/item/clothing/neck/psycross/malum/secret/equipped(mob/living/user, slot, initial = FALSE)
@@ -589,7 +614,7 @@
 	salvage_amount = 1
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/necra/g
+/obj/item/clothing/neck/psycross/necra/g
 	name = "golden amulet of Jergal"
 	desc = "No matter if you're a king or a sweeper, all will prance - in due tyme - with the blessed reaper."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -602,7 +627,7 @@
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/necra/wood
+/obj/item/clothing/neck/psycross/necra/wood
 	name = "wooden amulet of Jergal"
 	desc = "From dust, we came; and to dust, we will return."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -616,7 +641,7 @@
 	ported_clothing = TRUE
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/noc/aalloy
+/obj/item/clothing/neck/psycross/noc/aalloy
 	name = "decrepit amulet of Mystra"
 	desc = "The ultimate answer to the ultimate question is not a parable, but a pair of numbers; 'four' and 'two'. Thou may not understand it, yet, but I assure thee; it shall all make sense in due tyme."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -629,7 +654,7 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/noc/bronze
+/obj/item/clothing/neck/psycross/noc/bronze
 	name = "bronze amulet of Mystra"
 	desc = "Knowledge predates lyfe and death itself. Who art thou, to assume the quill's works are no holier than a sword or masterwork?"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -638,7 +663,7 @@
 	icon_state = "noc_b"
 	ported_clothing = TRUE
 
-/obj/item/clothing/neck/psycross/silver/noc/g
+/obj/item/clothing/neck/psycross/noc/g
 	name = "golden amulet of Mystra"
 	desc = "The sun's radiance would mean nothing without comparison - or, more importantly, the capacity to compare at all."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -649,7 +674,7 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/noc/paalloy
+/obj/item/clothing/neck/psycross/noc/paalloy
 	name = "ancient amulet of Mystra"
 	desc = "The ultimate answer to the ultimate question is not a parable, but a pair of numbers; 'four' and 'two'. Thou may not understand it, yet, but I assure thee; it shall all make sense in due tyme."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -660,7 +685,7 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/noc/wood
+/obj/item/clothing/neck/psycross/noc/wood
 	name = "wooden amulet of Mystra"
 	desc = "They say that such a talisman was the first to be carved by mankind, once the first thought-of-beyond struck their minds."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'

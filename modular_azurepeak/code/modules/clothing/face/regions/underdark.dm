@@ -7,3 +7,7 @@
 	icon_state = "dgoggles"
 	armor_type = /datum/armor/ported/spectacles
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/foley/equip/rummaging-03.ogg'

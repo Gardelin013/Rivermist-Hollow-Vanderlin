@@ -20,7 +20,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a style.", "Elven styles") as anything in elven_colors
+		var/choice = browser_input_list(user, "Choose a style.", "Elven styles", elven_colors)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		picked = TRUE
 		switch(choice)
 			if("Blue Cloak")

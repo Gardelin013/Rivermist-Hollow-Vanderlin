@@ -16,6 +16,7 @@
 	sleeved = null
 	icon_state = "birdmask"
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CANT_CADJUST
 
 /obj/item/clothing/face/facemask/steel/maille/birdmask/Initialize(mapload)
 	. = ..()

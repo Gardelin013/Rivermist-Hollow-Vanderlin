@@ -21,3 +21,7 @@
 	item_state = "nightmare_armet"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEHAIR)
+	adj_sound = 'sound/items/visor.ogg'

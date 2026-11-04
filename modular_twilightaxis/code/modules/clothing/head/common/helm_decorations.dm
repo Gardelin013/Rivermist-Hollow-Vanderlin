@@ -19,7 +19,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/chooseA = input(user, "What will you choose?", "Where you got it?") as anything in rogavid
+		var/chooseA = browser_input_list(user, "What will you choose?", "Where you got it?", rogavid)
+		if(!chooseA)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(chooseA == "halo")
 			icon_state = "antlers"
 			antlers_final_icon = "antlers"
@@ -72,7 +74,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/chooseA = input(user, "What will you choose?", "Which colour?") as anything in towavid
+		var/chooseA = browser_input_list(user, "What will you choose?", "Which colour?", towavid)
+		if(!chooseA)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(chooseA == "red")
 			icon_state = "d_castle_red"
 			towers_final_icon = "d_castle_red"
@@ -125,7 +129,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/chooseB = input(user, "What will you choose?", "Which colour?") as anything in drvid
+		var/chooseB = browser_input_list(user, "What will you choose?", "Which colour?", drvid)
+		if(!chooseB)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(chooseB == "red")
 			icon_state = "d_dragon_red"
 			dragon_final_icon = "d_dragon_red"

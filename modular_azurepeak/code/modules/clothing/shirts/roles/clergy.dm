@@ -95,6 +95,11 @@
 	salvage_result = /obj/item/natural/hide/cured
 	salvage_amount = 1
 	ported_clothing = TRUE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = (CHEST|GROIN|ARMS|VITALS)
+	adj_sound = 'sound/foley/cloth_wipe (1).ogg'
+	armor_type = /datum/armor/ported/padded
 
 /obj/item/clothing/shirt/undershirt/priest/holy/equipped(mob/user, slot, initial = FALSE)
 	..()

@@ -7,6 +7,10 @@
 	icon_state = "chiv_abevor"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/neck/leather
 	name = "hardened leather gorget"
@@ -172,6 +176,6 @@
 	flags_inv = HIDEEARS|HIDEFACE|HIDEHAIR|HIDEFACIALHAIR
 	resistance_flags = FIRE_PROOF
 	body_parts_covered = NECK|MOUTH|NOSE|HAIR|EARS|HEAD
-	adjustable = CAN_CADJUST
+	adjustable = CANT_CADJUST
 	smeltresult = /obj/item/ingot/iron
 	ported_clothing = TRUE

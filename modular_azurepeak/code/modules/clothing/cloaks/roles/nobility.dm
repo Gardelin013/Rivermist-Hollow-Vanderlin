@@ -109,7 +109,9 @@
 	if(custom_design)
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	var/the_time = world.time
-	var/chosen = input(user, "Select a design.","Tabard Design") as null|anything in list("Split")
+	var/chosen = browser_input_list(user, "Select a design.","Tabard Design", list("Split"))
+	if(!chosen)
+		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	if(world.time > (the_time + 10 SECONDS))
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	if(!chosen)

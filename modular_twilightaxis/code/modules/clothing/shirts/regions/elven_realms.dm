@@ -20,7 +20,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Elven colors") as anything in elven_colors
+		var/choice = browser_input_list(user, "Choose a color.", "Elven colors", elven_colors)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		picked = TRUE
 		detail_tag = "_[choice]"
 		update_appearance()
@@ -48,7 +50,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Elven colors") as anything in elven_colors
+		var/choice = browser_input_list(user, "Choose a color.", "Elven colors", elven_colors)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		picked = TRUE
 		detail_tag = "_[choice]"
 		update_appearance()
@@ -74,7 +78,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Elven colors") as anything in elven_colors
+		var/choice = browser_input_list(user, "Choose a color.", "Elven colors", elven_colors)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		picked = TRUE
 		detail_tag = "_[choice]"
 		update_appearance()

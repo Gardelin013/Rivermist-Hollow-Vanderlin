@@ -60,7 +60,7 @@
 
 /obj/item/clothing/pants/sirwal/plainrandom/Initialize()
 	color = pick("#FFFFFF", "#edc6a5", "#927351", CLOTHING_BLACK)
-	..()
+	. = ..()
 
 /obj/item/clothing/pants/sirwal/fancy/blue
 	icon = 'modular_twilightaxis/icons/clothing/desert/pants.dmi'
@@ -92,7 +92,7 @@
 
 /obj/item/clothing/pants/sirwal/fancy/random/Initialize()
 	color = pick(CLOTHING_BLACK, CLOTHING_BLUE, CLOTHING_PURPLE, CLOTHING_RED, CLOTHING_YELLOW)
-	..()
+	. = ..()
 
 /obj/item/clothing/pants/sirwal/fancy/red
 	icon = 'modular_twilightaxis/icons/clothing/desert/pants.dmi'

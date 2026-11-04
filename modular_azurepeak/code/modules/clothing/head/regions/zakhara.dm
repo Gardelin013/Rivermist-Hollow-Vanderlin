@@ -87,7 +87,7 @@
 	name = "desert hood"
 	desc = "If only it was this warm."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "desert_hood"
 	item_state = "desert_hood"

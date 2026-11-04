@@ -18,7 +18,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Uniform colors") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Uniform colors", GLOB.ported_color_map)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		var/playerchoice = GLOB.ported_color_map[choice]
 		picked = TRUE
 		detail_color = playerchoice

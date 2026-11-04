@@ -41,11 +41,6 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/head/nunTA/MiddleClick(mob/user, list/modifiers)
-	if(!ishuman(user))
-		return
-	user.update_inv_head()
-
 /obj/item/clothing/head/onhelm/tw_d_peace
 	name = "Lathander's eye helmkleinod"
 	desc = "An elegant crest depicting Lathander's eye. It serves as a pious reminder of the divine gaze, guiding the wearer towards peace and protecting them from malice."

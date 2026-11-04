@@ -15,7 +15,7 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/armor/chainmail/iron/vampire/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#8B0000", "alpha" = 180, "size" = 1)) //Enchanted look.
 
 /obj/item/clothing/armor/chainmail/hauberk/ancient/vampire
@@ -34,5 +34,5 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/armor/chainmail/hauberk/ancient/vampire/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#8B0000", "alpha" = 180, "size" = 1)) //Enchanted look.

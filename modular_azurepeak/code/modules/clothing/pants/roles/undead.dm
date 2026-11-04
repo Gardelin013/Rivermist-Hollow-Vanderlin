@@ -40,7 +40,7 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/pants/platelegs/vampire/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#8B0000", "alpha" = 180, "size" = 1)) //Enchanted look.
 
 /obj/item/clothing/pants/tights/puritan/vampire

@@ -19,7 +19,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "white")
 			icon_state = "white_mage_neckwear"
 			item_state = "white_mage_neckwear"

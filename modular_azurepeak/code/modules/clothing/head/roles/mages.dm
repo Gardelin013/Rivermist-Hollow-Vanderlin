@@ -19,7 +19,7 @@
 	name = "witch hat"
 	desc = "Fair is foul, and foul is fair; Hover through the fog and filthy air."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "witch"
 	item_state = "witch"
@@ -35,7 +35,7 @@
 
 /obj/item/clothing/head/witchhat/mageblue
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "witch"
 	item_state = "witch"

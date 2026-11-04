@@ -29,3 +29,8 @@
 	icon_state = "opsyknuckle"
 	smeltresult = /obj/item/ingot/steel
 	misc_flags = CRAFTING_TEST_EXCLUDE
+
+// silver-blessed knuckles burn vampires and werewolves like other RMH silver gear
+/obj/item/clothing/gloves/knuckles/psydon/Initialize(mapload)
+	. = ..()
+	enchant(/datum/enchantment/silver)

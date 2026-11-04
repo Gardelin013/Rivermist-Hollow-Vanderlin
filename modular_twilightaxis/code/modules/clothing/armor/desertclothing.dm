@@ -148,7 +148,7 @@
 
 /obj/item/clothing/armor/leather/vest/open/random/Initialize()
 	color = pick("#2f51b8", CLOTHING_RED, CLOTHING_ORANGE, CLOTHING_GREEN, CLOTHING_PURPLE)
-	..()
+	. = ..()
 
 /obj/item/clothing/armor/leather/vest/open/red
 	icon = 'modular_twilightaxis/icons/clothing/desert/armor.dmi'

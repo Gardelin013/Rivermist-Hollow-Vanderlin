@@ -32,6 +32,7 @@
 	sewrepair = TRUE
 	resistance_flags = FIRE_PROOF
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CANT_CADJUST
 
 /obj/item/clothing/face/facemask/steel/miragefen_rogue
 	name = "bronze-decorated steel mask"

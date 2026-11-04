@@ -30,7 +30,7 @@
 
 /obj/item/clothing/shirt/robe/bishop/equipped(mob/user, slot, initial = FALSE)
 	..()
-	if(slot != ITEM_SLOT_ARMOR|ITEM_SLOT_SHIRT)
+	if(!(slot & (ITEM_SLOT_ARMOR|ITEM_SLOT_SHIRT)))
 		return
 	to_chat(user, span_notice("With my vows to poverty and my vestments, I feel vigorous - empowered by my God!"))
 

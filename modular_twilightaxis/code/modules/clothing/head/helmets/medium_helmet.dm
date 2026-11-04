@@ -25,7 +25,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/cloth) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Orle") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Orle", GLOB.ported_color_map)
+		if(!choice)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		detail_color = GLOB.ported_color_map[choice]
@@ -57,7 +59,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/feather) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Plume") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Plume", GLOB.ported_color_map)
+		if(!choice)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		detail_color = GLOB.ported_color_map[choice]
@@ -85,6 +89,7 @@
 	. = ..()
 	if((slot & ITEM_SLOT_HEAD))
 		active_item = TRUE
+		ADD_TRAIT(user, TRAIT_BITERHELM, REF(src))
 		to_chat(user, span_warning("Unholy strands of darksteel worm into your flesh as the visor chitters. Her symbiotic malice tightens your jaw with predatory intent.."))
 	return
 
@@ -93,4 +98,5 @@
 	if(!active_item)
 		return
 	active_item = FALSE
+	REMOVE_TRAIT(user, TRAIT_BITERHELM, REF(src))
 	to_chat(user, span_warning("..and like that, the darksteel strands recede back into the helmet. Her oppressive grip releases your jaw, leaving a cold, hollow ache."))

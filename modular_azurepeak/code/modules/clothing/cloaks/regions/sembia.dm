@@ -39,7 +39,7 @@
 	item_state = "dittocloak"
 	detail_tag = "_detail"
 	altdetail_tag = "_detailalt"
-	adjustable = CAN_CADJUST
+	adjustable = CANT_CADJUST
 	alternate_worn_layer = 9.9
 	color = CLOTHING_WHITE
 	detail_color = CLOTHING_WHITE

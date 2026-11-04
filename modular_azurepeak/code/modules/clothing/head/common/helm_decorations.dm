@@ -29,7 +29,7 @@
 	name = "helmet's greatplume"
 	desc = "A magnificent plume, intended to be worn atop a helmet; a touch of flamboyance, indiscriminate of the alloy."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "greatplume"
 	item_state = "greatplume"

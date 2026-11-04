@@ -39,7 +39,7 @@
 
 /obj/item/clothing/armor/workervest/Initialize(mapload)
 	color = pick("#94b4b6", "#ba8f9e", "#bd978c", "#92bd8c", "#c7c981")
-	..()
+	. = ..()
 
 /obj/item/clothing/armor/longcoat/brown
 	icon = 'modular_azurepeak/icons/clothing/armor.dmi'

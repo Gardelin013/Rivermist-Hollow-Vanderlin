@@ -102,7 +102,7 @@
 /obj/item/clothing/head/necromhood
 	name = "necromancers hood"
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "necromhood"
 	item_state = "necromhood"

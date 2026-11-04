@@ -23,15 +23,10 @@
 /obj/item/clothing/neck/ornateamulet/noble/attack_hand_secondary(mob/user, list/modifiers)
 	if(choicename)
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-	var/current_time = world.time
-	var/namechoice = input(user, "Input a new name", "Rename Object")
-	if(namechoice)
+	var/namechoice = browser_input_text(user, "Input a new name", "Rename Object", max_length = MAX_NAME_LEN)
+	if(namechoice && !QDELETED(src))
 		name = namechoice
 		choicename = TRUE
-	else
-		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-	if(world.time > (current_time + 30 SECONDS))
-		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/clothing/neck/gorget/gold/king

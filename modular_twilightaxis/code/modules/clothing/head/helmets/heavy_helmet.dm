@@ -73,7 +73,7 @@
 	sleeved = null
 	icon_state = "helmet_eora"
 	item_state = "helmet_eora"
-	adjustable = CAN_CADJUST
+	adjustable = CANT_CADJUST
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/head/helmet/heavy/knight/raneshi_hmamluk
@@ -96,7 +96,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/cloth) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Orle") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Orle", GLOB.ported_color_map)
+		if(!choice)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		detail_color = GLOB.ported_color_map[choice]
@@ -170,6 +172,10 @@
 	dyeable = TRUE
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEHAIR)
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/head/helmet/heavy/knight/raneshi_hmamluk/raneshi_vmamluk
 	name = "hound masked mamluk helmet"

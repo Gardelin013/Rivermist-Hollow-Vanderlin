@@ -22,6 +22,7 @@
 	dyeable = TRUE
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
 
 /obj/item/clothing/head/crown/circlet/donator_mortosasye_golddiadem
 	name = "gold diadem"
@@ -74,7 +75,7 @@
 	color = null
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/head/crown/serpcrown/mortosuncrown
+/obj/item/clothing/head/crown/mortosuncrown
 	name = "sun crown"
 	desc = "A far too extravagant crown made of gold, sporting a rontz at the center. The metal has been shaped to resemble sunrays."
 	icon = 'modular_azurepeak/icons/clothing/donor_clothes.dmi'
@@ -82,6 +83,7 @@
 	sleeved = null
 	icon_state = "mortosasye_suncrown"
 	item_state = "mortosasye_suncrown"
+	sellprice = VALUE_GOLD_ITEM
 	article = null
 	worn_x_dimension = 64
 	worn_y_dimension = 64
@@ -166,7 +168,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/thorn) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Thorns.") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Thorns.", GLOB.ported_color_map)
+		if(!choice)
+			return
 		detail_color = GLOB.ported_color_map[choice]
 		detail_tag = "_detail"
 		user.visible_message(span_warning("[user] adds [W] to [src]."))

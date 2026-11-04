@@ -18,7 +18,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/fur) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Fur") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Fur", GLOB.ported_color_map)
+		if(!choice)
+			return
 		detail_color = GLOB.ported_color_map[choice]
 		detail_tag = "_detail"
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
@@ -28,7 +30,9 @@
 			var/mob/living/carbon/H = user
 			H.update_inv_head()
 	if(istype(W, /obj/item/natural/cloth) && !altdetail_tag)
-		var/choice = input(user, "Choose a color.", "Cloth") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Cloth", GLOB.ported_color_map)
+		if(!choice)
+			return
 		detail_color = GLOB.ported_color_map[choice]
 		detail_tag = "_detailalt"
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
@@ -190,6 +194,7 @@
 	salvage_amount = 1
 	block2add = null
 	ported_clothing = TRUE
+	adjustable = CANT_CADJUST
 
 /obj/item/clothing/head/roguehood/undividedcleric
 	name = "undivided clerical hood"
@@ -227,7 +232,7 @@
 	name = "gravetender's hat"
 	desc = "A fine leather slouch fitted with a hidden steel skull cap. It serves as a reminder that Jergal's grasp is never too far."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "gravehat"
 	item_state = "gravehat"

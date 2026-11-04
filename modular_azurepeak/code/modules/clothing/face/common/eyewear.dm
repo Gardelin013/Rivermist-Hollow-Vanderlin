@@ -26,6 +26,9 @@
 	adjustable = CAN_CADJUST
 	toggle_icon_state = TRUE
 	ported_clothing = TRUE
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/foley/equip/rummaging-03.ogg'
 
 /obj/item/clothing/face/spectacles/duelist
 	name = "iron duelist goggles"
@@ -57,6 +60,9 @@
 	adjustable = CAN_CADJUST
 	toggle_icon_state = TRUE
 	ported_clothing = TRUE
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/foley/equip/rummaging-03.ogg'
 
 /obj/item/clothing/face/spectacles/steel
 	name = "steel spectacles"
@@ -70,6 +76,9 @@
 	adjustable = CAN_CADJUST
 	toggle_icon_state = TRUE
 	ported_clothing = TRUE
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/foley/equip/rummaging-03.ogg'
 
 /obj/item/clothing/face/spectacles/thin
 	name = "thin-lensed spectacles"

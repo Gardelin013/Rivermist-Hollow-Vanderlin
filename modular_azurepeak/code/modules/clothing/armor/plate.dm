@@ -239,7 +239,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Uniform colors") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Uniform colors", GLOB.ported_color_map)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		var/playerchoice = GLOB.ported_color_map[choice]
 		picked = TRUE
 		detail_color = playerchoice
@@ -548,3 +550,8 @@
 	max_integrity = ARMOR_INT_CHEST_PLATE_PSYDON
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+
+// silver-plated duster burn vampires and werewolves like other RMH silver gear
+/obj/item/clothing/armor/medium/scale/inqcoat/armored/heavy/Initialize(mapload)
+	. = ..()
+	enchant(/datum/enchantment/silver)

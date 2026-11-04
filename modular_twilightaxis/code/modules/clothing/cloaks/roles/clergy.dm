@@ -17,7 +17,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choiceC = input(user, "Choose a color.", "Sune colors") as anything in eora_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Sune colors", eora_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "Blue Tabard")
 			icon_state = "tabard_blue"
 			item_state = "tabard_blue"

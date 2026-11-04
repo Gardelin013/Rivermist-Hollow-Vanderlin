@@ -5,7 +5,7 @@
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/donor_clothes.dmi'
 	sleeved = 'modular_azurepeak/icons/clothing/onmob/donor_sleeves_armor.dmi'
 	icon_state = "thistleturtleneck"
-	adjustable = CAN_CADJUST
+	adjustable = CANT_CADJUST
 	toggle_icon_state = TRUE
 	allowed_sex = list(FEMALE)
 	ported_adjust = TRUE
@@ -13,10 +13,6 @@
 	adj_sound = 'sound/foley/cloth_wipe (1).ogg'
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
-
-/obj/item/clothing/shirt/undershirt/artificer/donator_thistle/get_mechanics_examine(mob/user)
-	. = ..()
-	. += span_info("RMB to adjust the undershirt's coverage; it can either cover the entire torso, or be tightened up to just cover the chest.")
 
 /obj/item/clothing/shirt/freifechter
 	name = "fencing shirt"

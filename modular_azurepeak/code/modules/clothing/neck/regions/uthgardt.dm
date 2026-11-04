@@ -17,7 +17,7 @@
 	icon_state = "gronnabyssor"
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/dendor/gronn
+/obj/item/clothing/neck/psycross/dendor/gronn
 	name = "carved talisman"
 	desc = "'The world above, of knifetoothed plants and rotting carrion. From jungle to desert, even the stones are nature. Heed its call with the respect it commands, or succumb to madness.' </br> </br>The Volfskinned Man embodies the virtue of nature and temperance; to live in harmony with the world and its spirits. Pluck a jackberry, plant a seed - Slay a beast, see no part wasted. Yet, temperance must be shown; to take from the world without respect-nor-exchange is to curse the homeland with misfortune. Yet, to completely embrace the world's primality is to lose your humanity - and worse, to become the very beast you hunt."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -45,7 +45,7 @@
 	icon_state = "gronnzizo"
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/ravox/gronn
+/obj/item/clothing/neck/psycross/inhumen/graggar/gronn
 	name = "carved talisman"
 	desc = "'The battle, the combat, the violence, the rush of victory, the honored glories. Defeat the foe, or die with them.' </br> </br>The Grinning Moose embodies the virtues of strengh and domination; to survive both the homeland's frigid blizzards and those who'd seek to maraude its countrymen. Be untamed and unstoppable, but do not lose yourself in the haze; for even the Moose was chained, once. Kill your own without reason, and the chain shall be tugged; and your soul, too, shall be impaled on their horns."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'

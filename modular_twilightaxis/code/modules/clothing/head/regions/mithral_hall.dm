@@ -18,7 +18,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "white")
 			icon_state = "white_mage_headwear"
 		if(choiceC == "blue")
@@ -66,7 +68,9 @@
 
 /obj/item/clothing/head/twilight_hammerhold_hat/peasant/attack_hand_secondary(mob/user, list/modifiers)
 	if(!picked)
-		var/choiceV = input(user, "Choose a variant.", "Mithral Hall colors") as anything in hammerhold_variants
+		var/choiceV = browser_input_list(user, "Choose a variant.", "Mithral Hall colors", hammerhold_variants)
+		if(!choiceV)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceV == "a")
 			icon_state = "headwear_a"
 			hammerhold_final_icon = "headwear_a"

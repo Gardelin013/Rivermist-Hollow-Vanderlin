@@ -134,6 +134,7 @@
 	icon_state = "handgloves"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY
 
 /obj/item/clothing/gloves/knuckles
 	name = "steel knuckles"
@@ -227,3 +228,8 @@
 	icon_state = "silverknuckle"
 	smeltresult = /obj/item/ingot/silver
 	misc_flags = CRAFTING_TEST_EXCLUDE
+
+// silver-blessed knuckles burn vampires and werewolves like other RMH silver gear
+/obj/item/clothing/gloves/knuckles/silver/Initialize(mapload)
+	. = ..()
+	enchant(/datum/enchantment/silver)

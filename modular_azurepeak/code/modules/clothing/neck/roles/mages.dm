@@ -9,6 +9,10 @@
 	item_flags = (1<<13)
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/neck/coif/heavypadding/black
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'

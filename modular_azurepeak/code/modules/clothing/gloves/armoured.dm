@@ -144,7 +144,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Uniform colors") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Uniform colors", GLOB.ported_color_map)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		var/playerchoice = GLOB.ported_color_map[choice]
 		picked = TRUE
 		detail_color = playerchoice
@@ -244,5 +246,5 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/gloves/chain/vampire/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#8B0000", "alpha" = 180, "size" = 1)) //Enchanted look.

@@ -24,6 +24,7 @@
 	max_integrity = ARMOR_INT_CHEST_PLATE_BRIGANDINE + 200
 	armor_type = /datum/armor/brigandine
 	interrupt_damount = 15
+	repair_time = 20 SECONDS
 	var/realname = null
 	var/realdesc = null
 	var/realstate = null
@@ -47,7 +48,7 @@
 	. = ..()
 	if(active_item)
 		return
-	if((slot & ITEM_SLOT_SHIRT) || ITEM_SLOT_ARMOR)
+	if(slot & (ITEM_SLOT_SHIRT|ITEM_SLOT_ARMOR))
 		active_item = TRUE
 
 /obj/item/clothing/armor/regenerating/baotha/dropped(mob/user, silent = FALSE)
@@ -59,7 +60,9 @@
 /obj/item/clothing/armor/regenerating/baotha/attack_hand_secondary(mob/living/user, list/modifiers)
 	if(user.patron.type == /datum/patron/faerun/evil_gods/Blissara)
 		var/mimicry = list("shirt", "formal silks", "rags", "tunic", "dress", "silky dress", "undervestments", "royal gown", "white foreign shirt", "silk shirt", "fancy coat", "low cut tunic", "pristine dress", "gilded dress shirt", "Undo")
-		var/mimicry_choise = input("Variants:", "camouflage") as anything in mimicry
+		var/mimicry_choise = browser_input_list(user, "Variants:", "camouflage", mimicry)
+		if(!mimicry_choise)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		switch(mimicry_choise)
 			if("shirt")
 				name = "shirt"

@@ -80,6 +80,10 @@
 	smeltresult = /obj/item/ingot/bronze
 	anvilrepair = /datum/attribute/skill/craft/armor_repair
 	ported_clothing = TRUE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/neck/gorget/aventail/iron
 	name = "iron aventail"

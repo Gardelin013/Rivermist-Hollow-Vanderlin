@@ -227,11 +227,6 @@
 	name = "Nun Hood"
 	item_path = /obj/item/clothing/head/nunTA
 
-/datum/loadout_item/ta_head_roguehood_newmoon
-	name = "Veiled Star Hood"
-	item_path = /obj/item/clothing/head/roguehood/newmoon
-	point_cost = 3
-
 /datum/loadout_item/ta_head_roguehood_psydon_confessor_overseer
 	name = "Closed Hood"
 	item_path = /obj/item/clothing/head/roguehood/psydon/confessor/overseer
@@ -364,11 +359,6 @@
 	name = "Tears of Love Amulet"
 	item_path = /obj/item/clothing/neck/loveamulet
 
-/datum/loadout_item/ta_neck_bevor_blackpowder
-	name = "Blackpowder Order Coverall"
-	item_path = /obj/item/clothing/neck/bevor/blackpowder
-	point_cost = 4
-
 /datum/loadout_item/ta_neck_psycross_inhumen_gronn_spider
 	name = "Carved Talisman (Inhumen, Gronn, Spider)"
 	item_path = /obj/item/clothing/neck/psycross/inhumen/gronn/spider
@@ -377,19 +367,9 @@
 	name = "Pierced Coin Amulet"
 	item_path = /obj/item/clothing/neck/psycross/inhumen/matthios/moneta
 
-/datum/loadout_item/ta_neck_chaincoif_chainmantle_bloodraider
-	name = "Raider's Chain Mantle"
-	item_path = /obj/item/clothing/neck/chaincoif/chainmantle/bloodraider
-	point_cost = 3
-
 /datum/loadout_item/ta_ring_baotha
 	name = "Snake Ring"
 	item_path = /obj/item/clothing/ring/baotha
-
-/datum/loadout_item/ta_wrists_bracers_cloth_monk_aria
-	name = "Aria Wrists"
-	item_path = /obj/item/clothing/wrists/bracers/cloth/monk/aria
-	point_cost = 4
 
 /datum/loadout_item/ta_wrists_bracers_zizo_bloodraider
 	name = "Raider's Bracers"
@@ -487,30 +467,10 @@
 	item_path = /obj/item/clothing/armor/chainmail/iron/besilked
 	point_cost = 2
 
-/datum/loadout_item/ta_armor_leather_newmoon_jacket
-	name = "Veiled Star Jacket"
-	item_path = /obj/item/clothing/armor/leather/newmoon_jacket
-	point_cost = 5
-
 /datum/loadout_item/ta_armor_leather_jacket_sea_grenzelhoft
 	name = "Reichsmarine Sailor's Jacket"
 	item_path = /obj/item/clothing/armor/leather/jacket/sea/grenzelhoft
 	point_cost = 2
-
-/datum/loadout_item/ta_armor_brigandine_agha
-	name = "Agha Scale"
-	item_path = /obj/item/clothing/armor/brigandine/agha
-	point_cost = 5
-
-/datum/loadout_item/ta_armor_plate_cataphract
-	name = "Cataphract Armor"
-	item_path = /obj/item/clothing/armor/plate/cataphract
-	point_cost = 8
-
-/datum/loadout_item/ta_armor_chainmail_hauberk_janissary
-	name = "Janissary Chainmail"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/janissary
-	point_cost = 5
 
 /datum/loadout_item/ta_armor_leather_vest_open
 	name = "Open Vest"
@@ -551,11 +511,6 @@
 	name = "Open Vest (Red)"
 	item_path = /obj/item/clothing/armor/leather/vest/open/red
 	point_cost = 2
-
-/datum/loadout_item/ta_armor_plate_cataphract_sultan
-	name = "Sultan Scale"
-	item_path = /obj/item/clothing/armor/plate/cataphract/sultan
-	point_cost = 10
 
 /datum/loadout_item/ta_armor_gambeson_aria
 	name = "Aria Bikini"
@@ -604,11 +559,6 @@
 	item_path = /obj/item/clothing/armor/leather/heavy/coat/commandant
 	point_cost = 2
 
-/datum/loadout_item/ta_armor_medium_scale_nightmare
-	name = "Nightmare Tears Scales"
-	item_path = /obj/item/clothing/armor/medium/scale/nightmare
-	point_cost = 5
-
 /datum/loadout_item/ta_armor_gambeson_heavy_inq_overseer
 	name = "Confessor Shirt"
 	item_path = /obj/item/clothing/armor/gambeson/heavy/inq/overseer
@@ -654,26 +604,6 @@
 	item_path = /obj/item/clothing/armor/plate/fluted/zizo/bloodraider
 	point_cost = 2
 
-/datum/loadout_item/ta_armor_cuirass_etrcuirass
-	name = "Sembian Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/etrcuirass
-	point_cost = 5
-
-/datum/loadout_item/ta_armor_medium_scale_townguard_sheriff
-	name = "Sheriff's Armor"
-	item_path = /obj/item/clothing/armor/medium/scale/townguard/sheriff
-	point_cost = 5
-
-/datum/loadout_item/ta_armor_plate_legion
-	name = "Shoonite Lorica Segmentata"
-	item_path = /obj/item/clothing/armor/plate/legion
-	point_cost = 8
-
-/datum/loadout_item/ta_armor_medium_scale_townguard
-	name = "Watchman's Armor"
-	item_path = /obj/item/clothing/armor/medium/scale/townguard
-	point_cost = 5
-
 /datum/loadout_item/ta_armor_gambeson_heavy_hierophant_warscholar
 	name = "War Scholar's Shawl"
 	item_path = /obj/item/clothing/armor/gambeson/heavy/hierophant/warscholar
@@ -684,37 +614,17 @@
 	item_path = /obj/item/clothing/armor/leather/studded/cult
 	point_cost = 2
 
-/datum/loadout_item/ta_armor_plate_hussar
-	name = "Hussar's Plate Harness"
-	item_path = /obj/item/clothing/armor/plate/hussar
-	point_cost = 8
-
 /datum/loadout_item/ta_armor_basiceast_yohei
 	name = "Black Dobo Robe"
 	item_path = /obj/item/clothing/armor/basiceast/yohei
 	point_cost = 2
 
-/datum/loadout_item/ta_armor_brigandine_harayoroi
-	name = "Hara-yoroi Cuirass"
-	item_path = /obj/item/clothing/armor/brigandine/harayoroi
-	point_cost = 8
-
 // CLOTHING - shirts, trousers, gloves and shoes
-
-/datum/loadout_item/ta_gloves_plate_nightmare
-	name = "Nightmare Tears Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/nightmare
-	point_cost = 4
 
 /datum/loadout_item/ta_gloves_plate_zizo_bloodraider
 	name = "Raider's Gauntlets"
 	item_path = /obj/item/clothing/gloves/plate/zizo/bloodraider
 	point_cost = 1
-
-/datum/loadout_item/ta_gloves_plate_legion
-	name = "Shoonite Manica"
-	item_path = /obj/item/clothing/gloves/plate/legion
-	point_cost = 4
 
 /datum/loadout_item/ta_gloves_bandages_pugilist_aria
 	name = "Aria Bondaged Gloves"
@@ -757,16 +667,6 @@
 	item_path = /obj/item/clothing/gloves/bloodraider
 	point_cost = 3
 
-/datum/loadout_item/ta_pants_chainlegs_nightmare
-	name = "Nightmare Tears Chausses"
-	item_path = /obj/item/clothing/pants/chainlegs/nightmare
-	point_cost = 3
-
-/datum/loadout_item/ta_pants_chainlegs_twilight_drow
-	name = "Scourge Chain Chausses"
-	item_path = /obj/item/clothing/pants/chainlegs/twilight_drow
-	point_cost = 3
-
 /datum/loadout_item/ta_pants_trou_leather_etrpants_donat
 	name = "Wanderer's Pants (Donat)"
 	item_path = /obj/item/clothing/pants/trou/leather/etrpants/donat
@@ -781,11 +681,6 @@
 	name = "Heavy Trousers"
 	item_path = /obj/item/clothing/pants/heavy_leather_pants/otavan/overseer
 	point_cost = 1
-
-/datum/loadout_item/ta_pants_chainlegs_kilt_legion
-	name = "Shoonite Cingulum Kilt"
-	item_path = /obj/item/clothing/pants/chainlegs/kilt/legion
-	point_cost = 3
 
 /datum/loadout_item/ta_pants_trou_leather_hakama
 	name = "Hakama"
@@ -1066,25 +961,10 @@
 	name = "Stargazer Robe"
 	item_path = /obj/item/clothing/shirt/robe/noc/stargazer
 
-/datum/loadout_item/ta_shoes_boots_armor_nightmare
-	name = "Nightmare Tears Boots"
-	item_path = /obj/item/clothing/shoes/boots/armor/nightmare
-	point_cost = 4
-
 /datum/loadout_item/ta_shoes_boots_armor_zizo_bloodraider
 	name = "Raider's Boots"
 	item_path = /obj/item/clothing/shoes/boots/armor/zizo/bloodraider
 	point_cost = 1
-
-/datum/loadout_item/ta_shoes_boots_armor_twilight_drow
-	name = "Scourge Plated Boots"
-	item_path = /obj/item/clothing/shoes/boots/armor/twilight_drow
-	point_cost = 4
-
-/datum/loadout_item/ta_shoes_boots_armor_legion
-	name = "Shoonite Greaves"
-	item_path = /obj/item/clothing/shoes/boots/armor/legion
-	point_cost = 4
 
 /datum/loadout_item/ta_shoes_boots_leather_etrbootsm
 	name = "Wanderer's Boots"

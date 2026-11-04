@@ -10,6 +10,10 @@
 	max_integrity = ARMOR_INT_SIDE_BLACKSTEEL
 	anvilrepair = /datum/attribute/skill/craft/armor_repair
 	ported_clothing = TRUE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/neck/bevor/blacksteel/modern
 	name = "blacksteel neckguard"
@@ -18,6 +22,10 @@
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/neck.dmi'
 	sleeved = null
 	icon_state = "bsneckguard"
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/neck/bevor/zizo
 	name = "avantyne bevor"
@@ -30,6 +38,10 @@
 	armor_class = AC_MEDIUM
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = NECK
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/neck/gorget/aventail
 	name = "aventail"

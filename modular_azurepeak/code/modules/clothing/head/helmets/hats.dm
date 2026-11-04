@@ -18,7 +18,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/cloth) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Orle") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Orle", GLOB.ported_color_map)
+		if(!choice)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		detail_color = GLOB.ported_color_map[choice]
@@ -28,7 +30,9 @@
 			var/mob/living/carbon/H = user
 			H.update_inv_head()
 	if(istype(W, /obj/item/clothing/head/veiled) && !altdetail_tag)
-		var/choicealt = input(user, "Choose a color.", "Veil") as anything in GLOB.ported_color_map
+		var/choicealt = browser_input_list(user, "Choose a color.", "Veil", GLOB.ported_color_map)
+		if(!choicealt)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		altdetail_color = GLOB.ported_color_map[choicealt]
@@ -72,7 +76,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/cloth) && !detail_tag)
-		var/choice = input(user, "Choose a color.", "Orle") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Orle", GLOB.ported_color_map)
+		if(!choice)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		detail_color = GLOB.ported_color_map[choice]

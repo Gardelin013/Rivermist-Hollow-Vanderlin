@@ -9,6 +9,7 @@
 	sellprice = 4
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY
 
 /obj/item/clothing/armor/cuirass/iron/hobgoblin
 	name = "hoblin plate"
@@ -22,3 +23,4 @@
 	sellprice = 7
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY

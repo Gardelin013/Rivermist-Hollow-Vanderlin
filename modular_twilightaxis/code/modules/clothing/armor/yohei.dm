@@ -9,6 +9,7 @@
 	max_integrity = ARMOR_INT_CHEST_LIGHT_MASTER + 25
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY
 
 /obj/item/clothing/armor/brigandine/harayoroi
 	name = "hara-yoroi cuirass"
@@ -33,7 +34,9 @@
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	if(!picked)
-		var/choice = input(user, "Choose a color.", "Uniform colors") as anything in GLOB.ported_color_map
+		var/choice = browser_input_list(user, "Choose a color.", "Uniform colors", GLOB.ported_color_map)
+		if(!choice)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		var/playerchoice = GLOB.ported_color_map[choice]
 		picked = TRUE
 		detail_color = playerchoice

@@ -6,11 +6,13 @@
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/head/helmet/blacksteel_ap/legate
 	additional_items = list(/obj/item/ingot/blacksteel, /obj/item/ingot/gold)
+	craftdiff = 5
 
 /datum/anvil_recipe/armor/ported/blacksteel_legate_plateboots
 	name = "Legate's Caligae, Blacksteel"
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/shoes/boots/armor/blacksteel/legate
+	craftdiff = 5
 
 /datum/anvil_recipe/armor/ported/blacksteel_legate_platechest
 	name = "Legate's Lorica Musculata, Blacksteel (+3 Blacksteel, +1 Gold)"
@@ -24,12 +26,14 @@
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/gloves/plate/blacksteel/legate
 	additional_items = list(/obj/item/ingot/gold)
+	craftdiff = 5
 
 /datum/anvil_recipe/armor/ported/blacksteel_legate_platelegs
 	name = "Legate's Plate Chausses, Blacksteel (+1 Blacksteel, +1 Gold)"
 	req_bar = /obj/item/ingot/blacksteel
 	created_item = /obj/item/clothing/pants/platelegs/blacksteel/legate
 	additional_items = list(/obj/item/ingot/blacksteel, /obj/item/ingot/gold)
+	craftdiff = 5
 
 /datum/anvil_recipe/armor/ported/iron_boot_twilight_elven
 	name = "Elven Rider Boots, Iron"
@@ -48,6 +52,7 @@
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/armor/cuirass/legion
 	additional_items = list(/obj/item/ingot/steel, /obj/item/natural/hide/cured)
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/steel_lightcuirass_twilight_elven
 	name = "Elven Rider Cuirass, Steel (+1 Fur, +1 Tallow, +3 Cured Leather)"
@@ -60,36 +65,42 @@
 	name = "Elven Rider Bracers, Steel"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/wrists/bracers/twilight_elven
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/steel_raneshen_plated
 	name = "Calishite Plate Armor, Steel (+3 Steel, +1 Bronze, +1 Cured Leather)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/armor/plate/full/raneshen_plated
 	additional_items = list(/obj/item/ingot/steel, /obj/item/ingot/steel, /obj/item/ingot/steel, /obj/item/natural/hide/cured, /obj/item/ingot/bronze)
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/steel_raneshen_scale
 	name = "Calishite Lamellar, Steel (+1 Steel, +1 Bronze)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/armor/plate/raneshen_scale
 	additional_items = list(/obj/item/ingot/steel, /obj/item/ingot/bronze)
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/steel_raneshi_hmamluk
 	name = "Masked Mamluk Helmet, Steel (+1 Steel, +1 Bronze)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/head/helmet/heavy/knight/raneshi_hmamluk
 	additional_items = list(/obj/item/ingot/steel, /obj/item/ingot/bronze)
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/steel_raneshi_jarhelmet
 	name = "Calishite Jar Helmet, Steel (+1 Bronze +1 Steel)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/head/helmet/raneshi_jarhelmet
 	additional_items = list(/obj/item/ingot/bronze, /obj/item/ingot/steel)
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/steel_raneshi_vmamluk
 	name = "Hound Masked Mamluk Helmet, Steel (+1 Steel, +1 Bronze)"
 	req_bar = /obj/item/ingot/steel
 	created_item = /obj/item/clothing/head/helmet/heavy/knight/raneshi_hmamluk/raneshi_vmamluk
 	additional_items = list(/obj/item/ingot/steel, /obj/item/ingot/bronze)
+	craftdiff = 3
 
 /datum/anvil_recipe/armor/ported/tw_d_castle_red
 	name = "castle helmkleinod"

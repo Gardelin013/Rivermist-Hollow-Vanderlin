@@ -66,3 +66,8 @@
 	resistance_flags = FIRE_PROOF
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	adjustable = CAN_CADJUST
+	ported_adjust = TRUE
+	adj_open_coverage = (CHEST|GROIN|ARMS|VITALS)
+	adj_sound = 'sound/foley/cloth_wipe (1).ogg'
+	armor_type = /datum/armor/padded/bad

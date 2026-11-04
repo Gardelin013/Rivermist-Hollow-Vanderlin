@@ -516,6 +516,7 @@
 	icon_state = "sanshoom_prowlerrobe"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY
 
 /obj/item/clothing/armor/leather/heavy/donator_cuirass
 	name = "heroic leather cuirass"
@@ -843,6 +844,7 @@
 	icon_state = "sanshoom_prowlerrobe"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY
 
 /obj/item/clothing/armor/leather/heavy/coat/donator_squidqueen
 	name = "ragged longcoat"

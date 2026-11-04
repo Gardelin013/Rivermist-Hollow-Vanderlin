@@ -5,7 +5,7 @@
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/32x48/head.dmi'
 	sleeved = null
 	icon_state = "dreamsquidhelm"
-	adjustable = CAN_CADJUST
+	adjustable = CANT_CADJUST
 	max_integrity = ARMOR_INT_HELMET_BLACKSTEEL
 	item_flags = (1<<13)
 	block2add = null

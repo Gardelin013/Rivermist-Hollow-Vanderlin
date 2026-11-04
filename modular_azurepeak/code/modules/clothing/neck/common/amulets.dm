@@ -21,7 +21,9 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/neck/carved/mob_can_equip(mob/living/M, mob/living/equipper, slot, disable_warning = FALSE, bypass_equip_delay_self = FALSE)
-	..()
+	. = ..()
+	if(!.)
+		return
 
 	if((slot & ITEM_SLOT_WRISTS) || (wrist_display && slot != ITEM_SLOT_NECK))
 		mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
@@ -310,7 +312,7 @@
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
 /obj/item/clothing/neck/skullamulet/gemerald/Initialize(mapload)
-	..()
+	. = ..()
 	add_filter(FORCE_FILTER, 2, list("type" = "outline", "color" = "#A0E65C", "alpha" = 200, "size" = 1))
 
 /obj/item/clothing/neck/skullamulet/gemerald/equipped(mob/living/user, slot, initial = FALSE)

@@ -10,6 +10,6 @@
 	abstract_type = /obj/item/clothing/neck/collar/bell
 
 /obj/item/clothing/neck/collar/bell/Initialize(mapload)
-	if(bellsound == TRUE)
-		. = ..()
-		AddComponent(/datum/component/squeak, SFX_COLLARJINGLE, 50, 100, 1) //We want squeak so wearer jingles if touched while wearing collar
+	. = ..()
+	if(bellsound)
+		AddComponent(/datum/component/squeak, SFX_COLLARJINGLE, 50, 100, 1) // jingles when the wearer is touched

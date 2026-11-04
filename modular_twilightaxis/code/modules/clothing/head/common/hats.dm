@@ -20,14 +20,8 @@
 	icon_state = "eaststrawhat"
 	flags_inv = HIDEEARS
 	sewrepair = TRUE
-	var/hides_ears = TRUE
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
-
-/obj/item/clothing/head/eaststrawhat/MiddleClick(mob/user, list/modifiers)
-	. = ..()
-	hides_ears = !hides_ears
-	flags_inv = hides_ears ? HIDEEARS : null
 
 /obj/item/clothing/head/duelhat/etrhat
 	name = "wanderer's hat"

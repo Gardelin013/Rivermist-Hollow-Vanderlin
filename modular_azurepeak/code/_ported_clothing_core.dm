@@ -49,6 +49,16 @@ GLOBAL_LIST_INIT(ported_color_map, COLOR_MAP)
 /obj/item/clothing/AdjustClothes(mob/user)
 	if(!ported_adjust)
 		return ..()
+	ported_adjust_toggle(user)
+
+// RMH visors swap to "_raised" sprites; ported visors keep the "_t" toggle.
+/obj/item/clothing/head/helmet/visored/AdjustClothes(mob/user)
+	if(!ported_adjust)
+		return ..()
+	ported_adjust_toggle(user)
+
+/// Opens or closes a ported visor, coif or robe using the adj_open_* values.
+/obj/item/clothing/proc/ported_adjust_toggle(mob/user)
 	if(loc != user)
 		to_chat(user, span_warning("I need to wear [src] to adjust it."))
 		return

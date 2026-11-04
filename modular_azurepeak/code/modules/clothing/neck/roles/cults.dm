@@ -1,4 +1,9 @@
-/obj/item/clothing/neck/psycross/silver/ravox/g/triumph
+/// Gruumsh amulets, kept with the other inhumen symbols.
+/obj/item/clothing/neck/psycross/inhumen/graggar
+	resistance_flags = FIRE_PROOF
+	abstract_type = /obj/item/clothing/neck/psycross/inhumen/graggar
+
+/obj/item/clothing/neck/psycross/inhumen/graggar/g/triumph
 	name = "ornate amulet of Gruumsh"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/neck.dmi'
@@ -121,7 +126,7 @@
 	salvage_amount = 1
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/ravox/bronze
+/obj/item/clothing/neck/psycross/inhumen/graggar/bronze
 	name = "bronze amulet of Gruumsh"
 	desc = "'EVERYTHING - AND EVERYONE YOU LOVE - WILL BE GONE! WHAT WILL YOU HAVE, AFTER THE LAST FIRE'S BEEN SMOTHERED OUT?!' </br>‎ </br>'..You. I'd still have you.'"
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -132,7 +137,7 @@
 	ported_clothing = TRUE
 	wrist_mob_icon = 'modular_azurepeak/icons/clothing/onmob/wrists.dmi'
 
-/obj/item/clothing/neck/psycross/silver/ravox/g
+/obj/item/clothing/neck/psycross/inhumen/graggar/g
 	name = "golden amulet of Gruumsh"
 	desc = "Might makes right."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -142,7 +147,7 @@
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
 
-/obj/item/clothing/neck/psycross/silver/ravox/wood
+/obj/item/clothing/neck/psycross/inhumen/graggar/wood
 	name = "wooden amulet of Gruumsh"
 	desc = "When all you have is a hammer, every problem tends to look like a nail."
 	icon = 'modular_azurepeak/icons/clothing/neck_2.dmi'
@@ -213,16 +218,30 @@
 	to_chat(user, span_warning(swap_message))
 	swap_form(user)
 
-/obj/item/clothing/neck/psycross/inhumen/matthios/gilded/equipped(mob/user, slot, initial = FALSE)
+/obj/item/clothing/neck/psycross/inhumen/matthios/gilded/equipped(mob/living/user, slot, initial = FALSE)
 	. = ..()
-	if(obj_broken || active_item)
+	if(obj_broken || active_item || !istype(user))
 		return
+	if(!(slot & (ITEM_SLOT_NECK|ITEM_SLOT_RING)) || !istype(user.patron, /datum/patron/faerun/evil_gods))
+		return
+	active_item = TRUE
+	if(!stolen_fyre && istype(user.patron, /datum/patron/faerun/evil_gods/Mask))
+		user.set_stat_modifier("matthios_boldness_[REF(src)]", list((STATKEY_LCK) = 1))
+	if(user.has_language(/datum/language/thievescant))
+		to_chat(user, span_info("I already know Thieves' Cant, but praise be Mask anyway!"))
+		return
+	to_chat(user, span_info("I gain insight on Thieves' Cant. Blend the gestures into normal speech to hide them."))
+	user.grant_language(/datum/language/thievescant)
+	grant_chant = TRUE
 
 /obj/item/clothing/neck/psycross/inhumen/matthios/gilded/dropped(mob/user, silent = FALSE)
 	. = ..()
 	if(!active_item)
 		return
 	active_item = FALSE
+	if(isliving(user))
+		var/mob/living/living_user = user
+		living_user.remove_stat_modifier("matthios_boldness_[REF(src)]")
 	if(grant_chant)
 		to_chat(user, span_info("The knowledge fades from my mind."))
 		user.remove_language(/datum/language/thievescant)

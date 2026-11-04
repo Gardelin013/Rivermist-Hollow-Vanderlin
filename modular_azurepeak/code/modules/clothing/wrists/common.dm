@@ -119,6 +119,7 @@
 	drop_sound = 'sound/foley/dropsound/cloth_drop.ogg'
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	armor_class = ARMOR_CLASS_NONE
 
 /obj/item/clothing/wrists/bracers/hand
 	name = "hand's bracers"

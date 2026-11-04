@@ -13,6 +13,9 @@
 	sellprice = 30
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEFACE|HIDEHAIR)
 
 /obj/item/clothing/head/octopus/MiddleClick(mob/user, list/modifiers)
 	if(!ishuman(user))
@@ -89,7 +92,7 @@
 	name = "flamboyant hat"
 	desc = "A luxurious purple feathered hat with wide brim."
 	icon = 'modular_azurepeak/icons/clothing/head.dmi'
-	mob_overlay_icon = null
+	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/head.dmi'
 	sleeved = null
 	icon_state = "flamboyant"
 	item_state = "flamboyant"

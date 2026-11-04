@@ -182,20 +182,10 @@
 	item_path = /obj/item/clothing/head/helmet/visored/royalknight/spaz
 	point_cost = 3
 
-/datum/loadout_item/ap_head_helmet_heavy_aventail_iron_donator_lamprey
-	name = "Iron Stechhelm"
-	item_path = /obj/item/clothing/head/helmet/heavy/aventail/iron/donator_lamprey
-	point_cost = 4
-
 /datum/loadout_item/ap_head_helmet_grandmaster_habit
 	name = "Knight-Abbot's Habited Burgonet"
 	item_path = /obj/item/clothing/head/helmet/grandmaster_habit
 	point_cost = 3
-
-/datum/loadout_item/ap_head_helmet_grandmaster_habit_aventail
-	name = "Knight-Abbot's Habited Burgonet (Aventail)"
-	item_path = /obj/item/clothing/head/helmet/grandmaster_habit/aventail
-	point_cost = 4
 
 /datum/loadout_item/ap_head_helmet_bascinet_apostle_grandmaster
 	name = "Knight-Abbot's Heavy Burgonet"
@@ -206,16 +196,6 @@
 	name = "Knight-Apostle's Heavy Burgonet"
 	item_path = /obj/item/clothing/head/helmet/bascinet/apostle
 	point_cost = 3
-
-/datum/loadout_item/ap_head_helmet_bascinet_apostle_aventail
-	name = "Knight-Apostle's Heavy Burgonet (Aventail)"
-	item_path = /obj/item/clothing/head/helmet/bascinet/apostle/aventail
-	point_cost = 4
-
-/datum/loadout_item/ap_head_helmet_bascinet_apostle_aventail_grandmaster
-	name = "Knight-Apostle's Heavy Burgonet (Aventail, Grandmaster)"
-	item_path = /obj/item/clothing/head/helmet/bascinet/apostle/aventail/grandmaster
-	point_cost = 4
 
 /datum/loadout_item/ap_head_helmet_bascinet_apostle_winged
 	name = "Knight-Apostle's Winged Burgonet"
@@ -266,11 +246,6 @@
 	name = "Skikudic Savoyard"
 	item_path = /obj/item/clothing/head/helmet/bascinet/pigface/donator_stalkerino
 	point_cost = 3
-
-/datum/loadout_item/ap_head_helmet_heavy_aventail_donator_lamprey
-	name = "Stechhelm"
-	item_path = /obj/item/clothing/head/helmet/heavy/aventail/donator_lamprey
-	point_cost = 4
 
 /datum/loadout_item/ap_head_helmet_heavy_abyssor_painter
 	name = "Sylveric Helmet"
@@ -469,11 +444,6 @@
 /datum/loadout_item/ap_head_helmet_kettle_paalloy
 	name = "Ancient Kettle Helmet"
 	item_path = /obj/item/clothing/head/helmet/kettle/paalloy
-	point_cost = 3
-
-/datum/loadout_item/ap_head_helmet_sallet_iron_banded
-	name = "Banded Iron Helmet"
-	item_path = /obj/item/clothing/head/helmet/sallet/iron/banded
 	point_cost = 3
 
 /datum/loadout_item/ap_head_helmet_sallet_beastskull
@@ -906,7 +876,7 @@
 
 /datum/loadout_item/ap_head_crown_serpcrown_mortosuncrown
 	name = "Sun Crown"
-	item_path = /obj/item/clothing/head/crown/serpcrown/mortosuncrown
+	item_path = /obj/item/clothing/head/crown/mortosuncrown
 	point_cost = 3
 
 /datum/loadout_item/ap_head_crown_serpcrown_mortosuncrown/nobility_check(mob/C)
@@ -1090,11 +1060,6 @@
 
 // ACCESSORIES - neck, rings and wrists
 
-/datum/loadout_item/ap_neck_bevor_zizo
-	name = "Avantyne Bevor"
-	item_path = /obj/item/clothing/neck/bevor/zizo
-	point_cost = 3
-
 /datum/loadout_item/ap_neck_carved
 	name = "Carved Amulet"
 	item_path = /obj/item/clothing/neck/carved
@@ -1103,15 +1068,6 @@
 	name = "Porcelain Amulet"
 	item_path = /obj/item/clothing/neck/carved/porcelainamulet
 
-/datum/loadout_item/ap_neck_collar_prisoner
-	name = "Castifico Collar"
-	item_path = /obj/item/clothing/neck/collar/prisoner
-
-/datum/loadout_item/ap_neck_gorget_forlorncollar
-	name = "Forlorn Collar"
-	item_path = /obj/item/clothing/neck/gorget/forlorncollar
-	point_cost = 4
-
 /datum/loadout_item/ap_neck_collar_fur
 	name = "Fur Collar"
 	item_path = /obj/item/clothing/neck/collar/fur
@@ -1119,16 +1075,6 @@
 /datum/loadout_item/ap_neck_collar_forlorn
 	name = "Light Forlorn Collar"
 	item_path = /obj/item/clothing/neck/collar/forlorn
-
-/datum/loadout_item/ap_neck_bevor_aasimar
-	name = "Aasimari Gorget"
-	item_path = /obj/item/clothing/neck/bevor/aasimar
-	point_cost = 4
-
-/datum/loadout_item/ap_neck_chaincoif_full_black
-	name = "Full Chain Coif"
-	item_path = /obj/item/clothing/neck/chaincoif/full/black
-	point_cost = 3
 
 /datum/loadout_item/ap_neck_mercmedal_routier
 	name = "Amnian Silvered Halo"
@@ -1141,11 +1087,6 @@
 /datum/loadout_item/ap_neck_mercmedal_blackoak_ap
 	name = "Guardian's Seedpouch"
 	item_path = /obj/item/clothing/neck/mercmedal/blackoak_ap
-
-/datum/loadout_item/ap_neck_gorget_steel_kazengun
-	name = "Kozakuran Gorget"
-	item_path = /obj/item/clothing/neck/gorget/steel/kazengun
-	point_cost = 4
 
 /datum/loadout_item/ap_neck_psycross_abyssor_gronn
 	name = "Carved Talisman (Abyssor, Gronn)"
@@ -1169,12 +1110,12 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_dendor_gronn
 	name = "Carved Talisman (Silver, Dendor, Gronn)"
-	item_path = /obj/item/clothing/neck/psycross/silver/dendor/gronn
+	item_path = /obj/item/clothing/neck/psycross/dendor/gronn
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_ravox_gronn
 	name = "Carved Talisman (Silver, Ravox, Gronn)"
-	item_path = /obj/item/clothing/neck/psycross/silver/ravox/gronn
+	item_path = /obj/item/clothing/neck/psycross/inhumen/graggar/gronn
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_mercmedal_atgervi
@@ -1191,7 +1132,7 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_noc_paalloy
 	name = "Ancient Amulet of Mystra"
-	item_path = /obj/item/clothing/neck/psycross/silver/noc/paalloy
+	item_path = /obj/item/clothing/neck/psycross/noc/paalloy
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_paalloy
@@ -1204,7 +1145,7 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_noc_aalloy
 	name = "Decrepit Amulet of Mystra"
-	item_path = /obj/item/clothing/neck/psycross/silver/noc/aalloy
+	item_path = /obj/item/clothing/neck/psycross/noc/aalloy
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_aalloy
@@ -1213,32 +1154,32 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_astrata_dasfox
 	name = "Defiled Lathanderite Periapt"
-	item_path = /obj/item/clothing/neck/psycross/silver/astrata/dasfox
+	item_path = /obj/item/clothing/neck/psycross/astrata/dasfox
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_necra_g
 	name = "Golden Amulet of Jergal"
-	item_path = /obj/item/clothing/neck/psycross/silver/necra/g
+	item_path = /obj/item/clothing/neck/psycross/necra/g
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_astrata_g
 	name = "Golden Amulet of Lathander"
-	item_path = /obj/item/clothing/neck/psycross/silver/astrata/g
+	item_path = /obj/item/clothing/neck/psycross/astrata/g
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_noc_g
 	name = "Golden Amulet of Mystra"
-	item_path = /obj/item/clothing/neck/psycross/silver/noc/g
+	item_path = /obj/item/clothing/neck/psycross/noc/g
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_dendor_g
 	name = "Golden Amulet of Silvanus"
-	item_path = /obj/item/clothing/neck/psycross/silver/dendor/g
+	item_path = /obj/item/clothing/neck/psycross/dendor/g
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_eora_g
 	name = "Golden Amulet of Sune"
-	item_path = /obj/item/clothing/neck/psycross/silver/eora/g
+	item_path = /obj/item/clothing/neck/psycross/eora/g
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_naledi
@@ -1252,12 +1193,12 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_necra_g_triumph
 	name = "Ornate Amulet of Jergal"
-	item_path = /obj/item/clothing/neck/psycross/silver/necra/g/triumph
+	item_path = /obj/item/clothing/neck/psycross/necra/g/triumph
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_astrata_g_triumph
 	name = "Ornate Amulet of Lathander"
-	item_path = /obj/item/clothing/neck/psycross/silver/astrata/g/triumph
+	item_path = /obj/item/clothing/neck/psycross/astrata/g/triumph
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_malum_g_triumph
@@ -1266,17 +1207,17 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_noc_g_triumph
 	name = "Ornate Amulet of Mystra"
-	item_path = /obj/item/clothing/neck/psycross/silver/noc/g/triumph
+	item_path = /obj/item/clothing/neck/psycross/noc/g/triumph
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_dendor_g_triumph
 	name = "Ornate Amulet of Silvanus"
-	item_path = /obj/item/clothing/neck/psycross/silver/dendor/g/triumph
+	item_path = /obj/item/clothing/neck/psycross/dendor/g/triumph
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_eora_g_triumph
 	name = "Ornate Amulet of Sune"
-	item_path = /obj/item/clothing/neck/psycross/silver/eora/g/triumph
+	item_path = /obj/item/clothing/neck/psycross/eora/g/triumph
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_ravox_g_triumph
@@ -1301,18 +1242,13 @@
 
 /datum/loadout_item/ap_neck_psycross_silver_eora_rosecollar
 	name = "Rosestone Clasped Collar"
-	item_path = /obj/item/clothing/neck/psycross/silver/eora/rosecollar
+	item_path = /obj/item/clothing/neck/psycross/eora/rosecollar
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_necra_ap
 	name = "Silver Amulet of Jergal"
 	item_path = /obj/item/clothing/neck/psycross/silver/necra_ap
 	point_cost = 1
-
-/datum/loadout_item/ap_neck_chaincoif_chainmantle_lamplighter
-	name = "Lamplighter's Collar"
-	item_path = /obj/item/clothing/neck/chaincoif/chainmantle/lamplighter
-	point_cost = 3
 
 /datum/loadout_item/ap_neck_psycross_inhumen_paalloy
 	name = "Ancient Zcross"
@@ -1322,45 +1258,20 @@
 	name = "Decrepit Zcross"
 	item_path = /obj/item/clothing/neck/psycross/inhumen/aalloy
 
-/datum/loadout_item/ap_neck_chaincoif_chainmantle_matthios
-	name = "Gilded Chain Mantle"
-	item_path = /obj/item/clothing/neck/chaincoif/chainmantle/matthios
-	point_cost = 3
-
 /datum/loadout_item/ap_neck_psycross_silver_ravox_g
 	name = "Golden Amulet of Gruumsh"
-	item_path = /obj/item/clothing/neck/psycross/silver/ravox/g
+	item_path = /obj/item/clothing/neck/psycross/inhumen/graggar/g
 	point_cost = 1
 
 /datum/loadout_item/ap_neck_psycross_silver_ravox_g_triumph
 	name = "Ornate Amulet of Gruumsh"
-	item_path = /obj/item/clothing/neck/psycross/silver/ravox/g/triumph
+	item_path = /obj/item/clothing/neck/psycross/inhumen/graggar/g/triumph
 	point_cost = 1
-
-/datum/loadout_item/ap_neck_coif_baotha
-	name = "Saccharine Veil"
-	item_path = /obj/item/clothing/neck/coif/baotha
-	point_cost = 1
-
-/datum/loadout_item/ap_neck_gorget_steel_graggar
-	name = "Vicious Gorget"
-	item_path = /obj/item/clothing/neck/gorget/steel/graggar
-	point_cost = 4
-
-/datum/loadout_item/ap_neck_gorget_steel_gold
-	name = "Gold-plated Gorget"
-	item_path = /obj/item/clothing/neck/gorget/steel/gold
-	point_cost = 4
 
 /datum/loadout_item/ap_neck_coif_heavypadding_black
 	name = "Heavy Padded Coif"
 	item_path = /obj/item/clothing/neck/coif/heavypadding/black
 	point_cost = 1
-
-/datum/loadout_item/ap_neck_bevor_dreamwalker
-	name = "Otherworldly Bevor"
-	item_path = /obj/item/clothing/neck/bevor/dreamwalker
-	point_cost = 4
 
 /datum/loadout_item/ap_neck_mercmedal_condottiero
 	name = "Condottiero's Hilt"
@@ -1406,19 +1317,6 @@
 /datum/loadout_item/ap_neck_ornateamulet_noble_triumph/nobility_check(mob/C)
 	return ported_loadout_noble_check(C)
 
-/datum/loadout_item/ap_neck_gorget_gold_king
-	name = "Royal Golden Gorget"
-	item_path = /obj/item/clothing/neck/gorget/gold/king
-	point_cost = 6
-
-/datum/loadout_item/ap_neck_gorget_gold_king/nobility_check(mob/C)
-	return ported_loadout_noble_check(C)
-
-/datum/loadout_item/ap_neck_gorget_ancient_vampire
-	name = "Ancient Ceremonial Gorget"
-	item_path = /obj/item/clothing/neck/gorget/ancient/vampire
-	point_cost = 4
-
 /datum/loadout_item/ap_ring_band_paalloy
 	name = "Ancient Weddingband"
 	item_path = /obj/item/clothing/ring/band/paalloy
@@ -1426,10 +1324,6 @@
 /datum/loadout_item/ap_ring_lief_ring
 	name = "Blortz Blacksteel Engagement Ring"
 	item_path = /obj/item/clothing/ring/lief_ring
-
-/datum/loadout_item/ap_ring_quartzbs
-	name = "Blortz Ring of Blacksteel"
-	item_path = /obj/item/clothing/ring/quartzbs
 
 /datum/loadout_item/ap_ring_aalloy
 	name = "Decrepit Ring"
@@ -1439,14 +1333,6 @@
 	name = "Decrepit Weddingband"
 	item_path = /obj/item/clothing/ring/band/aalloy
 
-/datum/loadout_item/ap_ring_diamondbs
-	name = "Dorpel Ring of Blacksteel"
-	item_path = /obj/item/clothing/ring/diamondbs
-
-/datum/loadout_item/ap_ring_emeraldbs
-	name = "Gemerald Ring of Blacksteel"
-	item_path = /obj/item/clothing/ring/emeraldbs
-
 /datum/loadout_item/ap_ring_porcelain
 	name = "Porcelain Ring"
 	item_path = /obj/item/clothing/ring/porcelain
@@ -1455,21 +1341,9 @@
 	name = "Rontz Ring"
 	item_path = /obj/item/clothing/ring/ruby
 
-/datum/loadout_item/ap_ring_rubybs
-	name = "Rontz Ring of Blacksteel"
-	item_path = /obj/item/clothing/ring/rubybs
-
-/datum/loadout_item/ap_ring_sapphirebs
-	name = "Saffira Ring of Blacksteel"
-	item_path = /obj/item/clothing/ring/sapphirebs
-
 /datum/loadout_item/ap_ring_rubys
 	name = "Silver Rontz Ring"
 	item_path = /obj/item/clothing/ring/rubys
-
-/datum/loadout_item/ap_ring_topazbs
-	name = "Toper Ring of Blacksteel"
-	item_path = /obj/item/clothing/ring/topazbs
 
 /datum/loadout_item/ap_ring_griefflower
 	name = "Rosa Ring"
@@ -1483,135 +1357,9 @@
 /datum/loadout_item/ap_ring_diamond_triumph/nobility_check(mob/C)
 	return ported_loadout_noble_check(C)
 
-/datum/loadout_item/ap_wrists_bracers_zizo
-	name = "Avantyne Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/zizo
-	point_cost = 3
-
-/datum/loadout_item/ap_wrists_bracers_brigandine_black
-	name = "Brigandine Rerebraces"
-	item_path = /obj/item/clothing/wrists/bracers/brigandine/black
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_ancient_chain
-	name = "Decrepit Chain Sleeves"
-	item_path = /obj/item/clothing/wrists/bracers/ancient/chain
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_ancient_armharness_ap
-	name = "Ancient Plate Arm Harness"
-	item_path = /obj/item/clothing/wrists/bracers/ancient/armharness_ap
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_bronze_armharness
-	name = "Bronze Plate Arm Harness"
-	item_path = /obj/item/clothing/wrists/bracers/bronze/armharness
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_cloth
-	name = "Cloth Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/cloth
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_ancient_armharness
-	name = "Decrepit Plate Arm Harness"
-	item_path = /obj/item/clothing/wrists/bracers/ancient/armharness
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_hand
-	name = "Hand's Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/hand
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_iron_armharness
-	name = "Iron Plate Arm Harness"
-	item_path = /obj/item/clothing/wrists/bracers/iron/armharness
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_lirvas
-	name = "Lirvasi Pauldrons"
-	item_path = /obj/item/clothing/wrists/bracers/lirvas
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_cloth_gladiator
-	name = "Padded Wrappings"
-	item_path = /obj/item/clothing/wrists/bracers/cloth/gladiator
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_armharness
-	name = "Plate Arm Harness"
-	item_path = /obj/item/clothing/wrists/bracers/armharness
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_donator_steelpauldron
-	name = "Steel Pauldrons"
-	item_path = /obj/item/clothing/wrists/bracers/donator_steelpauldron
-	point_cost = 4
-
 /datum/loadout_item/ap_wrists_allwrappings_scarlet
 	name = "Wrappings"
 	item_path = /obj/item/clothing/wrists/allwrappings/scarlet
-
-/datum/loadout_item/ap_wrists_bracers_aasimar
-	name = "Aasimari Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/aasimar
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_ancient_chain_ap
-	name = "Ancient Chain Sleeves"
-	item_path = /obj/item/clothing/wrists/bracers/ancient/chain_ap
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_matthios
-	name = "Gilded Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/matthios
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_leather_baotha
-	name = "Saccharine Cuffs"
-	item_path = /obj/item/clothing/wrists/bracers/leather/baotha
-	point_cost = 1
-
-/datum/loadout_item/ap_wrists_bracers_graggar
-	name = "Vicious Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/graggar
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_graggar_heavy
-	name = "Vicious Wristguards"
-	item_path = /obj/item/clothing/wrists/bracers/graggar/heavy
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_dreamwalker
-	name = "Otherworldly Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/dreamwalker
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_donator_decapauldron
-	name = "Decablessed Pauldrons"
-	item_path = /obj/item/clothing/wrists/bracers/donator_decapauldron
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_donator_decapauldron/nobility_check(mob/C)
-	return ported_loadout_noble_check(C)
-
-/datum/loadout_item/ap_wrists_bracers_gold_king
-	name = "Royal Golden Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/gold/king
-	point_cost = 6
-
-/datum/loadout_item/ap_wrists_bracers_gold_king/nobility_check(mob/C)
-	return ported_loadout_noble_check(C)
-
-/datum/loadout_item/ap_wrists_bracers_ancient_vampire
-	name = "Ancient Ceremonial Bracers"
-	item_path = /obj/item/clothing/wrists/bracers/ancient/vampire
-	point_cost = 4
-
-/datum/loadout_item/ap_wrists_bracers_cloth_lich
-	name = "Decrepit Padded Wrappings"
-	item_path = /obj/item/clothing/wrists/bracers/cloth/lich
-	point_cost = 4
 
 // CLOAKS
 
@@ -1885,26 +1633,6 @@
 
 // ARMOR
 
-/datum/loadout_item/ap_armor_brigandine_pyro
-	name = "Darksooted Brigandine Coat"
-	item_path = /obj/item/clothing/armor/brigandine/pyro
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_brigandine_haraate
-	name = "Hansimhae Cuirass"
-	item_path = /obj/item/clothing/armor/brigandine/haraate
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_ancient_heavy_ap
-	name = "Ancient Plate-and-maille"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/ancient/heavy_ap
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_zizo
-	name = "Avantyne Hauberk"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/zizo
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_chainmail_besilked
 	name = "Besilked Haubergeon"
 	item_path = /obj/item/clothing/armor/chainmail/besilked
@@ -1915,103 +1643,18 @@
 	item_path = /obj/item/clothing/armor/chainmail/besilked/fencer
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_chainmail_hauberk_ancient_heavy
-	name = "Decrepit Plate-and-maille"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/ancient/heavy
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_matthios
-	name = "Gilded Hauberk"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/matthios
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_graggar
-	name = "Vicious Hauberk"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/graggar
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_gambeson_sophisticated_coat_trimmed
 	name = "Trimmed Fancy Coat"
 	item_path = /obj/item/clothing/armor/gambeson/sophisticated_coat/trimmed
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_cuirass_iron_conjured
-	name = "Iron Breastplate"
-	item_path = /obj/item/clothing/armor/cuirass/iron/conjured
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_aasimar
-	name = "Aasimari Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/aasimar
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_aasimar
-	name = "Aasimari Cuirass (Ornate)"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/aasimar
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_apostle
-	name = "Apostolic Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/apostle
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_full_apostle
-	name = "Apostolic Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/full/apostle
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_cuirass_ornate_dasfox
-	name = "Archaic Ceremonial Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/dasfox
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_bronze_donator
-	name = "Bronze Maillekini"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/bronze/donator
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_bronze_donator_girdle
-	name = "Bronze Plackart"
-	item_path = /obj/item/clothing/armor/cuirass/bronze/donator_girdle
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_longcoat_wyrd_cloak
 	name = "Cloak of the Wyrd"
 	item_path = /obj/item/clothing/armor/longcoat/wyrd_cloak
 
-/datum/loadout_item/ap_armor_chainmail_donator
-	name = "Cropped Haubergeon"
-	item_path = /obj/item/clothing/armor/chainmail/donator
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_bronze_donator
-	name = "Cropped Iron Haubergeon (Bronze)"
-	item_path = /obj/item/clothing/armor/chainmail/bronze/donator
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_iron_donator
-	name = "Cropped Iron Haubergeon (Iron)"
-	item_path = /obj/item/clothing/armor/chainmail/iron/donator
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_longcoat_eiren
 	name = "Darkwood's Embrace"
 	item_path = /obj/item/clothing/armor/longcoat/eiren
-
-/datum/loadout_item/ap_armor_plate_full_donator_triheartfelt
-	name = "Duskmarian Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/full/donator_triheartfelt
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_donator_elven
-	name = "Elven Haubergeon"
-	item_path = /obj/item/clothing/armor/chainmail/donator_elven
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_iron_donator_elven
-	name = "Elven Haubergeon (Iron)"
-	item_path = /obj/item/clothing/armor/chainmail/iron/donator_elven
-	point_cost = 5
 
 /datum/loadout_item/ap_armor_brigandine_light_tyesca
 	name = "Fencing Brigandine (Brigandine, Light)"
@@ -2022,11 +1665,6 @@
 	name = "Fencing Brigandine (Cuirass, Fencer)"
 	item_path = /obj/item/clothing/armor/cuirass/fencer/tyesca
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_plate_fluted_donator_girdle
-	name = "Fluted Plackart"
-	item_path = /obj/item/clothing/armor/plate/fluted/donator_girdle
-	point_cost = 8
 
 /datum/loadout_item/ap_armor_gambeson_heavy_strudels
 	name = "Form-fitting Padded Gambeson"
@@ -2041,61 +1679,6 @@
 /datum/loadout_item/ap_armor_longcoat_donator_squidqueen_alt
 	name = "Frayed Longcoat (Longcoat)"
 	item_path = /obj/item/clothing/armor/longcoat/donator_squidqueen_alt
-
-/datum/loadout_item/ap_armor_cuirass_psydon_donator_gothic
-	name = "Gothic Chestplate"
-	item_path = /obj/item/clothing/armor/cuirass/psydon/donator_gothic
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_donator_gothic
-	name = "Gothic Cuirass (Gothic)"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/donator_gothic
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_donator_gothic_ap
-	name = "Gothic Cuirass (Gothic) (2)"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/donator_gothic_ap
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_fluted_donator_gothic_ornate
-	name = "Gothic Half-plate (Fluted, Gothic Ornate)"
-	item_path = /obj/item/clothing/armor/plate/fluted/donator_gothic_ornate
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_fluted_donator_gothic
-	name = "Gothic Half-plate (Fluted, Gothic)"
-	item_path = /obj/item/clothing/armor/plate/fluted/donator_gothic
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_fluted_ornate_donator_gothic
-	name = "Gothic Half-plate (Fluted, Ornate, Gothic)"
-	item_path = /obj/item/clothing/armor/plate/fluted/ornate/donator_gothic
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_donator_gothic
-	name = "Gothic Half-plate (Gothic)"
-	item_path = /obj/item/clothing/armor/plate/donator_gothic
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_iron_donator_gothic
-	name = "Gothic Iron Half-plate"
-	item_path = /obj/item/clothing/armor/plate/iron/donator_gothic
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_full_iron_donator_gothic
-	name = "Gothic Iron Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/full/iron/donator_gothic
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_full_donator_gothic
-	name = "Gothic Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/full/donator_gothic
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_full_fluted_ornate_donator_gothic
-	name = "Gothic Plate Armor (Fluted, Ornate)"
-	item_path = /obj/item/clothing/armor/plate/full/fluted/ornate/donator_gothic
-	point_cost = 9
 
 /datum/loadout_item/ap_armor_gambeson_heavy_donator_arming
 	name = "Heavy Jacketed Gambeson (Arming)"
@@ -2117,16 +1700,6 @@
 	item_path = /obj/item/clothing/armor/leather/heavy/donator_girdle
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_plate_heartplate
-	name = "Heavy Steel Heartplate"
-	item_path = /obj/item/clothing/armor/plate/heartplate
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_donator_girdle
-	name = "Heavy Steel Plackart"
-	item_path = /obj/item/clothing/armor/plate/donator_girdle
-	point_cost = 8
-
 /datum/loadout_item/ap_armor_leather_donator_cuirass
 	name = "Heroic Leather Cuirass"
 	item_path = /obj/item/clothing/armor/leather/donator_cuirass
@@ -2147,26 +1720,6 @@
 	item_path = /obj/item/clothing/armor/leather/studded/psyaltrist/donator_cuirass
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_chainmail_hauberk_iron_heavy_zycuirass
-	name = "Iron Gardbrace and Fauld"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/iron/heavy/zycuirass
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_cuirass_iron_heartplate
-	name = "Iron Heartplate"
-	item_path = /obj/item/clothing/armor/cuirass/iron/heartplate
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_iron_donator
-	name = "Iron Maillekini"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/iron/donator
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_iron_donator_girdle
-	name = "Iron Plackart"
-	item_path = /obj/item/clothing/armor/cuirass/iron/donator_girdle
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_brigandine_light_donator_rhynn
 	name = "Jacketed Brigandine"
 	item_path = /obj/item/clothing/armor/brigandine/light/donator_rhynn
@@ -2181,41 +1734,6 @@
 	name = "Jacketed Gambeson (Jacket)"
 	item_path = /obj/item/clothing/armor/gambeson/donator_jacket
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_iron_heavy_rockhill
-	name = "Jacketed Iron Plate-and-maille"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/iron/heavy/rockhill
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_heavy_rockhill
-	name = "Jacketed Plate-and-maille"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/heavy/rockhill
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_fluted_robed_grandmaster
-	name = "Knight-Abbot's Plated Raiment (Chainmail, Hauberk, Fluted)"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/fluted/robed/grandmaster
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_full_robed_grandmaster
-	name = "Knight-Abbot's Plated Raiment (Plate, Full)"
-	item_path = /obj/item/clothing/armor/plate/full/robed/grandmaster
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_fluted_robed
-	name = "Knight-Apostle's Heavy Raiment (Chainmail, Hauberk, Fluted)"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/fluted/robed
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_full_robed
-	name = "Knight-Apostle's Heavy Raiment (Plate, Full)"
-	item_path = /obj/item/clothing/armor/plate/full/robed
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_cuirass_ornate_robed
-	name = "Knight-Apostle's Raiment"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/robed
-	point_cost = 5
 
 /datum/loadout_item/ap_armor_leather_heartplate
 	name = "Leather Heartplate"
@@ -2247,11 +1765,6 @@
 	item_path = /obj/item/clothing/armor/gambeson/heavy/donator_cropped
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_chainmail_hauberk_donator
-	name = "Maillekini"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/donator
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_gambeson_shadowrobe_donator_sanshoom_ap
 	name = "Prowler Robe"
 	item_path = /obj/item/clothing/armor/gambeson/shadowrobe/donator_sanshoom_ap
@@ -2265,21 +1778,6 @@
 /datum/loadout_item/ap_armor_longcoat_donator_squidqueen
 	name = "Ragged Longcoat (Longcoat)"
 	item_path = /obj/item/clothing/armor/longcoat/donator_squidqueen
-
-/datum/loadout_item/ap_armor_chainmail_ollanius_maille
-	name = "Shoulderless Haubergeon"
-	item_path = /obj/item/clothing/armor/chainmail/ollanius_maille
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_heartplate
-	name = "Steel Heartplate (Heartplate)"
-	item_path = /obj/item/clothing/armor/cuirass/heartplate
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_donator_girdle
-	name = "Steel Plackart"
-	item_path = /obj/item/clothing/armor/cuirass/donator_girdle
-	point_cost = 5
 
 /datum/loadout_item/ap_armor_leather_studded_heartplate
 	name = "Studded Leather Heartplate"
@@ -2306,46 +1804,6 @@
 	item_path = /obj/item/clothing/armor/brigandine/light/woodland/plackart
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_chainmail_woodland
-	name = "Woodland Brigandine (Chainmail)"
-	item_path = /obj/item/clothing/armor/chainmail/woodland
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_woodland
-	name = "Woodland Brigandine (Chainmail, Hauberk)"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/woodland
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_woodland_plackart
-	name = "Woodland Brigandine (Chainmail, Hauberk, Plackart)"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/woodland/plackart
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_chainmail_woodland_plackart
-	name = "Woodland Brigandine (Chainmail, Plackart)"
-	item_path = /obj/item/clothing/armor/chainmail/woodland/plackart
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_woodland
-	name = "Woodland Brigandine (Cuirass)"
-	item_path = /obj/item/clothing/armor/cuirass/woodland
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_woodland
-	name = "Woodland Brigandine (Cuirass, Ornate)"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/woodland
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_woodland_plackart
-	name = "Woodland Brigandine (Cuirass, Ornate, Plackart)"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/woodland/plackart
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_woodland_plackart
-	name = "Woodland Brigandine (Cuirass, Plackart)"
-	item_path = /obj/item/clothing/armor/cuirass/woodland/plackart
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_leather_studded_woodland
 	name = "Woodland Brigandine (Leather, Studded)"
 	item_path = /obj/item/clothing/armor/leather/studded/woodland
@@ -2355,16 +1813,6 @@
 	name = "Woodland Brigandine (Leather, Studded, Plackart)"
 	item_path = /obj/item/clothing/armor/leather/studded/woodland/plackart
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_plate_full_dreamwalker
-	name = "Otherworldly Fullplate"
-	item_path = /obj/item/clothing/armor/plate/full/dreamwalker
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_hauberk_dreamwalker
-	name = "Otherworldly Hauberk"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/dreamwalker
-	point_cost = 5
 
 /datum/loadout_item/ap_armor_gambeson_heavy_hierophant_civilian
 	name = "Shawl"
@@ -2410,11 +1858,6 @@
 	item_path = /obj/item/clothing/armor/gambeson/heavy/raneshen
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_gambeson_baotha
-	name = "Saccharine Vestments"
-	item_path = /obj/item/clothing/armor/gambeson/baotha
-	point_cost = 2
-
 /datum/loadout_item/ap_armor_gambeson_heavy_grenzelhoft_loadout_astrocrat
 	name = "Thin Darkholdian Hip-shirt"
 	item_path = /obj/item/clothing/armor/gambeson/heavy/grenzelhoft/loadout/astrocrat
@@ -2425,16 +1868,6 @@
 	item_path = /obj/item/clothing/armor/gambeson/raneshen
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_brigandine_gronn
-	name = "Uthgardt Byrine Hauberk"
-	item_path = /obj/item/clothing/armor/brigandine/gronn
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_iron_gronn
-	name = "Uthgardt Norsii Iron Plate"
-	item_path = /obj/item/clothing/armor/plate/iron/gronn
-	point_cost = 8
-
 /datum/loadout_item/ap_armor_leather_heavy_gronn
 	name = "Uthgardt Ravager Mantle"
 	item_path = /obj/item/clothing/armor/leather/heavy/gronn
@@ -2444,11 +1877,6 @@
 	name = "Hoblin Armor"
 	item_path = /obj/item/clothing/armor/leather/hobgoblin
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_cuirass_iron_hobgoblin
-	name = "Hoblin Plate"
-	item_path = /obj/item/clothing/armor/cuirass/iron/hobgoblin
-	point_cost = 5
 
 /datum/loadout_item/ap_armor_leather_heavy_freifechter_loadout
 	name = "Aesthetic Fencing Jacket"
@@ -2517,90 +1945,20 @@
 	item_path = /obj/item/clothing/armor/plate/ancient/artificer
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_plate_fluted_zizo
-	name = "Avantyne Half-plate"
-	item_path = /obj/item/clothing/armor/plate/fluted/zizo
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_fluted_avantyne
-	name = "Avantyne-threaded Maille"
-	item_path = /obj/item/clothing/armor/plate/fluted/avantyne
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_iron_banded
-	name = "Banded Iron Armor"
-	item_path = /obj/item/clothing/armor/plate/iron/banded
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_heartfelt
-	name = "Coat of Armor"
-	item_path = /obj/item/clothing/armor/heartfelt
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_heartfelt_hand
-	name = "Coat of Armor (Hand)"
-	item_path = /obj/item/clothing/armor/heartfelt/hand
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_medium_scale_marshal
-	name = "Coat of the Commander"
-	item_path = /obj/item/clothing/armor/medium/scale/marshal
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_cuirass_fencer_decorated
 	name = "Decorated Chestplate"
 	item_path = /obj/item/clothing/armor/cuirass/fencer/decorated
 	point_cost = 4
-
-/datum/loadout_item/ap_armor_brigandine_heavy_decorated
-	name = "Decorated Coat of Plates"
-	item_path = /obj/item/clothing/armor/brigandine/heavy/decorated
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_cuirass_ornate_gold_king
-	name = "Golden Heroic Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/gold/king
-	point_cost = 10
 
 /datum/loadout_item/ap_armor_cuirass_fencer_donator_gothic
 	name = "Gothic Fencing Cuirass"
 	item_path = /obj/item/clothing/armor/cuirass/fencer/donator_gothic
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_cuirass_ornate_grinning
-	name = "Grinning Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/grinning
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_cuirass_ornate_holysee
-	name = "Holy See Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/ornate/holysee
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_full_iron_bikini
-	name = "Iron Full-plate Corset"
-	item_path = /obj/item/clothing/armor/plate/full/iron/bikini
-	point_cost = 8
-
 /datum/loadout_item/ap_armor_cuirass_fencer_legacy
 	name = "Luskanian Fencer's Cuirass"
 	item_path = /obj/item/clothing/armor/cuirass/fencer/legacy
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_medium_scale_inqcoat_armored_heavy
-	name = "Plated Inquisitorial Duster"
-	item_path = /obj/item/clothing/armor/medium/scale/inqcoat/armored/heavy
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_fluted_baotha
-	name = "Saccharine Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/fluted/baotha
-	point_cost = 2
-
-/datum/loadout_item/ap_armor_plate_full_samsibsa
-	name = "Samsibsa Scaleplate"
-	item_path = /obj/item/clothing/armor/plate/full/samsibsa
-	point_cost = 8
 
 /datum/loadout_item/ap_armor_cuirass_fencer_donator
 	name = "Steel Heartplate (Fencer)"
@@ -2611,11 +1969,6 @@
 	name = "Steel Plackart (Fencer)"
 	item_path = /obj/item/clothing/armor/cuirass/fencer/donator_girdle
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_plate_silver
-	name = "Templar's Half-plate"
-	item_path = /obj/item/clothing/armor/plate/silver
-	point_cost = 8
 
 /datum/loadout_item/ap_armor_vampiric_gnoll
 	name = "Gnoll Skin"
@@ -2636,26 +1989,6 @@
 	name = "Gnoll Skin (Templar)"
 	item_path = /obj/item/clothing/armor/vampiric/gnoll/templar
 	point_cost = 2
-
-/datum/loadout_item/ap_armor_cuirass_iron_triumph
-	name = "Aged Iron Breastplate"
-	item_path = /obj/item/clothing/armor/cuirass/iron/triumph
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_brigandine_heavy_triumph
-	name = "Brigandine with Plate"
-	item_path = /obj/item/clothing/armor/brigandine/heavy/triumph
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_fluted_triumph_slim
-	name = "Fluted Half-plate"
-	item_path = /obj/item/clothing/armor/plate/fluted/triumph_slim
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_full_fluted_triumph_slim
-	name = "Fluted Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/full/fluted/triumph_slim
-	point_cost = 8
 
 /datum/loadout_item/ap_armor_leather_heavy_coat_triumph
 	name = "Hardened Leather Coat"
@@ -2692,115 +2025,12 @@
 	item_path = /obj/item/clothing/armor/leather/studded/triumph_padded
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_plate_full_triumph_slim
-	name = "Plate Armor"
-	item_path = /obj/item/clothing/armor/plate/full/triumph_slim
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_cuirass_triumph_slim
-	name = "Steel Cuirass"
-	item_path = /obj/item/clothing/armor/cuirass/triumph_slim
-	point_cost = 5
-
-/datum/loadout_item/ap_armor_plate_triumph_slim
-	name = "Steel Half-plate"
-	item_path = /obj/item/clothing/armor/plate/triumph_slim
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_full_dwarven
-	name = "Grudgebearer Dwarven Plate"
-	item_path = /obj/item/clothing/armor/plate/full/dwarven
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_plate_full_dwarven_smith
-	name = "Grudgebearer Splint Apron"
-	item_path = /obj/item/clothing/armor/plate/full/dwarven/smith
-	point_cost = 5
-
 /datum/loadout_item/ap_armor_rare_elfplate_welfplate_light
 	name = "Woad Elven Maille"
 	item_path = /obj/item/clothing/armor/rare/elfplate/welfplate/light
 	point_cost = 2
 
-/datum/loadout_item/ap_armor_chainmail_hauberk_ancient_vampire
-	name = "Ancient Ceremonial Vestments"
-	item_path = /obj/item/clothing/armor/chainmail/hauberk/ancient/vampire
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_iron_vampire
-	name = "Regal Maille"
-	item_path = /obj/item/clothing/armor/chainmail/iron/vampire
-	point_cost = 8
-
-/datum/loadout_item/ap_armor_chainmail_iron_vampire/nobility_check(mob/C)
-	return ported_loadout_noble_check(C)
-
 // CLOTHING - shirts, trousers, gloves and shoes
-
-/datum/loadout_item/ap_gloves_plate_aasimar
-	name = "Aasimari Plated Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/aasimar
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_chain_vampire
-	name = "Ancient Ceremonial Gauntlets"
-	item_path = /obj/item/clothing/gloves/chain/vampire
-	point_cost = 3
-
-/datum/loadout_item/ap_gloves_plate_zizo_heavy
-	name = "Avantyne Plate Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/zizo/heavy
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_avantyne
-	name = "Avantyne-threaded Sleevegloves"
-	item_path = /obj/item/clothing/gloves/plate/avantyne
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_blkknight
-	name = "Darkened Plate Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/blkknight
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_blkknight_death
-	name = "Darkened Plate Gauntlets (Death)"
-	item_path = /obj/item/clothing/gloves/plate/blkknight/death
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_dwarven
-	name = "Grudgebearer Dwarven Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/dwarven
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_kote
-	name = "Jjajeungna Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/kote
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_dreamwalker
-	name = "Otherworldly Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/dreamwalker
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_baotha
-	name = "Saccharine Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/baotha
-	point_cost = 1
-
-/datum/loadout_item/ap_gloves_chain_gronn
-	name = "Uthgardt Byrine Gloves"
-	item_path = /obj/item/clothing/gloves/chain/gronn
-	point_cost = 3
-
-/datum/loadout_item/ap_gloves_plate_iron_gronn
-	name = "Uthgardt Norsii Iron Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/iron/gronn
-	point_cost = 4
-
-/datum/loadout_item/ap_gloves_plate_graggar_heavy
-	name = "Vicious Plated Gauntlets"
-	item_path = /obj/item/clothing/gloves/plate/graggar/heavy
-	point_cost = 4
 
 /datum/loadout_item/ap_gloves_angle_freifechter_loadout
 	name = "Aesthetic Fencing Gloves"
@@ -2874,11 +2104,6 @@
 	item_path = /obj/item/clothing/gloves/cloth/donator_thistle
 	point_cost = 1
 
-/datum/loadout_item/ap_gloves_rare_elfplate_welfplate_autumn
-	name = "Autumnwoad Elven Gloves"
-	item_path = /obj/item/clothing/gloves/rare/elfplate/welfplate/autumn
-	point_cost = 4
-
 /datum/loadout_item/ap_gloves_angle_gronnfur_cleric
 	name = "Thin Fur-lined Bone Gloves"
 	item_path = /obj/item/clothing/gloves/angle/gronnfur/cleric
@@ -2930,16 +2155,6 @@
 /datum/loadout_item/ap_gloves_rosa_nine/nobility_check(mob/C)
 	return ported_loadout_noble_check(C)
 
-/datum/loadout_item/ap_pants_platelegs_zizo_ap
-	name = "Avantyne Vestments"
-	item_path = /obj/item/clothing/pants/platelegs/zizo_ap
-	point_cost = 3
-
-/datum/loadout_item/ap_pants_platelegs_avantyne
-	name = "Avantyne-threaded Fauldcoat"
-	item_path = /obj/item/clothing/pants/platelegs/avantyne
-	point_cost = 3
-
 /datum/loadout_item/ap_pants_tights_explorerpants
 	name = "Explorer's Pants"
 	item_path = /obj/item/clothing/pants/tights/explorerpants
@@ -2957,11 +2172,6 @@
 	name = "Aesthetic Fencing Breeches"
 	item_path = /obj/item/clothing/pants/heavy_leather_pants/otavan/generic/loadout
 	point_cost = 1
-
-/datum/loadout_item/ap_pants_platelegs_aasimar
-	name = "Aasimari Plated Chausses"
-	item_path = /obj/item/clothing/pants/platelegs/aasimar
-	point_cost = 4
 
 /datum/loadout_item/ap_pants_heavy_leather_pants_grenzelpants_loadout
 	name = "Aesthetic Darkholdian Paumpers"
@@ -2982,20 +2192,10 @@
 	name = "Underdwelling Artificer's Trousers"
 	item_path = /obj/item/clothing/pants/trou/artipants/donator_thistle
 
-/datum/loadout_item/ap_pants_chainlegs_gronn
-	name = "Uthgardt Byrine Chausses"
-	item_path = /obj/item/clothing/pants/chainlegs/gronn
-	point_cost = 3
-
 /datum/loadout_item/ap_pants_trou_leather_gronn
 	name = "Uthgardt Fur Pants"
 	item_path = /obj/item/clothing/pants/trou/leather/gronn
 	point_cost = 1
-
-/datum/loadout_item/ap_pants_platelegs_iron_gronn
-	name = "Uthgardt Norsii Iron Chausses"
-	item_path = /obj/item/clothing/pants/platelegs/iron/gronn
-	point_cost = 4
 
 /datum/loadout_item/ap_pants_trou_leather_pontifex_raneshen
 	name = "Baggy Desert Pants"
@@ -3012,40 +2212,10 @@
 	item_path = /obj/item/clothing/pants/heavy_leather_pants/otavan/shepherd
 	point_cost = 1
 
-/datum/loadout_item/ap_pants_skirt_baotha
-	name = "Saccharine Fauldcoat"
-	item_path = /obj/item/clothing/pants/skirt/baotha
-	point_cost = 1
-
-/datum/loadout_item/ap_pants_platelegs_dreamwalker
-	name = "Otherworldly Legplate"
-	item_path = /obj/item/clothing/pants/platelegs/dreamwalker
-	point_cost = 4
-
-/datum/loadout_item/ap_pants_platelegs_blkknight
-	name = "Darkened Plate Chausses"
-	item_path = /obj/item/clothing/pants/platelegs/blkknight
-	point_cost = 4
-
-/datum/loadout_item/ap_pants_platelegs_vampire
-	name = "Ancient Ceremonial Plate Greaves"
-	item_path = /obj/item/clothing/pants/platelegs/vampire
-	point_cost = 4
-
-/datum/loadout_item/ap_pants_platelegs_blkknight_death
-	name = "Darkened Plate Chausses (Death)"
-	item_path = /obj/item/clothing/pants/platelegs/blkknight/death
-	point_cost = 4
-
 /datum/loadout_item/ap_pants_tights_puritan_vampire
 	name = "Formal Breeches"
 	item_path = /obj/item/clothing/pants/tights/puritan/vampire
 	point_cost = 1
-
-/datum/loadout_item/ap_pants_chainlegs_iron_hose_dyeable_necro
-	name = "Iron Chain Hosen with Decrepit Coverings"
-	item_path = /obj/item/clothing/pants/chainlegs/iron/hose/dyeable/necro
-	point_cost = 3
 
 /datum/loadout_item/ap_shirt_blamellar
 	name = "Bronze Lamellar Vest"
@@ -3231,49 +2401,6 @@
 /datum/loadout_item/ap_shirt_undershirt_priest_lich
 	name = "Decrepit Unholy Undervestaments"
 	item_path = /obj/item/clothing/shirt/undershirt/priest/lich
-
-/datum/loadout_item/ap_shoes_boots_armor_aasimar
-	name = "Aasimari Plated Boots"
-	item_path = /obj/item/clothing/shoes/boots/armor/aasimar
-	point_cost = 4
-
-/datum/loadout_item/ap_shoes_boots_armor_vampire
-	name = "Ancient Ceremonial Sabatons"
-	item_path = /obj/item/clothing/shoes/boots/armor/vampire
-	point_cost = 4
-
-/datum/loadout_item/ap_shoes_boots_armor_avantyne
-	name = "Avantyne-threaded Sabatons"
-	item_path = /obj/item/clothing/shoes/boots/armor/avantyne
-	point_cost = 3
-
-/datum/loadout_item/ap_shoes_boots_armor_dwarven
-	name = "Grudgebearer Dwarven Boots"
-	item_path = /obj/item/clothing/shoes/boots/armor/dwarven
-	point_cost = 4
-
-/datum/loadout_item/ap_shoes_boots_armor_dreamwalker
-	name = "Otherworldly Boots"
-	item_path = /obj/item/clothing/shoes/boots/armor/dreamwalker
-	point_cost = 4
-
-/datum/loadout_item/ap_shoes_boots_armor_gold_king
-	name = "Royal Golden Greaves"
-	item_path = /obj/item/clothing/shoes/boots/armor/gold/king
-	point_cost = 6
-
-/datum/loadout_item/ap_shoes_boots_armor_gold_king/nobility_check(mob/C)
-	return ported_loadout_noble_check(C)
-
-/datum/loadout_item/ap_shoes_boots_armor_baotha
-	name = "Saccharine Heels"
-	item_path = /obj/item/clothing/shoes/boots/armor/baotha
-	point_cost = 1
-
-/datum/loadout_item/ap_shoes_boots_armor_iron_gronn
-	name = "Uthgardt Norsii Iron Boots"
-	item_path = /obj/item/clothing/shoes/boots/armor/iron/gronn
-	point_cost = 4
 
 /datum/loadout_item/ap_shoes_boots_leather_donator_thistle
 	name = "Underdwelling Artificer's Boots"

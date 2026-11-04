@@ -24,7 +24,9 @@
 		return
 	if(!picked)
 		var/iconH = icon_state
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "white")
 			iconH = "white_shirt"
 			hammerhold_variants += list("e", "g")
@@ -33,7 +35,9 @@
 			hammerhold_variants += list("e", "g")
 		if(choiceC == "red")
 			iconH = "red_shirt"
-		var/choiceV = input(user, "Choose a variant.", "Mithral Hall variants") as anything in hammerhold_variants
+		var/choiceV = browser_input_list(user, "Choose a variant.", "Mithral Hall variants", hammerhold_variants)
+		if(!choiceV)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		iconH = iconH + "_[choiceV]"
 		icon_state = iconH
 		item_state = iconH
@@ -82,7 +86,9 @@
 
 /obj/item/clothing/shirt/twilight_hammerhold/coat/attack_hand_secondary(mob/user, list/modifiers)
 	if(!picked)
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "beige")
 			icon_state = "coat_a"
 			item_state = "coat_a"
@@ -125,7 +131,9 @@
 /obj/item/clothing/shirt/twilight_hammerhold/dress/attack_hand_secondary(mob/user, list/modifiers)
 	if(!picked)
 		var/iconH = icon_state
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "white")
 			iconH = "white_dress"
 			hammerhold_variants += list("c")
@@ -136,7 +144,9 @@
 			iconH = "blue_dress"
 		if(choiceC == "red")
 			iconH = "red_dress"
-		var/choiceV = input(user, "Choose a variant.", "Mithral Hall variants") as anything in hammerhold_variants
+		var/choiceV = browser_input_list(user, "Choose a variant.", "Mithral Hall variants", hammerhold_variants)
+		if(!choiceV)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		iconH = iconH + "_[choiceV]"
 		icon_state = iconH
 		item_state = iconH
@@ -172,7 +182,9 @@
 
 /obj/item/clothing/shirt/twilight_hammerhold/dress/furcoat/attack_hand_secondary(mob/user, list/modifiers)
 	if(!picked)
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "white")
 			icon_state = "white_mage_coat"
 			item_state = "white_mage_coat"
@@ -212,7 +224,9 @@
 
 /obj/item/clothing/shirt/twilight_hammerhold/dress/robe/attack_hand_secondary(mob/user, list/modifiers)
 	if(!picked)
-		var/choiceC = input(user, "Choose a color.", "Mithral Hall colors") as anything in hammerhold_colors
+		var/choiceC = browser_input_list(user, "Choose a color.", "Mithral Hall colors", hammerhold_colors)
+		if(!choiceC)
+			return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 		if(choiceC == "white")
 			icon_state = "white_mage_robe"
 			item_state = "white_mage_robe"

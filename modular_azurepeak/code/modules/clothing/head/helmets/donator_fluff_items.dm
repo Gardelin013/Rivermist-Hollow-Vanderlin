@@ -53,7 +53,9 @@
 	..()
 	if(!(istype(W, /obj/item/natural/feather) && !detail_tag))
 		return
-	var/choice = input(user, "Choose a color.", "Wings") as anything in GLOB.ported_color_map
+	var/choice = browser_input_list(user, "Choose a color.", "Wings", GLOB.ported_color_map)
+	if(!choice)
+		return
 	user.visible_message(span_warning("[user] adds [W] to [src]."))
 	user.transferItemToLoc(W, src, FALSE, FALSE)
 	detail_color = GLOB.ported_color_map[choice]
@@ -127,7 +129,9 @@
 	..()
 	if(!(istype(W, /obj/item/natural/feather) && !detail_tag))
 		return
-	var/choice = input(user, "Choose a color.", "Wings") as anything in GLOB.ported_color_map
+	var/choice = browser_input_list(user, "Choose a color.", "Wings", GLOB.ported_color_map)
+	if(!choice)
+		return
 	user.visible_message(span_warning("[user] adds [W] to [src]."))
 	user.transferItemToLoc(W, src, FALSE, FALSE)
 	detail_color = GLOB.ported_color_map[choice]
@@ -145,7 +149,7 @@
 	sleeved = null
 	icon_state = "wingedburgeonet"
 	item_state = "wingedburgeonet"
-	adjustable = CAN_CADJUST
+	adjustable = CANT_CADJUST
 	emote_environment = 3
 	body_parts_covered = FULL_HEAD
 	flags_inv = HIDEEARS|HIDEFACE|HIDEHAIR
@@ -165,7 +169,9 @@
 	..()
 	if(!(istype(W, /obj/item/natural/feather) && !detail_tag))
 		return
-	var/choice = input(user, "Choose a color.", "Wings") as anything in GLOB.ported_color_map
+	var/choice = browser_input_list(user, "Choose a color.", "Wings", GLOB.ported_color_map)
+	if(!choice)
+		return
 	user.visible_message(span_warning("[user] adds [W] to [src]."))
 	user.transferItemToLoc(W, src, FALSE, FALSE)
 	detail_color = GLOB.ported_color_map[choice]
@@ -339,7 +345,9 @@
 	var/obj/item/W = attacking_item
 	..()
 	if(istype(W, /obj/item/natural/cloth) && !altdetail_tag)
-		var/choicealt = input(user, "Choose a color.", "Scarf") as anything in GLOB.ported_color_map
+		var/choicealt = browser_input_list(user, "Choose a color.", "Scarf", GLOB.ported_color_map)
+		if(!choicealt)
+			return
 		user.visible_message(span_warning("[user] adds [W] to [src]."))
 		user.transferItemToLoc(W, src, FALSE, FALSE)
 		altdetail_color = GLOB.ported_color_map[choicealt]
@@ -358,6 +366,11 @@
 	icon_state = "ryan_maimedhelm"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEHAIR)
+	adj_sound = 'sound/items/visor.ogg'
+	adjustable = CAN_CADJUST
 
 /obj/item/clothing/head/helmet/sallet/visored/aasimar
 	name = "aasimari sayovard"
@@ -486,6 +499,10 @@
 	icon_state = "dakken_zizbarb"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEHAIR)
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/head/helmet/visored/royalknight/dasfox
 	name = "archaic ceremonial valkyrhelm"
@@ -497,13 +514,19 @@
 	ported_clothing = TRUE
 	hint_decorate = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEHAIR)
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/head/helmet/visored/royalknight/dasfox/attackby(obj/item/attacking_item, mob/user, list/modifiers)
 	var/obj/item/W = attacking_item
 	..()
 	if(!(istype(W, /obj/item/natural/feather) && !detail_tag))
 		return
-	var/choice = input(user, "Choose a color.", "Plume") as anything in GLOB.ported_color_map
+	var/choice = browser_input_list(user, "Choose a color.", "Plume", GLOB.ported_color_map)
+	if(!choice)
+		return
 	user.visible_message(span_warning("[user] adds [W] to [src]."))
 	user.transferItemToLoc(W, src, FALSE, FALSE)
 	detail_color = GLOB.ported_color_map[choice]
@@ -522,6 +545,10 @@
 	icon_state = "spaz_helm"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	ported_adjust = TRUE
+	adj_open_coverage = (HEAD|EARS|HAIR)
+	adj_open_inv = (HIDEEARS|HIDEHAIR)
+	adj_sound = 'sound/items/visor.ogg'
 
 /obj/item/clothing/head/helmet/heavy/knight/rockhill/iron
 	name = "knight-errant's armet"

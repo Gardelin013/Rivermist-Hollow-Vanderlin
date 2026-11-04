@@ -5,7 +5,6 @@
 	mob_overlay_icon = 'modular_azurepeak/icons/clothing/onmob/donor_clothes.dmi'
 	sleeved = null
 	icon_state = "night_cloak"
-	item_state = "night_cloak"
 	experimental_inhand = FALSE
 	experimental_onback = FALSE
 	alternate_worn_layer = 16

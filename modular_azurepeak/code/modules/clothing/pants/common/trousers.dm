@@ -131,3 +131,4 @@
 	icon_state = "handpants"
 	ported_clothing = TRUE
 	misc_flags = CRAFTING_TEST_EXCLUDE
+	allowed_race = SPECIES_BASE_BODY

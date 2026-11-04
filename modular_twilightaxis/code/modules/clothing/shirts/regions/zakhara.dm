@@ -183,7 +183,7 @@
 
 /obj/item/clothing/shirt/dress/thawb/random/Initialize()
 	color = pick("#989898", "#FFFFFF", "#9c4744", "#2f51b8", "#846145", "#e9c792", CLOTHING_BLACK)
-	..()
+	. = ..()
 
 /obj/item/clothing/shirt/dress/thawb/red
 	icon = 'modular_twilightaxis/icons/clothing/desert/shirts.dmi'
@@ -287,7 +287,7 @@
 
 /obj/item/clothing/shirt/robe/bisht/random/Initialize()
 	color = pick("#989898", "#FFFFFF", "#9c4744", "#2f51b8", "#846145", "#e9c792", CLOTHING_BLACK)
-	..()
+	. = ..()
 
 /obj/item/clothing/shirt/robe/bisht/red
 	icon = 'modular_twilightaxis/icons/clothing/desert/easternclothes.dmi'
