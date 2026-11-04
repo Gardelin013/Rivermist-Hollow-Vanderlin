@@ -61,6 +61,8 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 	var/key
 	/// original name of their mob
 	var/name
+	/// The GLOB.chosen_names entry of this character's body; a body remade for this mind keeps it.
+	var/reserved_name
 	/// replaced name for observers name if set
 	var/ghostname
 	/// the current mob this mind is residing in

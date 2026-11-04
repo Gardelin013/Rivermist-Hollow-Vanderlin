@@ -226,12 +226,13 @@
 	dat += "</a><br>"
 
 	if(enabled)
+		var/static/list/intensity_names = list("Very Light", "Light", "Moderate", "Intense", "Very Intense")
+		var/level = clamp(floor(intensity), 1, length(intensity_names))
+		var/intensity_href = "byond://?_src_=prefs;task=erp_pref;preference=kink;kink_name=[url_encode(kink.name)];action=set_intensity;intensity="
 		dat += "<b>Intensity:</b> "
-		for(var/i = 1 to 5)
-			if(i == intensity)
-				dat += "<b>[i]</b> "
-			else
-				dat += "<a href='byond://?_src_=prefs;task=erp_pref;preference=kink;kink_name=[url_encode(kink.name)];action=set_intensity;intensity=[i]'>[i]</a> "
+		dat += level > 1 ? "<a href='[intensity_href][level - 1]'>&lt;</a>" : "<a class='linkOff'>&lt;</a>"
+		dat += "<a class='linkOff'>[intensity_names[level]]</a>"
+		dat += level < length(intensity_names) ? "<a href='[intensity_href][level + 1]'>&gt;</a>" : "<a class='linkOff'>&gt;</a>"
 		dat += "<br>"
 
 		dat += "<b>Notes:</b> "
@@ -276,6 +277,36 @@
 			if(new_notes != null)
 				kink_data["notes"] = new_notes
 	mark_erp_preferences_dirty()
+
+/// Sets one kink from a panel edit; a null field keeps its stored value. FALSE for an unknown kink.
+/datum/preferences/proc/set_kink_preference(kink_name, enabled, intensity, notes)
+	if(!istext(kink_name) || !GLOB.available_kinks[kink_name])
+		return FALSE
+	var/list/kink_prefs = ensure_kink_preferences()
+	var/list/kink_data = kink_prefs[kink_name]
+	if(!islist(kink_data))
+		kink_data = get_default_kink_preference_data()
+		kink_prefs[kink_name] = kink_data
+	if(!isnull(enabled))
+		kink_data["enabled"] = (enabled == TRUE || enabled == "1")
+	var/level = isnull(intensity) ? null : text2num("[intensity]")
+	if(isnum(level))
+		kink_data["intensity"] = clamp(round(level), 1, 5)
+	if(!isnull(notes))
+		kink_data["notes"] = trim(STRIP_HTML_SIMPLE("[notes]", KINK_NOTES_MAX_LENGTH))
+	return TRUE
+
+/// Writes only the ERP block of the loaded slot, so other unsaved character edits stay unsaved.
+/datum/preferences/proc/save_erp_preferences()
+	if(!path)
+		return FALSE
+	var/savefile/S = new /savefile(path)
+	if(!S)
+		return FALSE
+	S.cd = "/character[default_slot]"
+	var/datum/preference/erp_entry = GLOB.preference_entries[/datum/preference/list_type/erp_preferences]
+	WRITE_FILE(S[erp_entry.savefile_key], erp_entry.serialize(ensure_erp_preferences()))
+	return TRUE
 
 /datum/preferences/proc/apply_character_kinks(mob/living/carbon/human/character)
 	var/list/erp_preferences = ensure_erp_preferences()

@@ -152,6 +152,7 @@
 	var/mage_hand_allowed = FALSE
 	/// Overlay zone used by Mage Hand while this action is active.
 	var/mage_hand_overlay_zone = null
+	var/remote_phrase
 	var/sex_volume = 50 //volume for plaps
 	/// User organ slots this action works on beyond its hole and stored penis; a covered organ disables it.
 	var/list/uses_user_organs
@@ -371,9 +372,11 @@
 		suppress_visible_messages = begin_remote_visible_message_suppression()
 		on_perform(action_user, action_target)
 		end_remote_visible_message_suppression(suppress_visible_messages)
+		leave_perform_lipstick_marks()
 		on_orifice_cycle()
 		play_perform_breast_anim()
 		play_perform_motion()
+		play_furniture_noise()
 		send_clench_prompt()
 		if(!is_runtime_active())
 			break
@@ -636,6 +639,9 @@
 	if(oxyloss_amt <= 0 || affected_target.getOxyLoss() > 30)
 		return
 	affected_target.adjustOxyLoss(oxyloss_amt)
+	// The wet choke comes as the air runs short; the emote still fires on top at the old odds.
+	if(affected_target.oxyloss >= 15 && prob(35))
+		affected_target.make_mouth_noise("choke", 40)
 	if(affected_target.oxyloss >= 25 && prob(33))
 		affected_target.emote(pick(list("gag", "choke", "gasp")), forced = TRUE)
 

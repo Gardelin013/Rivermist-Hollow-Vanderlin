@@ -139,14 +139,14 @@
 	color = "#804b70"
 
 /datum/sex_action/npc/npc_vaginal_sex/tentacle
-	name = "Tentacle their vagina"
+	name = "Tentacle vagina"
 	description = "Work an egg-bearing tentacle into their vagina."
 
 /datum/sex_action/npc/npc_vaginal_sex/tentacle/shows_on_menu(mob/living/user, mob/living/target)
 	return istype(user, /mob/living/simple_animal/hostile/retaliate/tentacle) && !is_maneater_tendril(user) && user != target
 
 /datum/sex_action/npc/npc_vaginal_sex/tentacle/maneater
-	name = "Part their petals with a vine"
+	name = "Part petals"
 	description = "Work a seed-bearing plant tendril into their vagina."
 
 /datum/sex_action/npc/npc_vaginal_sex/tentacle/maneater/shows_on_menu(mob/living/user, mob/living/target)
@@ -173,14 +173,14 @@
 	return ORGASM_LOCATION_INTO
 
 /datum/sex_action/npc/npc_anal_sex/tentacle
-	name = "Tentacle their anus"
+	name = "Tentacle anus"
 	description = "Work an egg-bearing tentacle into their anus."
 
 /datum/sex_action/npc/npc_anal_sex/tentacle/shows_on_menu(mob/living/user, mob/living/target)
 	return istype(user, /mob/living/simple_animal/hostile/retaliate/tentacle) && !is_maneater_tendril(user) && user != target
 
 /datum/sex_action/npc/npc_anal_sex/tentacle/maneater
-	name = "Root a vine in their anus"
+	name = "Root vine"
 	description = "Ease a seed-bearing plant tendril into their anus."
 
 /datum/sex_action/npc/npc_anal_sex/tentacle/maneater/shows_on_menu(mob/living/user, mob/living/target)
@@ -207,14 +207,14 @@
 	return ORGASM_LOCATION_INTO
 
 /datum/sex_action/npc/npc_throat_sex/tentacle
-	name = "Tentacle their throat"
+	name = "Tentacle throat"
 	description = "Ease an egg-bearing tentacle into their mouth."
 
 /datum/sex_action/npc/npc_throat_sex/tentacle/shows_on_menu(mob/living/user, mob/living/target)
 	return istype(user, /mob/living/simple_animal/hostile/retaliate/tentacle) && !is_maneater_tendril(user) && user != target
 
 /datum/sex_action/npc/npc_throat_sex/tentacle/maneater
-	name = "Feed them a flowering vine"
+	name = "Feed vine"
 	description = "Ease a seed-bearing plant tendril into their mouth."
 
 /datum/sex_action/npc/npc_throat_sex/tentacle/maneater/shows_on_menu(mob/living/user, mob/living/target)
@@ -236,7 +236,7 @@
 	return ORGASM_LOCATION_ORAL
 
 /datum/sex_action/tentacle_jerk
-	name = "Tentacle jerk them off"
+	name = "Tentacle jerk"
 	description = "Coil a smaller tentacle around their penis."
 	check_same_tile = FALSE
 	user_menu_zone_mask = SEX_UI_ZONE_BODY
@@ -284,7 +284,7 @@
 	add_sex_lock(target, ORGAN_SLOT_PENIS, null, FALSE)
 
 /datum/sex_action/tentacle_jerk/maneater
-	name = "Wind vines around their cock"
+	name = "Wind vines"
 	description = "Coil a flowering tendril around their penis."
 
 /datum/sex_action/tentacle_jerk/maneater/shows_on_menu(mob/living/user, mob/living/target)
@@ -302,7 +302,7 @@
 	return "[user] lets its flowering vines uncurl from [target]'s cock."
 
 /datum/sex_action/maneater_vine_caress
-	name = "Envelop them in flowering vines"
+	name = "Vine embrace"
 	description = "Stroke and squeeze their body with warm, sap-slick tendrils."
 	check_same_tile = FALSE
 	user_menu_zone_mask = SEX_UI_ZONE_BODY

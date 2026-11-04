@@ -11,6 +11,8 @@
 	w_class = WEIGHT_CLASS_SMALL
 	obj_flags = CAN_BE_HIT
 	sellprice = 1
+	// The sprite is drawn large for the inventory; in the world it is a third of that.
+	dropshrink = 0.4
 	var/dildo_type = "human"
 	var/dildo_size = "small"
 	var/pleasure = 4
@@ -82,7 +84,7 @@
 	var/obj/item/organ/genitals/penis/temp = new /obj/item/organ/genitals/penis
 	temp.name = name
 	icon_state = "dildo_[dildo_type]_[dildo_size]"
-	switch(shape_choice)
+	switch(dildo_type)
 		if("knotted")
 			temp.penis_type = PENIS_TYPE_KNOTTED
 		if("human")
@@ -132,6 +134,8 @@
 /obj/item/dildo/silver/pickup(mob/user)
 	. = ..()
 	var/mob/living/carbon/human/H = user
+	if(!ishuman(H) || !H.mind)
+		return
 	var/datum/antagonist/vampire/V_lord = H.mind.has_antag_datum(/datum/antagonist/vampire/)
 	var/datum/antagonist/werewolf/W = H.mind.has_antag_datum(/datum/antagonist/werewolf/)
 	if(ishuman(H))
@@ -152,7 +156,7 @@
 		return
 
 	. = ..()
-	if(ishuman(target))
+	if(ishuman(target) && target.mind)
 		//var/mob/living/carbon/human/s_user = user
 		var/mob/living/carbon/human/H = target
 		var/datum/antagonist/werewolf/W = H.mind.has_antag_datum(/datum/antagonist/werewolf/)

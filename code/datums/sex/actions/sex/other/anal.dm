@@ -1,5 +1,5 @@
 /datum/sex_action/sex/other/anal
-	name = "Ride them anally"
+	name = "Ride anally"
 	user_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	hole_id = ORGAN_SLOT_ANUS

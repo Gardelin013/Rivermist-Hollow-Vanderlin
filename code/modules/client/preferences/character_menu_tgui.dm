@@ -785,6 +785,7 @@ GLOBAL_VAR_INIT(character_setup_debug, FALSE)
 	var/windowflashing = read_preference(/datum/preference/toggle/windowflashing)
 	var/ambientocclusion = read_preference(/datum/preference/toggle/ambientocclusion)
 	var/auto_fit_viewport = read_preference(/datum/preference/toggle/auto_fit_viewport)
+	var/descriptor_color = read_preference(/datum/preference/toggle/descriptor_color)
 	var/toggles_maptext = read_preference(/datum/preference/bitwise/toggles_maptext)
 	var/pixel_size = read_preference(/datum/preference/numeric/pixel_size)
 	var/scaling_method = read_preference(/datum/preference/choiced/scaling_method)
@@ -1018,6 +1019,7 @@ GLOBAL_VAR_INIT(character_setup_debug, FALSE)
 		"hear_midis" = !!(toggles & SOUND_MIDI),
 		"ambientocclusion" = !!ambientocclusion,
 		"auto_fit_viewport" = !!auto_fit_viewport,
+		"descriptor_color" = !!descriptor_color,
 		"allow_midround_antag" = !!(toggles & MIDROUND_ANTAG),
 		"ambience" = !!(toggles & SOUND_AMBIENCE),
 		"background_music" = !!(toggles & SOUND_SHIP_AMBIENCE),

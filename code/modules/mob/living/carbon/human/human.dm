@@ -817,9 +817,14 @@
 	VV_DROPDOWN_OPTION(VV_HK_SET_SPECIES, "Set Species")
 	VV_DROPDOWN_OPTION(VV_HK_CORONATE, "Coronate")
 	VV_DROPDOWN_OPTION(VV_HK_CHANGE_TITLE, "Change Title")
+	VV_DROPDOWN_OPTION(VV_HK_BREAST_TEST_PANEL, "Breast Test Panel")
 
 /mob/living/carbon/human/vv_do_topic(list/href_list)
 	. = ..()
+	if(href_list[VV_HK_BREAST_TEST_PANEL])
+		if(!check_rights(R_SPAWN))
+			return
+		open_breast_test_panel(usr)
 	if(href_list[VV_HK_COPY_OUTFIT])
 		if(!check_rights(R_SPAWN))
 			return
@@ -1044,6 +1049,7 @@
 	skin_tone = target.skin_tone
 	lip_style = target.lip_style
 	lip_color = target.lip_color
+	lip_alpha = target.lip_alpha
 	age = target.age
 	//underwear = target.underwear
 	//underwear_color = target.underwear_color
@@ -1155,6 +1161,15 @@
 			add_faction("islander")
 			SSisland_mobs.register_mob(src, SSterrain_generation.get_island_at_location(turf))
 
+/mob/living/carbon/human/proc/clean_lips()
+	if(!lip_style)
+		return FALSE
+	lip_style = null
+	lip_color = initial(lip_color)
+	lip_alpha = initial(lip_alpha)
+	update_body()
+	return TRUE
+
 /**
  * Called when this human should be washed
  */
@@ -1179,6 +1194,10 @@
 	var/list/obscured = check_obscured_slots()
 
 	if(!is_mouth_covered())
+		clean_lips()
+		. = TRUE
+
+	if(wash_lipstick_marks())
 		. = TRUE
 
 	if(!(obscured[SLOT_CHECK_REGULAR] & ITEM_SLOT_SHIRT) && wear_shirt?.wash(clean_types))

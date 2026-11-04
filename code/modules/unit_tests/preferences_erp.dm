@@ -155,7 +155,7 @@
 	target_mind.current = null
 
 /datum/sex_action/unit_test_disconnected_erp
-	name = "Unit Test Disconnected ERP"
+	name = "Disconnect test"
 	check_distance = FALSE
 	stamina_cost = 0
 

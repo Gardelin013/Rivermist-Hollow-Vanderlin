@@ -1,5 +1,5 @@
 /datum/sex_action/npc/npc_rimming
-	name = "NPC Rim them"
+	name = "NPC rimjob"
 	check_same_tile = FALSE
 	gags_user = TRUE
 	scene_interaction = SEX_SCENE_INTERACTION_ORAL
@@ -37,7 +37,7 @@
 	. = ..()
 	if(can_show_action_message(user, target))
 		user.visible_message(spanify_force("[user] [get_generic_force_adjective()] rims [target]'s butt..."))
-	user.make_sucking_noise()
+	user.make_mouth_noise("lick")
 	do_thrust_animate(user, target)
 
 	perform_sex_action(user, target, 1, 0, 1)

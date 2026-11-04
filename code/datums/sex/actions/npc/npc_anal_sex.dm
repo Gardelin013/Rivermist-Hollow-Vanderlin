@@ -1,5 +1,5 @@
 /datum/sex_action/npc/npc_anal_sex
-	name = "NPC Sodomize them"
+	name = "NPC anal"
 	check_same_tile = FALSE
 	require_grab = FALSE
 	hole_id = ORGAN_SLOT_ANUS

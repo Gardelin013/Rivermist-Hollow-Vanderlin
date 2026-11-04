@@ -1,5 +1,5 @@
 /datum/sex_action/npc/npc_throat_sex
-	name = "NPC Fuck their throat"
+	name = "NPC throat"
 	check_same_tile = FALSE
 	hole_id = BODY_ZONE_PRECISE_MOUTH
 	gags_target = TRUE
@@ -32,7 +32,7 @@
 	. = ..()
 	if(can_show_action_message(user, target))
 		user.visible_message(spanify_force(get_perform_message(user, target)))
-	playsound(target, 'sound/misc/mat/segso.ogg', 50, TRUE, -2, ignore_walls = FALSE)
+	play_throat_thrust(target, 50)
 	do_thrust_animate(user, target)
 
 	perform_sex_action(user, target, 2, 0, 2)

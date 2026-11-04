@@ -4,6 +4,7 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 
 #define ERP_PREFERENCE_EDIT_GRACE_MINUTES 20
 #define ERP_PREFERENCE_EDIT_GRACE_PERIOD (ERP_PREFERENCE_EDIT_GRACE_MINUTES MINUTES)
+#define KINK_NOTES_MAX_LENGTH 256
 
 #define MAGE_HAND_ACTION_MESSAGE_START "start"
 #define MAGE_HAND_ACTION_MESSAGE_PERFORM "perform"
@@ -357,7 +358,7 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define ORGASM_LOCATION_SELF "self"
 #define ORGASM_LOCATION_CONTAINER "container"
 
-/// Units of fluid a female climax adds into the vagina (instead of spawning a puddle); the organ's drip system leaks it out.
+/// Units of femcum a female climax makes; what the wetness cap cannot keep gushes out at once.
 #define FEMCUM_ORGASM_VOLUME 10
 
 // Fluid modifier sources. Sources are strings so they never hold a reference.
@@ -382,6 +383,8 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define PHEROMONE_AROUSAL_FLOOR 40
 /// Plain arousal wetness drips to the floor only from this arousal up.
 #define VAGINA_DRIP_AROUSAL 80
+/// Units per second of own femcum taken back while wetness sits above its arousal target.
+#define VAGINA_WETNESS_FADE_RATE 0.02
 
 // Body fluid reagent data keys: who made it, whether makers mixed, and a hint of their last meals.
 #define FLUID_DATA_DONOR "fluid_donor"
@@ -420,6 +423,17 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define PENIS_SLAP_KNOCKBACK_HEFT 1.5
 /// Arousal the cock's owner gets from one slap.
 #define PENIS_SLAP_AROUSAL 1
+
+// Spots on a body a crotch can grind against; a turned back reads ass, lower back and back.
+#define GRIND_SPOT_FEET "feet"
+#define GRIND_SPOT_THIGH "thigh"
+#define GRIND_SPOT_HAND "hand"
+#define GRIND_SPOT_CROTCH "crotch"
+#define GRIND_SPOT_LAP "lap"
+#define GRIND_SPOT_BELLY "belly"
+#define GRIND_SPOT_ARM "arm"
+#define GRIND_SPOT_CHEST "chest"
+#define GRIND_SPOT_FACE "face"
 /// Leak multiplier while the owner lies down; gravity helps less.
 #define FLUID_LYING_LEAK_MULT 0.5
 /// Leak multiplier for a vagina or anus while the owner holds it in.

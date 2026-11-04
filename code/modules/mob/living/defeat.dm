@@ -117,6 +117,8 @@
 		return FALSE
 	if(!iscarbon(src))
 		return FALSE
+	if((mob_biotypes & MOB_UNDEAD) && (!mind?.key || IS_DEADITE(src)))
+		return FALSE
 	// A lair's captive NPC is scenery for its denizens: no defeat, no kidnap of its own.
 	if(GetComponent(/datum/component/npc_in_distress))
 		return FALSE
@@ -1470,7 +1472,7 @@ GLOBAL_LIST_INIT(npc_distress_thanks, list(
 		unlink_mind_from_other_resurrection_runes(mind, null)
 		mind.defeat_character_abandoned = TRUE
 	GLOB.rune_roundstart_mobs -= src
-	GLOB.chosen_names -= real_name
+	release_reserved_name()
 
 /mob/living/carbon/human/proc/become_npc_in_distress(decays = TRUE, list/captor_faction = null)
 	npc_in_distress_drop_carried()

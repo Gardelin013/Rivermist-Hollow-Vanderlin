@@ -185,8 +185,20 @@
 	allows_oviposition_pregnancy = TRUE
 	oviposition_storage_component_type = /datum/component/body_storage/mouth
 	oviposition_location_name = "stomach"
-	oviposition_lay_verb = "coughs up"
-	oviposition_lay_action = "cough up"
+	oviposition_lay_verb = "passes"
+	oviposition_lay_action = "pass"
+
+/// What goes down must come out the other end: the stomach births through the rear when there is one.
+/obj/item/organ/guts/get_birth_canal()
+	var/obj/item/organ/genitals/filling_organ/anus = owner ? get_real_organ(owner, ORGAN_SLOT_ANUS) : null
+	return istype(anus) ? anus : src
+
+/// Contractions a labour from this organ adds for the way its passenger has to travel.
+/obj/item/organ/proc/get_birth_extra_contractions()
+	return 0
+
+/obj/item/organ/guts/get_birth_extra_contractions()
+	return 2
 
 /obj/item/organ/genitals/filling_organ/Insert(mob/living/M, special, drop_if_replaced, new_zone = null)
 	. = ..()
@@ -559,11 +571,11 @@
 	// Creatures keep no fluid upkeep and refill at the plain fed rate.
 	if(!iscarbon(owner))
 		if(is_producing())
-			add_produced_fluid(production_rate * get_production_multiplier() * seconds)
+			add_produced_fluid(get_base_production(seconds))
 		return
 	if(HAS_TRAIT(owner, TRAIT_NOHUNGER))
 		if(is_producing())
-			add_produced_fluid(production_rate * get_nourishment_multiplier() * get_production_multiplier() * seconds)
+			add_produced_fluid(get_base_production(seconds) * get_nourishment_multiplier())
 		return
 	if(owner.nutrition < FLUID_HUNGER_NUTRITION)
 		if(hungerhelp)
@@ -571,9 +583,17 @@
 		return
 	if(!is_producing())
 		return
-	var/amount = production_rate * get_production_multiplier() * get_nourishment_multiplier() * seconds
+	var/amount = get_base_production(seconds) * get_nourishment_multiplier()
 	if(amount > 0)
 		pay_for_fluid(add_produced_fluid(amount))
+
+/// Units made over the given seconds before nourishment: base rate, fluid modifiers and fill curve.
+/obj/item/organ/genitals/filling_organ/proc/get_base_production(seconds)
+	return production_rate * get_production_multiplier() * get_fill_rate_multiplier() * seconds
+
+/// Speed share from how full the organ already is; flat unless a subtype slows as it fills.
+/obj/item/organ/genitals/filling_organ/proc/get_fill_rate_multiplier()
+	return 1
 
 /// Production speed from how fed the owner is: none when hungry, full when well fed, faster beyond.
 /obj/item/organ/genitals/filling_organ/proc/get_nourishment_multiplier()
@@ -689,6 +709,9 @@
 	var/mob/living/carbon/carbon_owner = owner
 	var/list/covers = list()
 	if(additional_blocker == "bra")
+		// A pulled-open top leaves the breasts bare, so leaks drip past it.
+		if(carbon_owner.has_bared_chest())
+			return covers
 		covers += carbon_owner.bra
 		if(carbon_owner.underwear?.covers_breasts)
 			covers += carbon_owner.underwear
@@ -850,7 +873,9 @@
 		if(!islist(layer_contents))
 			continue
 		for(var/obj/item/stored_item as anything in layer_contents.Copy())
-			if(QDELETED(stored_item) || stored_item.loc != src)
+			// A holder with a live mob hangs off the body by design; only an item away from its place is stale.
+			var/atom/expected_loc = stored_item.body_storage_destination(src, owner) || src
+			if(QDELETED(stored_item) || stored_item.loc != expected_loc)
 				layer_contents -= stored_item
 				needs_bulk_recalculation = TRUE
 				continue

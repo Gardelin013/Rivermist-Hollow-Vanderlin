@@ -1,5 +1,5 @@
 /datum/sex_action/penis_head_worship
-	name = "Worship their tip"
+	name = "Worship tip"
 	description = "Focus kisses and tongue-work on the head of their penis."
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS

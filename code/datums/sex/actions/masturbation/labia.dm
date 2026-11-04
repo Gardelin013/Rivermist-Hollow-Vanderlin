@@ -50,7 +50,7 @@
 
 	if(can_show_action_message(user, target))
 		user.visible_message(spanify_force("[user] [action_text] [user.p_their()] labia..."))
-	playsound(user, 'sound/misc/mat/fingering.ogg', 25, TRUE, -2, ignore_walls = FALSE)
+	play_rub_sound("finger", user, 25, ORGAN_SLOT_VAGINA)
 
 	perform_sex_action(user, user, arousal_amt, pain_amt, orgasm_amt)
 	handle_passive_ejaculation()
@@ -60,7 +60,8 @@
 	user.visible_message(span_warning("[user] stops teasing [user.p_their()] labia."))
 
 /datum/sex_action/masturbate/other/labia
-	name = "Pull their labia"
+	name = "Labia pulling"
+	remote_phrase = "Pull their labia"
 	check_same_tile = FALSE
 
 /datum/sex_action/masturbate/other/labia/shows_on_menu(mob/living/user, mob/living/target)
@@ -112,7 +113,7 @@
 
 	if(can_show_action_message(user, target))
 		user.visible_message(spanify_force("[user] [action_text] [target]'s labia..."))
-	playsound(user, 'sound/misc/mat/fingering.ogg', 25, TRUE, -2, ignore_walls = FALSE)
+	play_rub_sound("finger", target, 25, ORGAN_SLOT_VAGINA)
 
 	perform_sex_action(target, user, arousal_amt, pain_amt, orgasm_amt)
 	handle_passive_ejaculation(target)

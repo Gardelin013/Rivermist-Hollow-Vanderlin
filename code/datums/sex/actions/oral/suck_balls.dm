@@ -1,5 +1,5 @@
 /datum/sex_action/suck_balls
-	name = "Lick or suck their balls"
+	name = "Suck balls"
 	description = "Tease their balls with your tongue, shifting from licking to sucking as force increases."
 	user_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS

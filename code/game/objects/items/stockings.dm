@@ -109,6 +109,15 @@
 			return null
 	return stockings
 
+/mob/living/carbon/human/proc/get_sex_reachable_legwear()
+	RETURN_TYPE(/obj/item/clothing/legwears)
+	var/obj/item/clothing/legwears/stockings = legwear_socks
+	if(!istype(stockings))
+		return null
+	if(get_sex_covering_garment(BODY_ZONE_L_LEG) || get_sex_covering_garment(BODY_ZONE_R_LEG))
+		return null
+	return stockings
+
 
 /obj/item/clothing/legwears/random
 	misc_flags = CRAFTING_TEST_EXCLUDE

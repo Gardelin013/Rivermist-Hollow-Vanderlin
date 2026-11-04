@@ -431,21 +431,17 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 			"value_name" = current ? current.name : "None",
 			"options" = options,
 		))
-	var/static/list/translation = CUSTOM_PREFIX_TRANSLATION_LIST
+	var/static/list/custom_types = CUSTOM_DESCRIPTOR_TYPE_LIST
 	var/list/custom = list()
 	for(var/index in 1 to min(CUSTOM_DESCRIPTOR_AMOUNT, length(custom_descriptors)))
 		var/datum/custom_descriptor_entry/custom_entry = custom_descriptors[index]
-		var/visible = FALSE
-		switch(index)
-			if(1)
-				visible = has_descriptor_type_in_entries(/datum/mob_descriptor/prominent/custom/one)
-			if(2)
-				visible = has_descriptor_type_in_entries(/datum/mob_descriptor/prominent/custom/two)
+		var/datum/mob_descriptor/custom_descriptor = MOB_DESCRIPTOR(custom_types[index])
 		custom += list(list(
 			"index" = index,
-			"prefix" = translation["[custom_entry.prefix_type]"],
+			"name" = custom_descriptor?.name,
+			"prefix" = get_custom_descriptor_prefix_text(index),
 			"text" = custom_entry.content_text,
-			"visible" = visible,
+			"visible" = is_custom_descriptor_selected(index),
 		))
 	return list("entries" = entries, "custom" = custom)
 

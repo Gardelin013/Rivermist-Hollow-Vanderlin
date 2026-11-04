@@ -1994,6 +1994,9 @@ generate/load female uniform sprites matching all previously decided variables
 			. += organ.accessory_type
 			. += organ.accessory_colors
 			. += organ.get_render_key_state()
+			var/lipstick_key = get_lipstick_organ_key(organ)
+			if(lipstick_key)
+				. += lipstick_key
 			if(underwear?.hides_organ_slot(organ.slot))
 				. += "underwear_hidden"
 
@@ -2085,28 +2088,50 @@ generate/load female uniform sprites matching all previously decided variables
 	if(!istype(HD))
 		return
 
-	var/datum/species/species = dna?.species
-
-	var/list/offsets = get_offset_features()
-
 	HD.update_limb()
 
 	add_overlay(HD.get_limb_icon())
 	update_damage_overlays()
 
-	if(HD && !(HAS_TRAIT(src, TRAIT_HUSK)))
-		// lipstick
-		if(lip_style && (LIPS in species.species_traits))
-			var/mutable_appearance/lip_overlay = mutable_appearance('icons/mob/human_face.dmi', "lips_[lip_style]", -BODY_LAYER)
-			lip_overlay.color = lip_color
-			if(LAZYACCESS(offsets, OFFSET_FACE))
-				lip_overlay.pixel_x += offsets[OFFSET_FACE][1]
-				lip_overlay.pixel_y += offsets[OFFSET_FACE][2]
-			add_overlay(lip_overlay)
+	var/mutable_appearance/lip_overlay = get_lips_overlay()
+	if(lip_overlay)
+		add_overlay(lip_overlay)
 
 	update_inv_head()
 	update_inv_wear_mask()
 	update_inv_mouth()
+
+/mob/living/carbon/human/proc/get_lips_overlay()
+	if(!lip_style || HAS_TRAIT(src, TRAIT_HUSK))
+		return null
+	var/datum/species/species = dna?.species
+	if(!(LIPS in species?.species_traits))
+		return null
+	var/obj/item/bodypart/head/head = get_bodypart(BODY_ZONE_HEAD)
+	if(!istype(head) || head.skeletonized)
+		return null
+
+	var/mutable_appearance/lip_overlay
+	var/face_frame = TRUE
+	var/list/snout_lips = head.get_snout_lips(lip_style)
+	if(snout_lips)
+		lip_overlay = mutable_appearance('icons/mob/human_face.dmi', snout_lips[1], snout_lips[2])
+	else
+		var/head_lips = get_body_build() ? null : ((gender == MALE) ? species.lips_state_m : species.lips_state_f)
+		if(head_lips && icon_exists('icons/mob/human_face.dmi', "lips_[lip_style]_[head_lips]"))
+			lip_overlay = mutable_appearance('icons/mob/human_face.dmi', "lips_[lip_style]_[head_lips]", -BODY_LAYER)
+			face_frame = FALSE
+		else
+			lip_overlay = mutable_appearance('icons/mob/human_face.dmi', "lips_[lip_style]", -BODY_LAYER)
+
+	lip_overlay.color = lip_color
+	lip_overlay.alpha = lip_alpha
+	if(face_frame)
+		apply_offset(lip_overlay, OFFSET_FACE)
+	var/obj/item/bodypart/taur/taur = get_bodypart(BODY_ZONE_TAUR)
+	if(taur?.body_offset_y)
+		lip_overlay.pixel_y += taur.body_offset_y
+	return lip_overlay
 
 /mob/living/carbon/human/proc/update_smell(smelly_icon = "generic_mob_smell")
 	remove_overlay(SMELL_LAYER)

@@ -225,7 +225,7 @@
 	if(egg_type == initial(ovipositor.ovi_egg_type))
 		egg_type = get_species_oviposition_egg_type(carrier) || egg_type
 	// Apply player custom overrides before setting type (so profile apply respects them)
-	egg.apply_custom_overrides(ovipositor.custom_egg_name, ovipositor.custom_egg_desc, ovipositor.custom_egg_color, ovipositor.egg_scale, ovipositor.egg_traits, ovipositor.custom_auto_hatch)
+	egg.apply_custom_overrides(ovipositor.custom_egg_name, ovipositor.custom_egg_desc, ovipositor.custom_egg_color, ovipositor.egg_scale, ovipositor.egg_traits)
 	egg.set_egg_type(egg_type)
 	egg.set_oviposition_mother(carrier)
 	return egg

@@ -43,18 +43,18 @@
 		user.lube_up_hole(hole.get_orifice())
 
 /datum/sex_action/lube_up/vagina
-	name = "Lube up their pussy"
+	name = "Lube pussy"
 	organ_slot = ORGAN_SLOT_VAGINA
 	uses_target_organs = list(ORGAN_SLOT_VAGINA)
 
 /datum/sex_action/lube_up/anus
-	name = "Lube up their ass"
+	name = "Lube ass"
 	organ_slot = ORGAN_SLOT_ANUS
 	uses_target_organs = list(ORGAN_SLOT_ANUS)
 
 /// Slicks the toy in the active hand from a container in the other hand, else with spit.
 /datum/sex_action/lube_up/toy
-	name = "Lube up the toy in hand"
+	name = "Lube toy"
 	target_menu_zone_mask = SEX_UI_ZONE_ARMS
 	organ_slot = null
 

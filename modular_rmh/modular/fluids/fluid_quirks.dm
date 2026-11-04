@@ -78,11 +78,9 @@
 			return organ
 	return null
 
-/// Grows while the ache is ignored: 2, then 3, then 4 stress.
+/// One flat stack; each ache only refreshes the timer.
 /datum/stress_event/overfilled
 	stress_change = 2
-	max_stacks = 3
-	stress_change_per_extra_stack = 1
 	desc = span_red("I'm overfilled and aching for relief.")
 	timer = 3 MINUTES
 

@@ -55,12 +55,35 @@
 #define OVI_EGG_LEECH "leech_ovi"
 #define OVI_EGG_TENTACLE "tentacle_ovi"
 #define OVI_EGG_MANEATER "maneater_ovi"
+#define OVI_EGG_MOTHBUG "mothbug_ovi"
 
 // Oviposition customization and balance limits.
 #define OVI_EGG_MAX_CLUTCH 30
 #define OVI_EGG_DEFAULT_SCALE 1
 #define OVI_EGG_MIN_SCALE 0.5
 #define OVI_EGG_MAX_SCALE 2
+/// Width in centimetres a ripe egg passes the opening with at scale one, unless its profile says otherwise.
+#define OVI_EGG_DEFAULT_BIRTH_GIRTH 15
+/// Residue units a trait adds to what a birth leaves in the canal, and the sting venom leaves.
+#define OVI_EGG_RESIDUE_APHRODISIAC 2
+#define OVI_EGG_RESIDUE_VENOM 0.5
+#define OVI_EGG_RESIDUE_VENOM_SORENESS 5
+// How an egg kind hatches: on the floor once laid, inside its host, or either by a roll.
+#define OVI_HATCH_OUTSIDE 1
+#define OVI_HATCH_INSIDE 2
+#define OVI_HATCH_EITHER 3
+/// Points the host's fill adds to an either-roll, for fluid and for stored bulk, and the roll's cap.
+#define OVI_HATCH_FILL_FLUID_POINTS 40
+#define OVI_HATCH_FILL_BULK_POINTS 20
+#define OVI_HATCH_CHANCE_CAP 95
+/// A ripe outside egg that cannot be laid for this long hatches inside after all.
+#define OVI_HATCH_BLOCKED_GRACE (5 MINUTES)
+/// Throat width a stomach passenger must fit to be brought up by the mouth.
+#define OVI_RETCH_MAX_GIRTH 15
+// How a hatchling inside leaves on its own.
+#define HATCHLING_LEAVE_NEVER 0
+#define HATCHLING_LEAVE_AFTER_DELAY 1
+#define HATCHLING_LEAVE_WHEN_GROWN 2
 #define OVI_EGG_MAX_CUSTOM_NAME_LENGTH 96
 #define OVI_EGG_MAX_CUSTOM_DESC_LENGTH 512
 #define OVI_EGG_STAGE_TIME 1 MINUTES

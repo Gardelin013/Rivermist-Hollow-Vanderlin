@@ -8,6 +8,10 @@
 	var/display_icon = null
 	var/display_color = null
 	var/default_scale = OVI_EGG_DEFAULT_SCALE
+	/// Width in centimetres a ripe egg of this kind passes the opening with, before the egg's own scale.
+	var/birth_girth = OVI_EGG_DEFAULT_BIRTH_GIRTH
+	/// What a birth leaves in the canal, reagent type to units; traits add theirs on top.
+	var/list/residue_reagents
 	var/list/default_traits = null
 	var/production_interval_multiplier = 1
 	var/resource_cost_multiplier = 1
@@ -20,16 +24,18 @@
 	var/ready_message = null
 	var/hatch_message = null
 	var/auto_hatch_when_laid = TRUE
-	var/hatch_inside_host = FALSE
+	/// How this kind hatches: on the floor once laid, inside its host, or either by a roll.
+	var/hatch_mode = OVI_HATCH_OUTSIDE
+	/// Base chance to hatch inside when the kind may do either; the host's fill adds to it.
+	var/inside_hatch_chance = 0
+	/// What the hatchling does while it stays inside, or null for nothing.
+	var/inside_behaviour_type
 	var/allow_manual_host_removal = TRUE
 	var/newborn_start_scale = 0.5
 	var/newborn_growth_duration = 10 MINUTES
 	var/internal_hatch_layer = STORAGE_LAYER_INNER
 	var/internal_hatch_holder_type = /obj/item/mob_holder/internal_womb
 	var/internal_hatch_holder_bulk = 2
-	var/internal_hatch_triggers_contractions = FALSE
-	var/internal_hatch_auto_birth = FALSE
-	var/internal_hatch_birth_delay = 0
 	var/internal_hatch_message = null
 	var/internal_contraction_message = null
 	var/internal_birth_message = null
@@ -61,8 +67,8 @@
 		egg.egg_scale = default_scale
 	if(display_icon)
 		egg.icon = display_icon
-	egg.auto_hatch_when_laid = isnull(egg.custom_auto_hatch) ? auto_hatch_when_laid : egg.custom_auto_hatch
-	egg.hatch_inside_host = hatch_inside_host
+	egg.auto_hatch_when_laid = auto_hatch_when_laid
+	egg.hatch_inside_host = (hatch_mode == OVI_HATCH_INSIDE)
 	egg.body_storage_manual_removal = allow_manual_host_removal
 	egg.body_storage_random_removal = allow_manual_host_removal
 	egg.newborn_start_scale = newborn_start_scale
@@ -70,9 +76,6 @@
 	egg.internal_hatch_layer = internal_hatch_layer
 	egg.internal_hatch_holder_type = internal_hatch_holder_type
 	egg.internal_hatch_holder_bulk = internal_hatch_holder_bulk
-	egg.internal_hatch_triggers_contractions = internal_hatch_triggers_contractions
-	egg.internal_hatch_auto_birth = internal_hatch_auto_birth
-	egg.internal_hatch_birth_delay = internal_hatch_birth_delay
 	egg.internal_hatch_message = internal_hatch_message
 	egg.internal_contraction_message = internal_contraction_message
 	egg.internal_birth_message = internal_birth_message
@@ -88,6 +91,10 @@
 	poll_for_ghost = FALSE
 	require_ghost_to_hatch = FALSE
 	incubation_stage_duration = 4 MINUTES
+	birth_girth = 12
+	hatch_mode = OVI_HATCH_EITHER
+	inside_hatch_chance = 40
+	inside_behaviour_type = /datum/hatchling_inside_behaviour/spider
 	ready_message = "The spider egg in my %CONTAINER% twitches with hungry little movements."
 	hatch_message = "%EGG% splits open in a spray of web and skittering legs!"
 
@@ -101,6 +108,11 @@
 	poll_for_ghost = FALSE
 	require_ghost_to_hatch = FALSE
 	incubation_stage_duration = 7 MINUTES
+	birth_girth = 16
+	residue_reagents = list(/datum/reagent/water = 3)
+	hatch_mode = OVI_HATCH_EITHER
+	inside_hatch_chance = 50
+	inside_behaviour_type = /datum/hatchling_inside_behaviour/bog_bug
 	ready_message = "The bog bug egg in my %CONTAINER% churns like a swamp creature is kicking to get free."
 	hatch_message = "%EGG% bursts with a wet pop, spilling out a ravenous bog bug!"
 
@@ -116,6 +128,10 @@
 	require_ghost_to_hatch = FALSE
 	internal_hatch_holder_bulk = 6
 	incubation_stage_duration = 1.5 MINUTES
+	birth_girth = 13
+	residue_reagents = list(/datum/reagent/consumable/egg_slime = 6)
+	hatch_mode = OVI_HATCH_INSIDE
+	inside_behaviour_type = /datum/hatchling_inside_behaviour/tentacle
 	ready_message = "The tentacle egg in my %CONTAINER% squirms with impatient coils."
 	hatch_message = "%EGG% splits with a wet tear, spilling out a writhing tentacle mass!"
 
@@ -130,6 +146,7 @@
 	poll_for_ghost = FALSE
 	require_ghost_to_hatch = FALSE
 	incubation_stage_duration = 4 MINUTES
+	birth_girth = 18
 	ready_message = "The green egg in my %CONTAINER% tightens around a vigorously rooting seedling."
 	hatch_message = "%EGG% peels open like a wet flower, releasing a maneater seedling!"
 
@@ -141,6 +158,7 @@
 	display_color = "#eee3c7"
 	default_scale = 1.15
 	production_interval_multiplier = 1.15
+	birth_girth = 13
 	ready_message = "The harpy egg in my %CONTAINER% feels full and heavy, like a ripe nesting egg ready to be laid."
 
 /datum/oviposition_egg_profile/avian
@@ -151,6 +169,7 @@
 	display_color = "#f0e0bd"
 	default_scale = 1.1
 	production_interval_multiplier = 1.1
+	birth_girth = 13
 	ready_message = "The avian egg in my %CONTAINER% feels heavy, warm, and ready to be laid."
 
 /datum/oviposition_egg_profile/softshell
@@ -163,6 +182,8 @@
 	production_interval_multiplier = 0.8
 	resource_cost_multiplier = 0.8
 	incubation_stage_duration = 4 MINUTES
+	birth_girth = 13
+	residue_reagents = list(/datum/reagent/consumable/egg_slime = 2)
 	ready_message = "The softshell egg in my %CONTAINER% feels pliant, warm, and ready to pass."
 
 /datum/oviposition_egg_profile/parasitic
@@ -176,6 +197,8 @@
 	production_interval_multiplier = 1.35
 	resource_cost_multiplier = 1.4
 	incubation_stage_duration = 6 MINUTES
+	birth_girth = 12
+	residue_reagents = list(/datum/reagent/consumable/egg_slime = 2)
 	ready_message = "The parasitic egg in my %CONTAINER% twitches with needy, invasive warmth."
 
 /datum/oviposition_egg_profile/embryo
@@ -190,16 +213,15 @@
 		"The embryo in my %CONTAINER% grows heavier and more alive.",
 		"A tight, restless pressure builds in my %CONTAINER%."
 	)
+	birth_girth = 24
 	ready_message = "The embryo in my %CONTAINER% is fully grown and about to hatch inside me."
 	hatch_message = "Something alive hatches from %EGG% inside my %CONTAINER%!"
 	auto_hatch_when_laid = FALSE
-	hatch_inside_host = TRUE
+	hatch_mode = OVI_HATCH_INSIDE
+	inside_behaviour_type = /datum/hatchling_inside_behaviour/embryo
 	allow_manual_host_removal = FALSE
 	internal_hatch_layer = STORAGE_LAYER_INNER
 	internal_hatch_holder_bulk = 2
-	internal_hatch_triggers_contractions = TRUE
-	internal_hatch_auto_birth = TRUE
-	internal_hatch_birth_delay = 20 SECONDS
 	internal_hatch_message = "Something alive hatches inside my %CONTAINER%, forcing it to clench around the newborn."
 	internal_contraction_message = "My %CONTAINER% clenches in sharp contractions around the hatchling inside."
 	internal_birth_message = "%CARRIER% doubles over as a newborn forces its way out of %CONTAINER%!"
@@ -220,10 +242,11 @@
 	"The leech egg in my %CONTAINER% twitches with small, eager movements.",
 	"The leech egg in my %CONTAINER% feels ready to split.",
 	)
+	birth_girth = 6
 	ready_message = "The leech egg in my %CONTAINER% is ready to hatch."
 	hatch_message = "%EGG% splits open with a wet little twitch!"
 	auto_hatch_when_laid = TRUE
-	hatch_inside_host = TRUE
+	hatch_mode = OVI_HATCH_INSIDE
 	allow_manual_host_removal = TRUE
 	internal_hatch_layer = STORAGE_LAYER_DEEP
 
@@ -250,6 +273,8 @@
 			profile_type = /datum/oviposition_egg_profile/tentacle
 		if(OVI_EGG_MANEATER)
 			profile_type = /datum/oviposition_egg_profile/maneater
+		if(OVI_EGG_MOTHBUG)
+			profile_type = /datum/oviposition_egg_profile/mothbug
 	return new profile_type
 
 /proc/get_species_oviposition_egg_type(mob/living/owner)
@@ -451,8 +476,6 @@
 	var/custom_egg_desc = ""
 	/// Player-set custom color override (hex string, uses grayscale icon_state)
 	var/custom_egg_color = null
-	/// Optional player override for laid auto-hatching.
-	var/custom_auto_hatch = null
 	/// Visual/mechanical egg scale. Null means profile default until first appearance update.
 	var/egg_scale = null
 	/// Optional modifier flags applied to this egg. Null means profile default.
@@ -464,9 +487,6 @@
 	var/internal_hatch_layer = STORAGE_LAYER_INNER
 	var/internal_hatch_holder_type = /obj/item/mob_holder/internal_womb
 	var/internal_hatch_holder_bulk = 2
-	var/internal_hatch_triggers_contractions = FALSE
-	var/internal_hatch_auto_birth = FALSE
-	var/internal_hatch_birth_delay = 0
 	var/internal_hatch_message = null
 	var/internal_contraction_message = null
 	var/internal_birth_message = null
@@ -481,7 +501,7 @@
 	update_egg_appearance()
 	return egg_type
 
-/obj/item/oviposition_egg/proc/apply_custom_overrides(c_name, c_desc, c_color, c_scale = null, list/c_traits = null, c_auto_hatch = null)
+/obj/item/oviposition_egg/proc/apply_custom_overrides(c_name, c_desc, c_color, c_scale = null, list/c_traits = null)
 	if(c_name && istext(c_name) && length(c_name))
 		custom_egg_name = c_name
 	if(c_desc && istext(c_desc) && length(c_desc))
@@ -492,8 +512,6 @@
 		egg_scale = sanitize_oviposition_scale(c_scale)
 	if(islist(c_traits))
 		egg_traits = sanitize_oviposition_trait_list(c_traits)
-	if(!isnull(c_auto_hatch))
-		custom_auto_hatch = c_auto_hatch ? TRUE : FALSE
 	update_egg_appearance()
 
 /obj/item/oviposition_egg/proc/set_oviposition_mother(mob/living/new_mother)
@@ -565,6 +583,43 @@
 
 /obj/item/oviposition_egg/proc/has_egg_trait(trait_flag)
 	return islist(egg_traits) && (trait_flag in egg_traits)
+
+/// The behaviour a hatchling of this kind follows while it stays inside, or null.
+/obj/item/oviposition_egg/proc/get_inside_behaviour_type()
+	var/datum/oviposition_egg_profile/profile = get_egg_profile()
+	return profile?.inside_behaviour_type
+
+/// How this kind hatches, from its profile.
+/obj/item/oviposition_egg/proc/get_hatch_mode()
+	var/datum/oviposition_egg_profile/profile = get_egg_profile()
+	return profile?.hatch_mode || OVI_HATCH_OUTSIDE
+
+/// The kind's base chance to hatch inside when it may do either.
+/obj/item/oviposition_egg/proc/get_inside_hatch_base_chance()
+	var/datum/oviposition_egg_profile/profile = get_egg_profile()
+	return profile?.inside_hatch_chance || 0
+
+/// Width this egg passes the opening with: the profile's ripe girth, scaled, and smaller while unripe.
+/obj/item/oviposition_egg/proc/get_birth_girth()
+	var/datum/oviposition_egg_profile/profile = get_egg_profile()
+	var/ripe = (profile?.birth_girth || OVI_EGG_DEFAULT_BIRTH_GIRTH) * get_egg_scale()
+	var/datum/component/pregnancy/pregnancy = get_pregnancy_component()
+	if(!pregnancy || !pregnancy.max_stage)
+		return ripe
+	return ripe * clamp(pregnancy.stage / pregnancy.max_stage, 0.5, 1)
+
+/// What a birth leaves in the canal: the profile's residue plus what the traits add, reagent type to units.
+/obj/item/oviposition_egg/proc/get_birth_residue()
+	var/datum/oviposition_egg_profile/profile = get_egg_profile()
+	var/list/residue = islist(profile?.residue_reagents) ? profile.residue_reagents.Copy() : list()
+	if(has_egg_trait(OVI_EGG_TRAIT_APHRODISIAC))
+		residue[/datum/reagent/consumable/aphrodisiac] += OVI_EGG_RESIDUE_APHRODISIAC
+	if(has_egg_trait(OVI_EGG_TRAIT_POISON))
+		residue[/datum/reagent/toxin/venom] += OVI_EGG_RESIDUE_VENOM
+	var/scale = get_egg_scale()
+	for(var/reagent_type in residue)
+		residue[reagent_type] *= scale
+	return residue
 
 /obj/item/oviposition_egg/proc/get_incubation_multiplier()
 	var/multiplier = get_egg_scale()

@@ -52,6 +52,12 @@
 	default_value = TRUE
 	category = "Mobs"
 
+/datum/erp_preference/boolean/allow_inside_hatching
+	name = "Hatchlings may hatch inside me"
+	description = "If eggs whose kind can hatch inside their host may do so in you; otherwise they are laid first"
+	default_value = TRUE
+	category = "Mobs"
+
 /datum/erp_preference/boolean/allow_mob_breeding
 	name = "Allow mob breeding"
 	description = "If you want mobs to breed you when possible"

@@ -1,6 +1,6 @@
 /datum/sex_action/tear_stockings
 	name = "Tear stockings"
-	description = "Hook your fingers into the bare stockings and rip them into ragged ladders."
+	description = "Hook your fingers into the stockings and rip them into ragged ladders."
 	user_menu_zone_mask = SEX_UI_ZONE_ARMS
 	target_menu_zone_mask = SEX_UI_ZONE_LEGS
 	check_same_tile = FALSE
@@ -9,13 +9,13 @@
 	do_time = 3 SECONDS
 	stamina_cost = 0.3
 
-/// Worn, uncovered stockings that can still be torn, or null.
+/// Worn stockings that can still be torn and that no heavy armor covers, or null.
 /datum/sex_action/tear_stockings/proc/get_tearable_stockings(mob/living/target)
 	RETURN_TYPE(/obj/item/clothing/legwears)
 	if(!ishuman(target))
 		return null
 	var/mob/living/carbon/human/human_target = target
-	var/obj/item/clothing/legwears/stockings = human_target.get_exposed_legwear()
+	var/obj/item/clothing/legwears/stockings = human_target.get_sex_reachable_legwear()
 	if(!stockings?.damaged_icon || stockings.obj_broken)
 		return null
 	return stockings

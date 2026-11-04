@@ -443,6 +443,7 @@
 	perform_sex_action(target, user, target_arousal_amt, target_pain_amt, target_orgasm_amt)
 	handle_passive_ejaculation(target)
 	playsound(user, 'sound/misc/mat/fingering.ogg', 30, TRUE, -2, ignore_walls = FALSE)
+	portal_touch_feedback(user, target)
 
 /datum/sex_action/portal_base/portal_hand_base/handle_climax_message(mob/living/carbon/human/user, mob/living/carbon/human/target, must_flip)
 	if(must_flip)
@@ -462,12 +463,12 @@
 
 /datum/sex_action/portal_base/portal_hand
 	parent_type = /datum/sex_action/portal_base/portal_hand_base
-	name = "Portal Finger Pussy"
+	name = "Portal Fingering"
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/portal_base/portal_hand_anal
 	parent_type = /datum/sex_action/portal_base/portal_hand_base
-	name = "Portal Finger Ass"
+	name = "Portal Anal-fingering"
 	hole_id = ORGAN_SLOT_ANUS
 	target_orgasm_amt = 2
 	start_message_user = "You start fingering your target's backside through the portal."
@@ -531,6 +532,7 @@
 
 	perform_sex_action(target, user, target_arousal_amt, target_pain_amt, target_orgasm_amt)
 	handle_passive_ejaculation(target)
+	portal_touch_feedback(user, target)
 
 	if(user_arousal_amt || user_pain_amt || user_orgasm_amt)
 		perform_sex_action(user, target, user_arousal_amt, user_pain_amt, user_orgasm_amt)
@@ -623,6 +625,7 @@
 	handle_passive_ejaculation(target)
 	handle_passive_ejaculation(user)
 	playsound(user, get_force_sound(), 50, TRUE, -2, ignore_walls = FALSE)
+	portal_touch_feedback(user, target)
 
 /datum/sex_action/portal_base/portal_penis_base/handle_climax_message(mob/living/user, mob/living/carbon/human/target, must_flip)
 	if(must_flip)
@@ -650,7 +653,7 @@
 
 /datum/sex_action/portal_base/portal_penis_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_penis_base
-	name = "Portal Pussy Fuck"
+	name = "Portal Vaginal"
 	hole_id = ORGAN_SLOT_VAGINA
 	start_message_user = "You slide your cock into the portal, reaching your target's pussy."
 	start_message_target = "You feel something penetrating your pussy through the portal!"
@@ -660,7 +663,7 @@
 
 /datum/sex_action/portal_base/portal_penis_anal
 	parent_type = /datum/sex_action/portal_base/portal_penis_base
-	name = "Portal Ass Fuck"
+	name = "Portal Anal"
 	hole_id = ORGAN_SLOT_ANUS
 	start_message_user = "You slide your cock into the portal, reaching your target's ass."
 	start_message_target = "You feel something penetrating your ass through the portal!"
@@ -718,6 +721,7 @@
 	perform_sex_action(user, target, user_arousal_amt, user_pain_amt, user_orgasm_amt)
 	perform_sex_action(target, user, target_arousal_amt, target_pain_amt, target_orgasm_amt)
 	playsound(user, get_force_sound(), 45, TRUE, -2, ignore_walls = FALSE)
+	portal_touch_feedback(user, target)
 
 /datum/sex_action/portal_base/portal_vagina_base/handle_climax_message(mob/living/user, mob/living/carbon/human/target, must_flip)
 	if(must_flip)
@@ -741,7 +745,7 @@
 
 /datum/sex_action/portal_base/portal_vagina_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_vagina_base
-	name = "Portal Grind Pussy"
+	name = "Portal Grinding"
 	required_user_organ = ORGAN_SLOT_VAGINA
 	hole_id = ORGAN_SLOT_VAGINA
 	start_message_user = "You grind your cunt against the portal, reaching your target's pussy."
@@ -751,7 +755,7 @@
 
 /datum/sex_action/portal_base/portal_vagina_anal
 	parent_type = /datum/sex_action/portal_base/portal_vagina_base
-	name = "Portal Grind Ass"
+	name = "Portal Anal-grinding"
 	required_user_organ = ORGAN_SLOT_ANUS
 	hole_id = ORGAN_SLOT_ANUS
 	start_message_user = "You press your backside to the portal, teasing your target's ass."
@@ -812,7 +816,7 @@
 	var/used_sex_volume = sex_volume
 	if(user.rogue_sneaking || user.m_intent == MOVE_INTENT_SNEAK || user.alpha <= 100)
 		used_sex_volume *= 0.5
-	playsound(target, list('sound/misc/mat/insert (1).ogg','sound/misc/mat/insert (2).ogg'), used_sex_volume, TRUE, ignore_walls = FALSE)
+	play_toy_reach_sound(target_organ, target, used_sex_volume)
 
 /datum/sex_action/portal_base/portal_store_base/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 	var/pain_amt = base_pain_amt
@@ -886,6 +890,7 @@
 			stop_runtime()
 			return
 
+	portal_touch_feedback(user, target, "insert")
 	user.update_inv_hands()
 	user.update_a_intents()
 	perform_sex_action(user, target, 0.5, pain_amt, 0.5)
@@ -903,13 +908,13 @@
 
 /datum/sex_action/portal_base/portal_store_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_store_base
-	name = "Portal Store Pussy"
+	name = "Portal Stuffing"
 	hole_id = ORGAN_SLOT_VAGINA
 	base_pain_amt = 2
 
 /datum/sex_action/portal_base/portal_store_anal
 	parent_type = /datum/sex_action/portal_base/portal_store_base
-	name = "Portal Store Ass"
+	name = "Portal Anal-stuffing"
 	hole_id = ORGAN_SLOT_ANUS
 	base_pain_amt = 4
 
@@ -959,7 +964,7 @@
 	var/used_sex_volume = sex_volume
 	if(user.rogue_sneaking || user.m_intent == MOVE_INTENT_SNEAK || user.alpha <= 100)
 		used_sex_volume *= 0.5
-	playsound(target, list('sound/misc/mat/insert (1).ogg','sound/misc/mat/insert (2).ogg'), used_sex_volume, TRUE, ignore_walls = FALSE)
+	play_toy_reach_sound(target_organ, target, used_sex_volume)
 
 /datum/sex_action/portal_base/portal_remove_base/on_perform(mob/living/carbon/human/user, mob/living/carbon/human/target)
 
@@ -1002,6 +1007,7 @@
 		if(!user.put_in_inactive_hand(removed_item))
 			removed_item.doMove(get_turf(user))
 
+	portal_touch_feedback(user, target, "remove")
 	perform_sex_action(user, target, 0.5, base_pain_amt, 0.5)
 	handle_passive_ejaculation()
 	pending_toy = choose_toy_to_reach(hole, STORAGE_LAYER_INNER)
@@ -1014,18 +1020,18 @@
 
 /datum/sex_action/portal_base/portal_remove_vaginal
 	parent_type = /datum/sex_action/portal_base/portal_remove_base
-	name = "Portal Retrieve Pussy"
+	name = "Portal Retrieval"
 	hole_id = ORGAN_SLOT_VAGINA
 	base_pain_amt = 1
 
 /datum/sex_action/portal_base/portal_remove_anal
 	parent_type = /datum/sex_action/portal_base/portal_remove_base
-	name = "Portal Retrieve Ass"
+	name = "Portal Anal-retrieval"
 	hole_id = ORGAN_SLOT_ANUS
 	base_pain_amt = 2
 /*
 /datum/sex_action/portal_base/portal_object_fuck
-	name = "Fuck portal with object"
+	name = "Portal Toy"
 	var/ouchietext = "owie"
 	do_time = 4 SECONDS //slower on your own but not as much as ass since this is on your front.
 
@@ -1123,10 +1129,31 @@
 /**
  * CRAFT AND SUPPLY
 */
-/datum/supply_pack/portals_and_fleshlight
-	name = "Set of Portal Smallclothes"
-	cost = 200
-	contains = list(
-		/obj/item/portallight,
-		/obj/item/clothing/undies/portalpanties
-		)
+// Both halves are arcyne work; the pair links by touching the light to the smallclothes.
+/datum/repeatable_crafting_recipe/arcyne/portal_light
+	name = "portal light"
+	reagent_requirements = list()
+	tool_usage = list()
+	requirements = list(
+		/obj/item/natural/melded/t1 = 1,
+		/obj/item/gem/amethyst = 1,
+		/obj/item/natural/glass = 1,
+	)
+	output = /obj/item/portallight
+	starting_atom = /obj/item/gem/amethyst
+	attacked_atom = /obj/item/natural/glass
+	craftdiff = 2
+
+/datum/repeatable_crafting_recipe/arcyne/portal_panties
+	name = "portal panties"
+	reagent_requirements = list()
+	tool_usage = list()
+	requirements = list(
+		/obj/item/natural/melded/t1 = 1,
+		/obj/item/gem/amethyst = 1,
+		/obj/item/natural/silk = 2,
+	)
+	output = /obj/item/clothing/undies/portalpanties
+	starting_atom = /obj/item/gem/amethyst
+	attacked_atom = /obj/item/natural/silk
+	craftdiff = 2

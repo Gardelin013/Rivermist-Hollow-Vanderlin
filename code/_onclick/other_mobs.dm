@@ -204,6 +204,7 @@
 	visible_message(span_danger("[user] bites [src]'s [parse_zone(user.zone_selected)]![next_attack_msg.Join()]"), \
 					span_userdanger("[user] bites my [parse_zone(user.zone_selected)]![next_attack_msg.Join()]"))
 	next_attack_msg.Cut()
+	user.leave_lipstick_bite(src, user.zone_selected)
 
 	var/obj/item/grabbing/bite/B = new()
 	if(user.equip_to_slot_or_del(B, ITEM_SLOT_MOUTH))

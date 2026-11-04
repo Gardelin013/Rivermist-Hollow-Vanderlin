@@ -1776,9 +1776,9 @@
 		combat_modifier += 0.5
 
 	var/stamina_factor = 1.0
-	if(L.stamina / L.maximum_stamina < 0.5)
+	if(L.stamina / L.maximum_stamina > 0.5)
 		stamina_factor += 0.3 // Tired grabbers are weaker
-	if(stamina / maximum_stamina < 0.3)
+	if(stamina / maximum_stamina > 0.7)
 		stamina_factor -= 0.2 // But tired victims also struggle more
 
 	var/grab_count = 0
@@ -2820,8 +2820,9 @@
 					found_ping(get_turf(M), client, "hidden")
 
 		for(var/obj/O in view(7,src))
-			if("hiddenguy" in O.vars)
-				var/mob/living/M = O.vars["hiddenguy"]
+			if(isstructure(O))
+				var/obj/structure/hiding_spot = O
+				var/mob/living/M = hiding_spot.hiddenguy
 				if(M)
 					var/sneak = GET_MOB_SKILL_VALUE_OLD(M, /datum/attribute/skill/misc/sneaking)
 					var/effective_sneak = 8 + (sneak * 2)
