@@ -68,6 +68,7 @@
 #include "ai_combat_flow.dm"
 #include "ai_detection_fields.dm"
 #include "ai_hazard_avoidance.dm"
+#include "ai_horny_hunt.dm"
 #include "ai_horny_interruptions.dm"
 #include "ai_idle_detection.dm"
 #include "ai_npc_reactions.dm"
