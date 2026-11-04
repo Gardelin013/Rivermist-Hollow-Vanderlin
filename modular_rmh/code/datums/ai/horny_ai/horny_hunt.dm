@@ -59,7 +59,9 @@
 	controller.clear_blackboard_key(BB_HORNY_CHASE_GAIN_TIME)
 	controller.set_blackboard_key(BB_HORNY_STAND_UP_COUNTER, 0)
 	controller.set_blackboard_key(BB_HORNY_ACTIONLESS_TICKS, 0)
-	controller.set_blackboard_key(BB_HORNY_STUN_COOLDOWN, world.time)
+	controller.clear_blackboard_key(BB_HORNY_PACK_CALLED)
+	controller.clear_blackboard_key(BB_HORNY_CIRCLE_UNTIL)
+	controller.clear_blackboard_key(BB_HORNY_SCENT_UNTIL)
 
 	basic_mob.visible_message(span_boldwarning(basic_mob.get_horny_seek_message(target_living)))
 
@@ -191,9 +193,31 @@
 	SEND_SIGNAL(basic_mob, COMSIG_HORNY_HUNT_PHASE_CHANGED, old_phase, new_phase, target_living)
 	if(target_living)
 		SEND_SIGNAL(target_living, COMSIG_LIVING_HUNTED, basic_mob, new_phase)
+	switch(new_phase)
+		if(HORNY_PHASE_NOTICE)
+			bark(controller, basic_mob, target_living, HORNY_BARK_NOTICE)
+		if(HORNY_PHASE_SEIZE)
+			// The catch is called once, on the way in; not every time the hold slips and the hunt resets to it.
+			if(old_phase != HORNY_PHASE_SUBDUE && old_phase != HORNY_PHASE_USE && old_phase != HORNY_PHASE_PRESENT)
+				bark(controller, basic_mob, target_living, HORNY_BARK_SEIZE)
+		if(HORNY_PHASE_BREAK_OFF)
+			bark(controller, basic_mob, target_living, HORNY_BARK_BREAK_OFF)
+		if(HORNY_PHASE_PRESENT)
+			bark(controller, basic_mob, target_living, HORNY_BARK_PRESENT)
+
+/// Hunters that talk say a short line over their head; the family profile picks the words.
+/datum/ai_behavior/horny/proc/bark(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, context)
+	if(!ishuman(basic_mob))
+		return FALSE
+	var/datum/horny_family_profile/profile = basic_mob.get_horny_family_profile()
+	var/line = profile.get_bark(basic_mob, target_living, context)
+	if(!line)
+		return FALSE
+	return human_npc_combat_state_balloon(controller, basic_mob, line)
 
 /// The tell: the hunter stands and stares for a beat before it moves.
 /datum/ai_behavior/horny/proc/perform_notice(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, datum/horny_family_profile/profile)
+	horny_call_pack(basic_mob, target_living, controller, profile)
 	if(world.time - (controller.blackboard[BB_HORNY_PHASE_SINCE] || 0) < profile.notice_time)
 		set_movement_target(controller, get_turf(basic_mob))
 		basic_mob.face_atom(target_living)
@@ -210,8 +234,12 @@
 	if(portal_light || can_see(basic_mob, target_living, HORNY_SIGHT_RANGE))
 		controller.set_blackboard_key(BB_HORNY_LAST_SEEN_TURF, get_turf(target_living))
 		controller.set_blackboard_key(BB_HORNY_LAST_SEEN_TIME, world.time)
+		controller.clear_blackboard_key(BB_HORNY_SCENT_UNTIL)
 		set_movement_target(controller, interaction_anchor)
+		if(!portal_light && try_hunt_tactics(controller, basic_mob, target_living, profile))
+			return FALSE
 	else
+		follow_scent_trail(controller, basic_mob, target_living, profile)
 		var/last_seen_time = controller.blackboard[BB_HORNY_LAST_SEEN_TIME]
 		if(isnull(last_seen_time))
 			last_seen_time = world.time
@@ -232,10 +260,52 @@
 		finish_action(controller, FALSE, target_key)
 		return FALSE
 
+	try_hunt_lunge(controller, basic_mob, interaction_anchor, profile)
 	update_hunt_speed(controller, basic_mob, interaction_anchor, profile)
 	return FALSE
 
-/// The catch. Slice 1 keeps the old grab and takedown behind the phase; the real wrestling ladder comes next.
+/// Throw, circle, lash or pounce, in that order. TRUE when a move took this beat.
+/datum/ai_behavior/horny/proc/try_hunt_tactics(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, datum/horny_family_profile/profile)
+	if(horny_throw_trap(basic_mob, target_living, controller, profile))
+		return TRUE
+	if(profile.circles_behind && horny_circle_target(basic_mob, target_living, controller, src))
+		return TRUE
+	if(horny_lash(basic_mob, target_living, controller, profile))
+		return TRUE
+	return horny_pounce(basic_mob, target_living, controller, profile)
+
+/// A hunter with a nose keeps the trail warm for a while after sight is lost.
+/datum/ai_behavior/horny/proc/follow_scent_trail(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, datum/horny_family_profile/profile)
+	if(!profile.follows_scent)
+		return FALSE
+	var/scent_until = controller.blackboard[BB_HORNY_SCENT_UNTIL]
+	if(isnull(scent_until))
+		scent_until = world.time + HORNY_SCENT_FOLLOW_TIME
+		controller.set_blackboard_key(BB_HORNY_SCENT_UNTIL, scent_until)
+	if(world.time >= scent_until)
+		return FALSE
+	var/turf/scent_turf = horny_find_scent_turf(basic_mob, target_living)
+	if(!scent_turf)
+		return FALSE
+	controller.set_blackboard_key(BB_HORNY_LAST_SEEN_TURF, scent_turf)
+	controller.set_blackboard_key(BB_HORNY_LAST_SEEN_TIME, world.time)
+	return TRUE
+
+/// A humanoid two or three tiles out vaults the gap, the same jump the fighters use.
+/datum/ai_behavior/horny/proc/try_hunt_lunge(datum/ai_controller/controller, mob/living/basic_mob, atom/interaction_anchor, datum/horny_family_profile/profile)
+	if(!profile.can_sprint || !ishuman(basic_mob) || !controller.can_move())
+		return FALSE
+	if(world.time < (controller.blackboard[BB_HUMAN_NPC_JUMP_COOLDOWN] || 0))
+		return FALSE
+	var/turf/landing_turf = human_npc_gap_close_landing(basic_mob, interaction_anchor)
+	if(!landing_turf)
+		return FALSE
+	controller.set_blackboard_key(BB_HUMAN_NPC_JUMP_COOLDOWN, world.time + HORNY_LUNGE_COOLDOWN)
+	basic_mob.face_atom(interaction_anchor)
+	INVOKE_ASYNC(basic_mob, TYPE_PROC_REF(/mob/living, jump_action), landing_turf)
+	return TRUE
+
+/// The catch: handed hunters climb the real ladder, handless ones still roll until their own moves land.
 /datum/ai_behavior/horny/proc/perform_seize(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, atom/interaction_anchor, obj/item/portallight/portal_light, datum/horny_family_profile/profile)
 	if(!basic_mob.Adjacent(interaction_anchor))
 		set_phase(controller, basic_mob, target_living, HORNY_PHASE_STALK)
@@ -248,26 +318,25 @@
 		return TRUE
 
 	var/mob/living/carbon/human/human_target = target_living
-	if(horny_target_is_subdued(basic_mob, human_target))
-		if(ensure_hold(controller, basic_mob, human_target, profile))
-			pause_after_prep(controller)
-			return FALSE
-		set_phase(controller, basic_mob, target_living, HORNY_PHASE_SUBDUE)
-		return TRUE
-
-	// Standing and free: a weapon comes first, then the takedown.
-	var/datum/horny_prep_step/disarm = profile.get_prep_step(/datum/horny_prep_step/disarm)
-	if(disarm?.can_run(controller, basic_mob, human_target, profile, FALSE) && disarm.perform_step(controller, basic_mob, human_target, profile, FALSE))
-		pause_after_prep(controller)
-		return FALSE
-
-	if(world.time > controller.blackboard[BB_HORNY_STUN_COOLDOWN] && legacy_takedown_roll(controller, basic_mob, human_target))
-		pause_after_prep(controller)
-		return FALSE
-
-	// Between rolls a handed hunter keeps a grip; a handless one waits for the fall.
+	// Handed hunters climb the real ladder: grab, grip, tackle, get on top, pin.
 	if(iscarbon(basic_mob))
-		ensure_target_grab(basic_mob, human_target)
+		switch(horny_seize_step(basic_mob, human_target, controller))
+			if(HORNY_SEIZE_DONE)
+				set_phase(controller, basic_mob, target_living, HORNY_PHASE_SUBDUE)
+				return TRUE
+			if(HORNY_SEIZE_FAILED)
+				set_phase(controller, basic_mob, target_living, HORNY_PHASE_STALK)
+				return TRUE
+		return FALSE
+
+	// Handless hunters bear down, coil or hoist, then hold.
+	switch(horny_handless_seize_step(basic_mob, human_target, controller, profile))
+		if(HORNY_SEIZE_DONE)
+			set_phase(controller, basic_mob, target_living, HORNY_PHASE_SUBDUE)
+			return TRUE
+		if(HORNY_SEIZE_FAILED)
+			set_phase(controller, basic_mob, target_living, HORNY_PHASE_STALK)
+			return TRUE
 	return FALSE
 
 /// Prep on a held or floored target, one step per beat, then on to the act.
@@ -288,6 +357,7 @@
 	if(ensure_hold(controller, basic_mob, human_target, profile))
 		pause_after_prep(controller)
 		return FALSE
+	horny_squeeze(basic_mob, human_target, profile)
 
 	var/datum/sex_scene_controller/scene_controller = basic_mob.open_sex_scene(human_target, FALSE)
 	if(!scene_controller)
@@ -351,6 +421,7 @@
 
 	if(ishuman(target_living))
 		ensure_hold(controller, basic_mob, target_living, profile)
+		horny_squeeze(basic_mob, target_living, profile)
 	if(start_horny_action(controller, basic_mob, target_living, scene_controller, target_key))
 		return FALSE
 	if(!LAZYACCESS(controller.current_behaviors, src))
@@ -390,13 +461,11 @@
 			if(!basic_mob.Adjacent(target_living) || !ishuman(target_living))
 				return FALSE
 			var/mob/living/carbon/human/human_target = target_living
-			var/datum/horny_prep_step/disarm = profile.get_prep_step(/datum/horny_prep_step/disarm)
-			if(disarm?.can_run(controller, basic_mob, human_target, profile, FALSE) && disarm.perform_step(controller, basic_mob, human_target, profile, FALSE))
-				pause_after_prep(controller)
+			// The subdue window is the ladder without the act: wrestle them down and keep them there.
+			if(iscarbon(basic_mob))
+				horny_seize_step(basic_mob, human_target, controller)
 				return FALSE
-			if(human_target.body_position != LYING_DOWN && world.time > controller.blackboard[BB_HORNY_STUN_COOLDOWN])
-				legacy_takedown_roll(controller, basic_mob, human_target)
-				pause_after_prep(controller)
+			horny_handless_seize_step(basic_mob, human_target, controller, profile)
 			return FALSE
 		if(HORNY_BREAK_OFF_SINK)
 			var/mob/living/simple_animal/hostile/retaliate/tentacle/ambusher/burrow = basic_mob
@@ -511,113 +580,9 @@
 /// Keeps a grip on the target. A handless hold prints its line and returns TRUE when newly set.
 /datum/ai_behavior/horny/proc/ensure_hold(datum/ai_controller/controller, mob/living/basic_mob, mob/living/carbon/human/human_target, datum/horny_family_profile/profile)
 	if(iscarbon(basic_mob))
-		ensure_target_grab(basic_mob, human_target)
+		horny_ensure_grab(basic_mob, human_target, controller)
 		return FALSE
-	return ensure_target_hold(controller, basic_mob, human_target, profile)
-
-/// A handed hunter takes a passive grab on a random limb, hands free.
-/datum/ai_behavior/horny/proc/ensure_target_grab(mob/living/carbon/carbon_mob, mob/living/target_living)
-	if(carbon_mob.pulling)
-		return
-
-	carbon_mob.drop_all_held_items()
-	var/sel_zone
-	if(prob(30)) // chance to gag
-		sel_zone = BODY_ZONE_PRECISE_MOUTH
-	else
-		sel_zone = pick(BODY_ZONE_CHEST, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM, BODY_ZONE_L_LEG, BODY_ZONE_R_LEG, BODY_ZONE_PRECISE_NECK, BODY_ZONE_PRECISE_GROIN)
-
-	if(!length(target_living.grabbedby))
-		target_living.grabbedby(carbon_mob, FALSE, sel_zone)
-
-/datum/ai_behavior/horny/proc/promote_existing_pull_to_hold(mob/living/basic_mob, mob/living/target_living)
-	if(target_living.pulledby != basic_mob)
-		return FALSE
-	if(basic_mob.grab_state >= GRAB_AGGRESSIVE)
-		return FALSE
-
-	// Handless mobs keep victims in place through the generic pull state, not grab items.
-	basic_mob.setGrabState(GRAB_AGGRESSIVE)
-	basic_mob.update_pull_movespeed()
-	basic_mob.set_pull_offsets(target_living, basic_mob.grab_state)
-	return TRUE
-
-/// A handless hunter pins a floored target with an aggressive pull. TRUE when the hold was just set.
-/datum/ai_behavior/horny/proc/ensure_target_hold(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living, datum/horny_family_profile/profile)
-	if(!basic_mob.Adjacent(target_living))
-		return FALSE
-
-	if(basic_mob.pulling && basic_mob.pulling != target_living)
-		basic_mob.stop_pulling()
-
-	if(target_living.pulledby == basic_mob)
-		if(basic_mob.grab_state >= GRAB_AGGRESSIVE)
-			return FALSE
-		if(!promote_existing_pull_to_hold(basic_mob, target_living))
-			return FALSE
-		basic_mob.visible_message(span_danger(profile.get_hold_message(basic_mob, target_living)), null, span_hear("I hear a violent struggle."))
-		return TRUE
-
-	if(basic_mob.pulling == target_living)
-		basic_mob.stop_pulling()
-
-	if(target_living.pulledby && target_living.pulledby != basic_mob && target_living.pulledby.grab_state >= GRAB_AGGRESSIVE)
-		return FALSE
-
-	if(!basic_mob.start_handless_pull(target_living, GRAB_PASSIVE, suppress_message = TRUE))
-		return FALSE
-
-	if(!promote_existing_pull_to_hold(basic_mob, target_living))
-		return FALSE
-
-	basic_mob.visible_message(span_danger(profile.get_hold_message(basic_mob, target_living)), null, span_hear("I hear a violent struggle."))
-	return TRUE
-
-/// The old chance-based takedown, kept only until the wrestling ladder replaces it.
-/datum/ai_behavior/horny/proc/legacy_takedown_roll(datum/ai_controller/controller, mob/living/basic_mob, mob/living/target_living)
-	if(!basic_mob.Adjacent(target_living))
-		return FALSE
-	if(target_living.body_position == LYING_DOWN)
-		return FALSE
-
-	// A yielding target offers no fight: ease them down, no guard roll, no stamina drain.
-	if(target_living.surrendering)
-		target_living.Knockdown(50)
-		controller.set_blackboard_key(BB_HORNY_STUN_COOLDOWN, world.time + 10 SECONDS)
-		basic_mob.visible_message(span_danger("[basic_mob] eases the yielding [target_living] down."))
-		return TRUE
-
-	var/prob2defend
-	var/obj/item/mainhand = target_living.get_active_held_item()
-	var/obj/item/offhand = target_living.get_inactive_held_item()
-	var/list/parry_data = target_living.calculate_parry_values(mainhand, offhand)
-	prob2defend += CLAMP(parry_data["defense_bonus"] / 80, 0, 40)
-	prob2defend += CLAMP(target_living.STASPD / 20 * 50, 0, 50)
-	if(target_living.cmode)
-		prob2defend *= 1.2
-	prob2defend = CLAMP(prob2defend + 60, 0, 100)
-
-	// Once only 20% stamina remains, the takedown becomes guaranteed
-	var/stamina_exhaustion = (target_living.maximum_stamina - target_living.stamina) / target_living.maximum_stamina <= 0.2 ? 0 : (target_living.maximum_stamina - target_living.stamina) / target_living.maximum_stamina
-	prob2defend = prob2defend * stamina_exhaustion
-	var/down_chance = CLAMP(prob2defend, 0, 100)
-
-	if(prob(100 - down_chance))
-		// Additive stuns: never cut short a stun or knockdown that already holds the target.
-		target_living.Stun(20)
-		target_living.Knockdown(50)
-		if(target_living.body_position != LYING_DOWN)
-			target_living.emote("gasp")
-		controller.set_blackboard_key(BB_HORNY_STUN_COOLDOWN, world.time + 10 SECONDS)
-		basic_mob.visible_message(span_danger("[basic_mob] batters [target_living]'s guard down and drags them to the ground!"))
-	else
-		controller.set_blackboard_key(BB_HORNY_STUN_COOLDOWN, world.time + 5 SECONDS)
-		basic_mob.visible_message(span_danger("[basic_mob] tries to pull [target_living] to the ground, exhausting them!"))
-
-	var/stamina_drain = max(round(target_living.maximum_stamina * 0.60 * (1 - ((100 - prob2defend) * 0.01))), 25)
-	target_living.adjust_stamina(stamina_drain, null, FALSE, FALSE)
-
-	return TRUE
+	return horny_handless_hold(basic_mob, human_target, profile)
 
 // --- The act -------------------------------------------------------------------------------------
 
@@ -939,6 +904,7 @@
 		picked_organ.toggle_visibility(FALSE)
 
 	basic_mob.stop_pulling()
+	basic_mob.cmode = FALSE
 	set_hunt_speed_normal(controller, basic_mob)
 	var/old_phase = controller.blackboard[BB_HORNY_PHASE]
 	if(old_phase == HORNY_PHASE_PRESENT && basic_mob.resting)
@@ -953,7 +919,9 @@
 	controller.clear_blackboard_key(BB_HORNY_STAND_UP_COUNTER)
 	controller.clear_blackboard_key(BB_HORNY_ACTIONLESS_TICKS)
 	controller.clear_blackboard_key(BB_HORNY_AGGRO_TARGET)
-	controller.clear_blackboard_key(BB_HORNY_STUN_COOLDOWN)
+	controller.clear_blackboard_key(BB_HORNY_PACK_CALLED)
+	controller.clear_blackboard_key(BB_HORNY_CIRCLE_UNTIL)
+	controller.clear_blackboard_key(BB_HORNY_SCENT_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_PORTAL_LIGHT)
 	controller.clear_blackboard_key(BB_HORNY_PHASE)
 	controller.clear_blackboard_key(BB_HORNY_PHASE_SINCE)
@@ -968,6 +936,8 @@
 	controller.clear_blackboard_key(BB_HORNY_BREAK_OFF_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_BREAK_OFF_COOLDOWN)
 	controller.clear_blackboard_key(BB_HORNY_PRESENT_UNTIL)
+	controller.clear_blackboard_key(BB_HORNY_WRESTLE_PRESSURE)
+	controller.clear_blackboard_key(BB_HORNY_PINNED)
 	controller.clear_blackboard_key(target_key)
 	controller.clear_blackboard_key(BB_HORNY_TIME_START)
 	if(basic_mob.is_dead())
@@ -980,6 +950,7 @@
 	if(!succeeded)
 		controller.set_blackboard_key(BB_HORNY_SEEK_COOLDOWN, world.time + failed_seek_cooldown)
 		basic_mob.visible_message(span_danger(basic_mob.get_horny_unsatisfied_message()))
+		bark(controller, basic_mob, finished_target, HORNY_BARK_LOST)
 		controller.modify_cooldown(src, world.time)
 		return
 
@@ -993,6 +964,7 @@
 		success_cooldown += 3 MINUTES
 	controller.set_blackboard_key(BB_HORNY_SEEK_COOLDOWN, world.time + success_cooldown)
 	basic_mob.visible_message(span_danger(basic_mob.get_horny_sated_message(finished_target, heavily_sated)))
+	bark(controller, basic_mob, finished_target, HORNY_BARK_SATED)
 	controller.modify_cooldown(src, world.time)
 
 #undef HORNY_ACTION_BLEED_HEAL_AMOUNT

@@ -157,8 +157,13 @@
 	partner.SetKnockdown(10 SECONDS) // already down, so the first step strips the warrior's own armour
 	TEST_ASSERT_EQUAL(partner.body_position, LYING_DOWN, "Test setup: the partner should be on the ground.")
 
-	horny.perform(0.1, controller, BB_BASIC_MOB_CURRENT_HORNY_TARGET, BB_TARGETTING_DATUM)
-	TEST_ASSERT(!skeleton.wear_armor || !skeleton.wear_pants, "Test setup: the first step should strip part of the warrior's armour.")
+	// The catch takes a few beats (grab, second grip, pin); the first prep step then strips the warrior's own armour.
+	for(var/beat in 1 to 12)
+		skeleton.next_move = 0
+		horny.perform(0.1, controller, BB_BASIC_MOB_CURRENT_HORNY_TARGET, BB_TARGETTING_DATUM)
+		if(!skeleton.wear_armor || !skeleton.wear_pants)
+			break
+	TEST_ASSERT(!skeleton.wear_armor || !skeleton.wear_pants, "Test setup: the first prep step should strip part of the warrior's armour.")
 	TEST_ASSERT(controller.behavior_cooldowns[horny] - world.time >= 1 SECONDS, "The next prep step should wait at least a second after the last one ends.")
 	// Teardown deletes the partner, and a floored, grabbed mob runtimes in its async get_up().
 	skeleton.stop_pulling()

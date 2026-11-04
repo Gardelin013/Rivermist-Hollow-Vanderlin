@@ -1776,9 +1776,9 @@
 		combat_modifier += 0.5
 
 	var/stamina_factor = 1.0
-	if(L.stamina / L.maximum_stamina < 0.5)
+	if(L.stamina / L.maximum_stamina > 0.5)
 		stamina_factor += 0.3 // Tired grabbers are weaker
-	if(stamina / maximum_stamina < 0.3)
+	if(stamina / maximum_stamina > 0.7)
 		stamina_factor -= 0.2 // But tired victims also struggle more
 
 	var/grab_count = 0

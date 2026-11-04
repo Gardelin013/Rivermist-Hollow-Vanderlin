@@ -105,7 +105,6 @@
 #define BB_HORNY_AGGRO_TARGET "BB_horny_aggro_target"
 #define BB_HORNY_HOSTILE_TARGETS "BB_horny_hostile_targets"
 #define BB_HORNY_SEEK_COOLDOWN "BB_horny_seek_cooldown"
-#define BB_HORNY_STUN_COOLDOWN "BB_horny_stun_cooldown"
 #define BB_HORNY_TIME_START "BB_horny_time_start"
 #define BB_HORNY_INITIAL_STRIP_DONE "BB_horny_initial_strip_done"
 #define BB_HORNY_STAND_UP_COUNTER "BB_horny_stand_up_counter"
@@ -130,3 +129,13 @@
 #define BB_HORNY_BREAK_OFF_UNTIL "BB_horny_break_off_until"
 #define BB_HORNY_BREAK_OFF_COOLDOWN "BB_horny_break_off_cooldown"
 #define BB_HORNY_PRESENT_UNTIL "BB_horny_present_until"
+#define BB_HORNY_POUNCE_COOLDOWN "BB_horny_pounce_cooldown"
+#define BB_HORNY_LASH_COOLDOWN "BB_horny_lash_cooldown"
+#define BB_HORNY_CIRCLE_UNTIL "BB_horny_circle_until"
+#define BB_HORNY_SCENT_UNTIL "BB_horny_scent_until"
+#define BB_HORNY_PACK_CALLED "BB_horny_pack_called"
+#define BB_HORNY_TRAP_COOLDOWN "BB_horny_trap_cooldown"
+/// Failed takedowns this catch; every miss makes the next body roll easier.
+#define BB_HORNY_WRESTLE_PRESSURE "BB_horny_wrestle_pressure"
+/// Set once the pin has landed on a floored target; cleared when the target is on their feet again.
+#define BB_HORNY_PINNED "BB_horny_pinned"

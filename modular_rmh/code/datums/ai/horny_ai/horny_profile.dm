@@ -45,6 +45,25 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	var/extra_strip_chance = 35
 	/// Restraint the bind step applies; null means this family cannot bind.
 	var/restraint_type = /obj/item/rope
+	/// How this family catches: HORNY_MOVE_*.
+	var/seize_move = HORNY_MOVE_LADDER
+	/// Added to the handless knockdown roll: momentum, weight, or just meanness.
+	var/bear_down_bonus = 0
+	/// Fatigue a coil costs the target every beat it holds on.
+	var/squeeze_fatigue = 0
+	/// Leaps the last two or three tiles.
+	var/pounces = FALSE
+	/// Reaches two tiles with a lash that drags the target closer.
+	var/lashes = FALSE
+	/// Works round to the target's back before closing.
+	var/circles_behind = FALSE
+	/// Follows a scent trail after sight is lost, when the target lets scents matter.
+	var/follows_scent = FALSE
+	/// Calls packmates on the tell, up to pack_cap hunters; 0 means no cap.
+	var/pack_call = FALSE
+	var/pack_cap = HORNY_PACK_CAP
+	/// Spits its ranged web as a trap when angered.
+	var/spits_web = FALSE
 
 /datum/horny_family_profile/New()
 	. = ..()
@@ -93,6 +112,10 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/proc/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] loses [hunter.p_their()] grip and sags, flushed and trembling, open to [target]."
 
+/// A short spoken line for a bark context, or null for families that do not talk.
+/datum/horny_family_profile/proc/get_bark(mob/living/hunter, mob/living/target, context)
+	return null
+
 /// Start and finish lines for the bind step, keyed start, start_target, start_hear, done, done_target, done_hear.
 /datum/horny_family_profile/proc/get_bind_lines(mob/living/hunter, mob/living/target)
 	return list(
@@ -103,6 +126,41 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 		"done_target" = "[hunter] binds my wrists with rope!",
 		"done_hear" = "I hear rope knotting.",
 	)
+
+/// A pounce family leaving the ground.
+/datum/horny_family_profile/proc/get_pounce_message(mob/living/hunter, mob/living/target)
+	return "[hunter] springs at [target]!"
+
+/// A handed hunter's grab landing on a limb; to_target gives the victim's own line.
+/datum/horny_family_profile/proc/get_grab_message(mob/living/hunter, mob/living/target, zone, to_target = FALSE)
+	return to_target ? "[hunter] grabs me by the [zone]!" : "[hunter] grabs [target] by the [zone]!"
+
+/// A handless hunter putting the target on the ground.
+/datum/horny_family_profile/proc/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] bears [target] down to the ground!"
+
+/datum/horny_family_profile/proc/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter] tries to drag [target] down, but [target] keeps [target.p_their()] feet!"
+
+/// A lash dragging the target a step closer, and one that misses.
+/datum/horny_family_profile/proc/get_lash_message(mob/living/hunter, mob/living/target)
+	return "[hunter] lashes out and drags [target] a step closer!"
+
+/datum/horny_family_profile/proc/get_lash_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter] lashes at [target], who twists clear!"
+
+/// The coil tightening; to_target gives the victim's own line.
+/datum/horny_family_profile/proc/get_squeeze_message(mob/living/hunter, mob/living/target, to_target = FALSE)
+	if(to_target)
+		return "[hunter]'s coils tighten and crush the breath out of me!"
+	return "[hunter]'s coils tighten around [target]!"
+
+/// The tell that brings the pack, and what others hear of it.
+/datum/horny_family_profile/proc/get_pack_call_message(mob/living/hunter, mob/living/target)
+	return "[hunter] shouts for [hunter.p_their()] friends and points at [target]!"
+
+/datum/horny_family_profile/proc/get_pack_call_hear_message(mob/living/hunter)
+	return "I hear a shout and an answering whoop."
 
 // --- Acts ----------------------------------------------------------------------------------------
 
@@ -154,6 +212,31 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/humanoids
 	family_flag = HORNY_MOB_TYPE_HUMANOIDS
 	can_sprint = TRUE
+	pack_call = TRUE
+	bear_down_bonus = 10
+
+/// The sweep a humanoid falls back on once the throw keeps failing.
+/datum/horny_family_profile/humanoids/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] hooks [target]'s legs out from under [target.p_them()] and brings [target.p_them()] down!"
+
+/datum/horny_family_profile/humanoids/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter] hooks at [target]'s legs, but [target] keeps [target.p_their()] footing!"
+
+/datum/horny_family_profile/humanoids/get_bark(mob/living/hunter, mob/living/target, context)
+	switch(context)
+		if(HORNY_BARK_NOTICE)
+			return pick("Well, well.", "Hey there.", "Look what wandered in.", "Come here, you.")
+		if(HORNY_BARK_SEIZE)
+			return pick("Got you!", "Hold still!", "No running now.", "Down you go.")
+		if(HORNY_BARK_BREAK_OFF)
+			return pick("Feisty one!", "You'll pay for that.", "Oh, you want it rough?")
+		if(HORNY_BARK_PRESENT)
+			return pick("Ah...!", "W-wait...", "Too... too much.")
+		if(HORNY_BARK_SATED)
+			return pick("Heh.", "Not bad.", "That'll do.", "Run along now.")
+		if(HORNY_BARK_LOST)
+			return pick("Bah!", "Get back here!", "Next time...")
+	return null
 
 /datum/horny_family_profile/undead
 	family_flag = HORNY_MOB_TYPE_UNDEAD
@@ -162,6 +245,8 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	flee_limit = 2
 	break_off = HORNY_BREAK_OFF_NONE
 	notice_time = 0
+	pack_call = TRUE
+	pack_cap = 0
 
 /datum/horny_family_profile/undead/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] turns its hollow gaze on [target] and starts toward [target.p_them()]."
@@ -175,12 +260,24 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/undead/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] rattles once and sags, hollow and still."
 
+/datum/horny_family_profile/undead/get_pack_call_message(mob/living/hunter, mob/living/target)
+	return "[hunter] lets out a long, hollow moan that carries far."
+
+/datum/horny_family_profile/undead/get_pack_call_hear_message(mob/living/hunter)
+	return "I hear a long, hollow moan."
+
 /datum/horny_family_profile/lycans
 	family_flag = HORNY_MOB_TYPE_LYCANS
 	hurt_limit = 0.4
 	break_off = HORNY_BREAK_OFF_CIRCLE
 	can_sprint = TRUE
 	restraint_type = null
+	seize_move = HORNY_MOVE_POUNCE
+	bear_down_bonus = 20
+	pounces = TRUE
+	circles_behind = TRUE
+	follows_scent = TRUE
+	pack_call = TRUE
 
 /datum/horny_family_profile/lycans/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s ears prick toward [target] and its lips peel back from its teeth."
@@ -203,6 +300,18 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/lycans/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] drops onto its back with a whine, belly up and twitching."
 
+/datum/horny_family_profile/lycans/get_pounce_message(mob/living/hunter, mob/living/target)
+	return "[hunter] launches itself at [target], jaws wide!"
+
+/datum/horny_family_profile/lycans/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] slams into [target] and bears [target.p_them()] down!"
+
+/datum/horny_family_profile/lycans/get_pack_call_message(mob/living/hunter, mob/living/target)
+	return "[hunter] throws its head back and howls!"
+
+/datum/horny_family_profile/lycans/get_pack_call_hear_message(mob/living/hunter)
+	return "I hear a howl."
+
 /datum/horny_family_profile/beasts
 	family_flag = HORNY_MOB_TYPE_BEASTS
 	pain_factor = 1.2
@@ -211,6 +320,12 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	strip_damage_chance = 60
 	strip_damage_ratio = 0.25
 	restraint_type = null
+	seize_move = HORNY_MOVE_POUNCE
+	bear_down_bonus = 20
+	pounces = TRUE
+	circles_behind = TRUE
+	follows_scent = TRUE
+	pack_call = TRUE
 
 /datum/horny_family_profile/beasts/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] lifts its head, nostrils flaring toward [target], and a low growl rolls out."
@@ -233,6 +348,18 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/beasts/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] rolls onto its back with a whine, belly up and twitching."
 
+/datum/horny_family_profile/beasts/get_pounce_message(mob/living/hunter, mob/living/target)
+	return "[hunter] launches itself at [target], jaws wide!"
+
+/datum/horny_family_profile/beasts/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] slams into [target] and bears [target.p_them()] down!"
+
+/datum/horny_family_profile/beasts/get_pack_call_message(mob/living/hunter, mob/living/target)
+	return "[hunter] throws its head back and howls!"
+
+/datum/horny_family_profile/beasts/get_pack_call_hear_message(mob/living/hunter)
+	return "I hear a howl."
+
 /datum/horny_family_profile/spiders
 	family_flag = HORNY_MOB_TYPE_SPIDERS
 	pain_factor = 1.5
@@ -240,6 +367,10 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	break_off = HORNY_BREAK_OFF_FLEE
 	extra_strip_chance = 20
 	restraint_type = /obj/item/rope/spider_silk
+	seize_move = HORNY_MOVE_POUNCE
+	bear_down_bonus = 15
+	pounces = TRUE
+	spits_web = TRUE
 
 /datum/horny_family_profile/spiders/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] goes still, every eye fixed on [target], then its legs begin to twitch."
@@ -262,6 +393,12 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/spiders/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s legs fold under it and it lies there, chittering weakly."
 
+/datum/horny_family_profile/spiders/get_pounce_message(mob/living/hunter, mob/living/target)
+	return "[hunter] springs at [target] in a blur of legs!"
+
+/datum/horny_family_profile/spiders/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] drags [target] down under a tangle of legs!"
+
 /datum/horny_family_profile/spiders/get_bind_lines(mob/living/hunter, mob/living/target)
 	return list(
 		"start" = "[hunter] starts winding sticky silk around [target]'s wrists!",
@@ -278,6 +415,9 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	hurt_limit = 0.3
 	break_off = HORNY_BREAK_OFF_FLEE
 	restraint_type = null
+	seize_move = HORNY_MOVE_POUNCE
+	bear_down_bonus = 10
+	pounces = TRUE
 
 /datum/horny_family_profile/bog_bugs/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s antennae swing toward [target] and its mandibles click."
@@ -300,6 +440,9 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/bog_bugs/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s legs fold under it and it lies there, chittering weakly."
 
+/datum/horny_family_profile/bog_bugs/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] knocks [target] flat and clamps on!"
+
 /datum/horny_family_profile/trolls
 	family_flag = HORNY_MOB_TYPE_TROLLS
 	pain_factor = 0.5
@@ -308,6 +451,8 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	strip_damage_chance = 60
 	strip_damage_ratio = 0.3
 	restraint_type = null
+	seize_move = HORNY_MOVE_HOIST
+	bear_down_bonus = 20
 
 /datum/horny_family_profile/trolls/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] snorts, sniffs the air, and turns its whole bulk toward [target]."
@@ -330,6 +475,12 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/trolls/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] sits down heavily, chest heaving, too far gone to hold on."
 
+/datum/horny_family_profile/trolls/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] hoists [target] off the ground and slams [target.p_them()] down!"
+
+/datum/horny_family_profile/trolls/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter] grabs for [target] and comes up with nothing but air!"
+
 /datum/horny_family_profile/minotaurs
 	family_flag = HORNY_MOB_TYPE_MINOTAURS
 	pain_factor = 0.5
@@ -338,6 +489,8 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	strip_damage_chance = 60
 	strip_damage_ratio = 0.3
 	restraint_type = null
+	seize_move = HORNY_MOVE_HOIST
+	bear_down_bonus = 20
 
 /datum/horny_family_profile/minotaurs/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] stamps once and lowers its horns toward [target], breath steaming."
@@ -360,10 +513,18 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/minotaurs/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] sits down heavily, chest heaving, too far gone to hold on."
 
+/datum/horny_family_profile/minotaurs/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] hooks [target] up by the waist and slams [target.p_them()] into the ground!"
+
+/datum/horny_family_profile/minotaurs/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s horns sweep past as [target] stumbles clear!"
+
 /datum/horny_family_profile/lamias
 	family_flag = HORNY_MOB_TYPE_LAMIAS
 	break_off = HORNY_BREAK_OFF_FLEE
 	restraint_type = null
+	seize_move = HORNY_MOVE_COIL
+	squeeze_fatigue = 8
 
 /datum/horny_family_profile/lamias/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s eyes catch the light as they settle on [target], tongue flicking."
@@ -386,11 +547,21 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/lamias/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s coils go slack and it lies there, tongue lolling."
 
+/datum/horny_family_profile/lamias/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s coils drag [target] down to the ground!"
+
+/datum/horny_family_profile/lamias/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s coils tighten, but [target] stays on [target.p_their()] feet!"
+
 /datum/horny_family_profile/lizards
 	family_flag = HORNY_MOB_TYPE_LIZARDS
 	pain_factor = 0.8
 	break_off = HORNY_BREAK_OFF_CIRCLE
 	restraint_type = null
+	seize_move = HORNY_MOVE_POUNCE
+	bear_down_bonus = 20
+	pounces = TRUE
+	circles_behind = TRUE
 
 /datum/horny_family_profile/lizards/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter] goes very still, then its jaws part toward [target]."
@@ -410,6 +581,12 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 /datum/horny_family_profile/lizards/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] goes limp, jaws slack, tail twitching."
 
+/datum/horny_family_profile/lizards/get_pounce_message(mob/living/hunter, mob/living/target)
+	return "[hunter] lunges at [target] with a snap of its jaws!"
+
+/datum/horny_family_profile/lizards/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter] drags [target] down in a thrashing roll!"
+
 /datum/horny_family_profile/tentacles
 	family_flag = HORNY_MOB_TYPE_TENTACLES
 	pain_factor = 0.3
@@ -417,6 +594,9 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	break_off = HORNY_BREAK_OFF_SINK
 	extra_strip_chance = 20
 	restraint_type = /obj/item/rope/spider_silk/tentacle_resin
+	seize_move = HORNY_MOVE_COIL
+	squeeze_fatigue = 8
+	lashes = TRUE
 
 /datum/horny_family_profile/tentacles/get_notice_message(mob/living/hunter, mob/living/target)
 	return "Something beneath the loam shifts and strains toward [target]."
@@ -438,6 +618,12 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 /datum/horny_family_profile/tentacles/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] goes slack all at once, every tentacle drooping."
+
+/datum/horny_family_profile/tentacles/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s coils drag [target] down to the ground!"
+
+/datum/horny_family_profile/tentacles/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s coils tighten, but [target] stays on [target.p_their()] feet!"
 
 /datum/horny_family_profile/tentacles/get_bind_lines(mob/living/hunter, mob/living/target)
 	return list(
@@ -466,6 +652,9 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	break_off = HORNY_BREAK_OFF_SINK
 	extra_strip_chance = 20
 	restraint_type = /obj/item/rope/spider_silk/tentacle_resin
+	seize_move = HORNY_MOVE_COIL
+	squeeze_fatigue = 8
+	lashes = TRUE
 
 /datum/horny_family_profile/maneaters/get_notice_message(mob/living/hunter, mob/living/target)
 	return "[hunter]'s vines rustle and lean toward [target], petals parting."
@@ -487,6 +676,15 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 /datum/horny_family_profile/maneaters/get_present_message(mob/living/hunter, mob/living/target)
 	return "[hunter] goes slack all at once, every vine drooping."
+
+/datum/horny_family_profile/maneaters/get_bear_down_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s vines knot around [target] and drag [target.p_them()] down to the loam!"
+
+/datum/horny_family_profile/maneaters/get_bear_down_miss_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s vines snag at [target], who tears free!"
+
+/datum/horny_family_profile/maneaters/get_lash_message(mob/living/hunter, mob/living/target)
+	return "[hunter]'s vines whip out and haul [target] a step closer!"
 
 /datum/horny_family_profile/maneaters/get_bind_lines(mob/living/hunter, mob/living/target)
 	return list(

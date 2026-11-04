@@ -73,3 +73,45 @@
 #define HORNY_INTERACTION_TIMEOUT (5 MINUTES)
 #define HORNY_PREP_PAUSE (1 SECONDS)
 #define HORNY_SIGHT_RANGE 9
+#define HORNY_LUNGE_COOLDOWN (6 SECONDS)
+
+// Results of one beat of a seize ladder, handed or handless.
+#define HORNY_SEIZE_WAIT 0
+#define HORNY_SEIZE_ACTED 1
+#define HORNY_SEIZE_DONE 2
+#define HORNY_SEIZE_FAILED 3
+
+// How a family catches: with hands, a pounce, a coil, or a hoist.
+#define HORNY_MOVE_LADDER "ladder"
+#define HORNY_MOVE_POUNCE "pounce"
+#define HORNY_MOVE_COIL "coil"
+#define HORNY_MOVE_HOIST "hoist"
+
+// Handless moves and hunt tactics.
+#define HORNY_POUNCE_COOLDOWN (6 SECONDS)
+#define HORNY_POUNCE_MIN_RANGE 2
+#define HORNY_POUNCE_MAX_RANGE 3
+#define HORNY_LASH_RANGE 2
+#define HORNY_LASH_COOLDOWN (4 SECONDS)
+#define HORNY_BEAR_DOWN_KNOCKDOWN 40
+#define HORNY_HOIST_IMMOBILIZE 20
+#define HORNY_BEAR_DOWN_FATIGUE 12
+// Every failed takedown adds this to the next body roll; handed hunters try the engine's throw this many times first.
+#define HORNY_PRESSURE_PER_MISS 10
+#define HORNY_THROW_TRIES 2
+#define HORNY_CIRCLE_TIME (6 SECONDS)
+#define HORNY_SCENT_RANGE 12
+#define HORNY_SCENT_FOLLOW_TIME (20 SECONDS)
+#define HORNY_PACK_RANGE 9
+#define HORNY_PACK_CAP 3
+#define HORNY_TRAP_COOLDOWN (20 SECONDS)
+#define HORNY_TRAP_MIN_RANGE 3
+#define HORNY_TRAP_MAX_RANGE 7
+
+// Bark contexts for hunters that talk.
+#define HORNY_BARK_NOTICE "notice"
+#define HORNY_BARK_SEIZE "seize"
+#define HORNY_BARK_BREAK_OFF "break_off"
+#define HORNY_BARK_PRESENT "present"
+#define HORNY_BARK_SATED "sated"
+#define HORNY_BARK_LOST "lost"
