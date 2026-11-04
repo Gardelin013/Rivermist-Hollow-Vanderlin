@@ -311,7 +311,7 @@
 				return
 			if(stat != CONSCIOUS)
 				return
-			if(is_mouth_covered())
+			if(is_mouth_covered() && !HAS_TRAIT(src, TRAIT_BITERHELM))
 				to_chat(src, span_warning("My mouth is blocked."))
 				return
 			if(HAS_TRAIT(src, TRAIT_NO_BITE))
