@@ -68,19 +68,6 @@
 	ADD_TRAIT(H, TRAIT_CYCLOPS_LEFT, QUIRK_TRAIT)
 	H.update_fov_angles()
 
-/datum/quirk/negative/tongueless
-	name = "Tongueless"
-	desc = "I said one word too many to a noble, they cut out my tongue."
-	desc_hint = "Being mute is not an excuse to forego roleplay. Use of custom emotes is recommended"
-	point_value = 4
-
-/datum/quirk/negative/tongueless/on_spawn()
-	if(!ishuman(owner))
-		return
-	var/mob/living/carbon/human/H = owner
-	var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
-	head?.add_wound(/datum/wound/facial/tongue/permanent)
-
 /datum/quirk/negative/wooden_arm_right
 	name = "Wooden Arm (R)"
 	desc = "I lost my right arm long ago, but the wooden arm doesn't bleed as much."

@@ -491,16 +491,6 @@
 			var/wound_desc = pick("shrapnel wound", "arrow wound", "deep scar", "poorly healed fracture")
 			to_chat(H, span_warning("You feel the familiar ache of your old [wound_desc] in your [wound_location]."))
 
-/datum/quirk/negative/loveless
-	name = "Loveless"
-	desc = "I am unable to show any kind of affection or love, whether carnal or platonic."
-	point_value = 3
-
-/datum/quirk/negative/loveless/on_spawn()
-	var/mob/living/carbon/human/H = owner
-	H.add_curse(/datum/curse/eora, TRUE)
-
-
 /datum/quirk/negative/nimrod
 	name = "Nimrod"
 	desc = "In the past I learned slower than my peers, and I tend to be clumsy."

@@ -49,8 +49,8 @@
 
 	if(HAS_TRAIT(src, TRAIT_WEAK_HEART) && stress > 60)
 		to_chat(src, span_warning("This is all too much for my weak heart!"))
-		INVOKE_ASYNC(src, PROC_REF(heart_attack))
-
+		Paralyze(60 SECONDS)
+		Knockdown(60 SECONDS)
 /mob/living/carbon/update_stress()
 	if(HAS_TRAIT(src, TRAIT_NOMOOD))
 		stress = 0
