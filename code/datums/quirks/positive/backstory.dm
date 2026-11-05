@@ -1,4 +1,4 @@
-/datum/quirk/boon/backstory
+/datum/quirk/positive/backstory
 	name = "Experienced Background"
 	desc = "You had a previous career before becoming an adventurer. You've retained skills from that time, but it left its mark on you."
 	desc_hint = "Combat skills are clamped at average from this, this is your past"
@@ -7,7 +7,7 @@
 	customization_options = list()
 	var/static/list/backstories
 
-/datum/quirk/boon/backstory/New()
+/datum/quirk/positive/backstory/New()
 	// Populate options from all backstory types
 	for(var/datum/backstory/backstory_type as anything in subtypesof(/datum/backstory))
 		if(IS_ABSTRACT(backstory_type))
@@ -22,7 +22,7 @@
 
 	return ..()
 
-/datum/quirk/boon/backstory/get_desc(datum/preferences/prefs)
+/datum/quirk/positive/backstory/get_desc(datum/preferences/prefs)
 	var/base_desc = desc
 
 	// If a backstory is selected, add its stats to the description
@@ -64,7 +64,7 @@
 
 	return base_desc
 
-/datum/quirk/boon/backstory/return_customization(datum/preferences/prefs)
+/datum/quirk/positive/backstory/return_customization(datum/preferences/prefs)
 	var/list/custom = list()
 
 	for(var/datum/backstory/story in backstories)
@@ -72,7 +72,7 @@
 			custom |= story.type
 	return custom
 
-/datum/quirk/boon/backstory/after_job_spawn()
+/datum/quirk/positive/backstory/after_job_spawn()
 	if(!ishuman(owner))
 		return
 
@@ -92,7 +92,7 @@
 
 	to_chat(H, span_notice("Your experience as [LOWER_TEXT(initial(B.name))] has shaped who you are today."))
 
-/datum/quirk/boon/backstory/on_remove()
+/datum/quirk/positive/backstory/on_remove()
 	if(!ishuman(owner))
 		return
 

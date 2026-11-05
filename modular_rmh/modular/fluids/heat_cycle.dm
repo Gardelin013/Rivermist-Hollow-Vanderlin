@@ -297,16 +297,16 @@
 		"Rut scent" = "The scent of a body in rut. It comes from anyone with a penis and no vagina.",
 	)
 
-/datum/quirk/peculiarity/heat_cycles
+/datum/quirk/neutral/heat_cycles
 	name = "Heat Cycles"
 	desc = "Every few hours my body goes into heat, or rut, and craves a mate."
 	desc_hint = "Every 2-3 hours you go into heat for 30 minutes: more fluids, rising arousal and a musky smell. A climax gives some relief."
 
-/datum/quirk/peculiarity/heat_cycles/on_spawn()
+/datum/quirk/neutral/heat_cycles/on_spawn()
 	. = ..()
 	owner?.grant_heat_cycle(HEAT_SOURCE_QUIRK)
 
-/datum/quirk/peculiarity/heat_cycles/on_remove()
+/datum/quirk/neutral/heat_cycles/on_remove()
 	if(!QDELETED(owner))
 		owner.revoke_heat_cycle(HEAT_SOURCE_QUIRK)
 	return ..()

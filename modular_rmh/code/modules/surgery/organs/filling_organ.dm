@@ -305,7 +305,7 @@
 
 /// Drips `amount` units of our reagents onto `target`, as drops for organs flagged [drips_as_drops].
 /obj/item/organ/genitals/filling_organ/proc/drip_to_turf(turf/target, amount)
-	spill_fluid_to_turf(target, reagents, amount, drips_as_drops && !owner?.has_quirk(/datum/quirk/peculiarity/free_flowing))
+	spill_fluid_to_turf(target, reagents, amount, drips_as_drops && !owner?.has_quirk(/datum/quirk/neutral/free_flowing))
 
 /// Spills fluid onto a turf: small amounts form a colored drop that grows into a puddle, larger ones pool at once.
 /proc/spill_fluid_to_turf(turf/target, datum/reagents/source, amount, as_drops = TRUE)
@@ -541,7 +541,7 @@
 	reagents.maximum_volume = capacity
 	if(change < FLUID_CAPACITY_ALERT_MIN_CHANGE || world.time <= last_size_alert + 12 SECONDS)
 		return
-	if(owner.has_quirk(/datum/quirk/peculiarity/selfawaregeni))
+	if(owner.has_quirk(/datum/quirk/neutral/selfawaregeni))
 		last_size_alert = world.time
 		to_chat(owner, span_blue("My [pick(altnames)] hold a different amount now."))
 
@@ -662,7 +662,7 @@
 	// A forced leak is a gush, so it always reaches the floor.
 	if(!forced_amount && !can_drip_to_floor())
 		return
-	if(prob(5) && owner.has_quirk(/datum/quirk/peculiarity/selfawaregeni) && MOBTIMER_FINISHED(owner, "organ_drip", rand(20, 120)))
+	if(prob(5) && owner.has_quirk(/datum/quirk/neutral/selfawaregeni) && MOBTIMER_FINISHED(owner, "organ_drip", rand(20, 120)))
 		MOBTIMER_SET(owner, "organ_drip")
 		to_chat(owner, pick(span_info("A little bit of [english_list(reagents.reagent_list)] drips from my [pick(altnames)]..."),
 			span_info("Some liquid drips from my [pick(altnames)]."),

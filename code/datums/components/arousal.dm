@@ -286,7 +286,7 @@
 	pain_amt = get_scaled_pain(pain_amt, applied_force, applied_speed)
 
 	var/isnymph = FALSE
-	if(HAS_TRAIT(user, TRAIT_NYMPHO_CURSE) || user.has_quirk(/datum/quirk/vice/addiction/lovefiend))
+	if(HAS_TRAIT(user, TRAIT_NYMPHO_CURSE) || user.has_quirk(/datum/quirk/negative/addiction/lovefiend))
 		isnymph = TRUE
 
 	if(user.has_status_effect(/datum/status_effect/debuff/orgasmbroken))
@@ -416,7 +416,7 @@
 							to_chat(devouser, span_info("I feel Viiritri guide me."))*/
 
 	var/isnymph = FALSE
-	if(HAS_TRAIT(user, TRAIT_NYMPHO_CURSE) || user.has_quirk(/datum/quirk/vice/addiction/lovefiend))
+	if(HAS_TRAIT(user, TRAIT_NYMPHO_CURSE) || user.has_quirk(/datum/quirk/negative/addiction/lovefiend))
 		isnymph = TRUE
 	if(user.has_status_effect(/datum/status_effect/debuff/orgasmbroken))
 		if(isnymph)
@@ -844,8 +844,8 @@
 	if(arousal > MAX_AROUSAL / 4)
 		user.play_climax_motion()
 
-	if(user.has_quirk(/datum/quirk/vice/addiction/lovefiend))
-		user.sate_addiction(/datum/quirk/vice/addiction/lovefiend)
+	if(user.has_quirk(/datum/quirk/negative/addiction/lovefiend))
+		user.sate_addiction(/datum/quirk/negative/addiction/lovefiend)
 
 	if(!user.rogue_sneaking && user.alpha > 100) //stealth sex, keep your voice down.
 		if(!user.can_speak())
@@ -1072,7 +1072,7 @@
 		return
 	last_pain = world.time
 
-	var/masochist = user.has_quirk(/datum/quirk/vice/addiction/masochist)
+	var/masochist = user.has_quirk(/datum/quirk/negative/addiction/masochist)
 	var/self_msg
 	var/observed_msg
 	var/partner_msg
@@ -1114,11 +1114,11 @@
 /// Never cancel the ache early; add_stress resets its timer and it expires on its own.
 /datum/component/arousal/proc/refresh_aching()
 	var/mob/living/user = parent
-	if(user.has_quirk(/datum/quirk/vice/addiction/masochist))
-		user.sate_addiction(/datum/quirk/vice/addiction/masochist)
+	if(user.has_quirk(/datum/quirk/negative/addiction/masochist))
+		user.sate_addiction(/datum/quirk/negative/addiction/masochist)
 		user.add_stress(/datum/stress_event/loinachegood)
 		return
-	if(user.has_quirk(/datum/quirk/vice/addiction/lovefiend))
+	if(user.has_quirk(/datum/quirk/negative/addiction/lovefiend))
 		user.add_stress(/datum/stress_event/loinachegood)
 		return
 	user.add_stress(/datum/stress_event/loinache)
@@ -1220,7 +1220,7 @@
 /datum/component/arousal/proc/handle_statuses()
 	var/mob/living/user = parent
 	var/nymph_mod = 0
-	if(HAS_TRAIT(user, TRAIT_NYMPHO_CURSE) || user.has_quirk(/datum/quirk/vice/addiction/lovefiend))
+	if(HAS_TRAIT(user, TRAIT_NYMPHO_CURSE) || user.has_quirk(/datum/quirk/negative/addiction/lovefiend))
 		nymph_mod = ORGASM_STRAIN_NYMPH_THRESHOLD_MOD
 
 	if(user.has_status_effect(/datum/status_effect/debuff/loinspent))

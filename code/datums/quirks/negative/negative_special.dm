@@ -1,5 +1,5 @@
 
-/datum/quirk/vice/wanted
+/datum/quirk/negative/wanted
 	name = "Wanted"
 	desc = "Something in my past has made me a target. I am marked as an outlaw in these lands. I'm always looking over my shoulder. And protecting my loins..."
 	desc_hint = "THIS IS A DIFFICULT FLAW - play at your own risk. \
@@ -12,7 +12,7 @@
 	customization_placeholder = "Fleeing prison."
 	var/logged = FALSE
 
-/datum/quirk/vice/wanted/get_desc(datum/preferences/prefs)
+/datum/quirk/negative/wanted/get_desc(datum/preferences/prefs)
 	var/reason = prefs?.quirk_customizations[type]
 	if(!reason)
 		reason = customization_value
@@ -20,19 +20,19 @@
 		return "[desc]<br><br><b>Reason:</b> [reason]"
 	return "[desc]<br><br><b>Reason:</b> Unknown - a mystery from your past."
 
-/datum/quirk/vice/wanted/after_job_spawn(datum/job/job)
+/datum/quirk/negative/wanted/after_job_spawn(datum/job/job)
 	var/mob/living/carbon/human/H = owner
 	if(!logged && H.name)
 		log_hunted("[H.ckey] playing as [H.name] has the hunted quirk.")
 		logged = TRUE
 		GLOB.outlawed_players += H.real_name
 
-/datum/quirk/vice/wanted/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/wanted/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("A wanted person..."))
 
 /* THIS QUIRK ISN'T LIABLE FOR RIVERMIST HOLLOW BUILD
-/datum/quirk/vice/luxless
+/datum/quirk/negative/luxless
 	name = "Lux-less"
 	desc = "Through some grand misfortune, or heroic sacrifice - you have given up your link to Psydon, and with it - your soul. A putrid, horrid thing, you consign yourself to an eternity of nil after death. EXPECT A DIFFICULT, MECHANICALLY UNFAIR EXPERIENCE. (Rakshari, Hollowkin and Kobolds cannot take this - they already have no lux.)"
 	point_value = 5
@@ -46,23 +46,23 @@
 		/datum/species/orc,
 	)
 
-/datum/quirk/vice/luxless/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/luxless/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Luxless..."))
 
-/datum/quirk/vice/luxless/on_spawn()
+/datum/quirk/negative/luxless/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	H.apply_status_effect(/datum/status_effect/debuff/flaw_lux_taken)
 */
 
-/datum/quirk/vice/pacifist
+/datum/quirk/negative/pacifist
 	name = "Pacifist"
 	desc = "I don't want to harm other living beings!"
 	point_value = 8
 
-/datum/quirk/vice/pacifist/on_spawn()
+/datum/quirk/negative/pacifist/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -74,20 +74,20 @@
 
 	ADD_TRAIT(owner, TRAIT_PACIFISM, "[type]")
 
-/datum/quirk/vice/pacifist/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/pacifist/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Pacifist..."))
 
-/datum/quirk/vice/pacifist/on_remove()
+/datum/quirk/negative/pacifist/on_remove()
 	if(owner)
 		REMOVE_TRAIT(owner, TRAIT_PACIFISM, "[type]")
 
-/datum/quirk/vice/chronic_migraine
+/datum/quirk/negative/chronic_migraine
 	name = "Chronic Migraines"
 	desc = "You suffer from frequent, debilitating headaches that can strike without warning."
 	point_value = 3
 
-/datum/quirk/vice/chronic_migraine/on_spawn()
+/datum/quirk/negative/chronic_migraine/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -97,34 +97,34 @@
 	BP?.update_chronic()
 	to_chat(H, span_warning("You feel the familiar pressure building behind your eyes."))
 
-/datum/quirk/vice/skill_issue
+/datum/quirk/negative/skill_issue
 	name = "Skill Issue"
 	desc = "You were never the best at anything, and it shows. Lose 1 point to all starting skills."
 	point_value = 5
 
-/datum/quirk/vice/skill_issue/on_spawn()
+/datum/quirk/negative/skill_issue/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	for(var/datum/attribute/skill/skill in SSskills.all_skills)
 		H.adjust_skill_level(skill, -10)
 
-/datum/quirk/vice/deaf
+/datum/quirk/negative/deaf
 	name = "Hard of Hearing"
 	desc = "You can barely hear. Words said outside of a 2 tile radius become jumbled or unreadable unless screamed."
 	point_value = 3
 
-/datum/quirk/vice/deaf/on_spawn()
+/datum/quirk/negative/deaf/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_PARTIAL_DEAF, "[type]")
 
-/datum/quirk/vice/deaf/on_remove()
+/datum/quirk/negative/deaf/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_PARTIAL_DEAF, "[type]")
 
-/datum/quirk/vice/traumatized
+/datum/quirk/negative/traumatized
 	name = "Traumatized"
 	desc = "You were an adventurer once, till you took something to the knee. Choose something to be afraid of."
 	point_value = 3
@@ -148,18 +148,18 @@
 	var/fear_type
 	var/next_scream_time = 0
 
-/datum/quirk/vice/traumatized/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/traumatized/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Traumatized..."))
 
-/datum/quirk/vice/traumatized/on_spawn()
+/datum/quirk/negative/traumatized/on_spawn()
 	if(!ishuman(owner))
 		return
 	if(!customization_value)
 		customization_value = /datum/species/goblin
 	fear_type = customization_value
 
-/datum/quirk/vice/traumatized/on_life(mob/living/user)
+/datum/quirk/negative/traumatized/on_life(mob/living/user)
 	if(world.time < next_scream_time)
 		return
 	if(ispath(fear_type, /datum/species))
@@ -205,49 +205,49 @@
 	stress_change = 5
 	timer = 5 MINUTES
 
-/datum/quirk/vice/tortured
+/datum/quirk/negative/tortured
 	name = "Tortured"
 	desc = "You were once tortured by bandits, Drow raiders, or your own kingdom. You fear it happening again and always answer truthfully when tortured."
 	point_value = 2
 
-/datum/quirk/vice/tortured/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/tortured/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Tortured..."))
 
-/datum/quirk/vice/tortured/on_spawn()
+/datum/quirk/negative/tortured/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_TORTURED, "[type]")
 
-/datum/quirk/vice/tortured/on_remove()
+/datum/quirk/negative/tortured/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_TORTURED, "[type]")
 
-/datum/quirk/vice/weak_heart
+/datum/quirk/negative/weak_heart
 	name = "Weak Heart"
 	desc = "You were born with a weak heart. You can't handle stressful situations for fear of your heart giving out."
 	desc_hint = "Half threshold for heart attacks and heart attack from being overly stressed"
 	point_value = 6
 	incompatible_quirks = list(
-		/datum/quirk/boon/iron_will
+		/datum/quirk/positive/iron_will
 	)
 
-/datum/quirk/vice/weak_heart/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/weak_heart/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Weak-Hearted..."))
 
-/datum/quirk/vice/weak_heart/on_spawn()
+/datum/quirk/negative/weak_heart/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_WEAK_HEART, "[type]")
 
-/datum/quirk/vice/weak_heart/on_remove()
+/datum/quirk/negative/weak_heart/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_WEAK_HEART, "[type]")
 
-/datum/quirk/vice/tremors
+/datum/quirk/negative/tremors
 	name = "Tremors"
 	desc = "Your body tremors periodically, causing you to drop what's in your hands and lose your grip for a short time. High stress makes the tremors worse."
 	point_value = 4
@@ -255,12 +255,12 @@
 	var/base_tremor_interval = 5 MINUTES
 	var/stress_tremor_interval = 2 MINUTES
 
-/datum/quirk/vice/tremors/on_spawn()
+/datum/quirk/negative/tremors/on_spawn()
 	if(!owner)
 		return
 	schedule_next_tremor()
 
-/datum/quirk/vice/tremors/on_life()
+/datum/quirk/negative/tremors/on_life()
 	if(!owner)
 		return
 
@@ -268,7 +268,7 @@
 		trigger_tremor()
 		schedule_next_tremor()
 
-/datum/quirk/vice/tremors/proc/schedule_next_tremor()
+/datum/quirk/negative/tremors/proc/schedule_next_tremor()
 	if(!owner)
 		return
 
@@ -284,7 +284,7 @@
 	tremor_interval = tremor_interval + rand(-30 SECONDS, 30 SECONDS)
 	next_tremor_time = world.time + tremor_interval
 
-/datum/quirk/vice/tremors/proc/trigger_tremor()
+/datum/quirk/negative/tremors/proc/trigger_tremor()
 	if(!owner)
 		return
 
@@ -308,7 +308,7 @@
 		animate(H.client, pixel_x = rand(-2, 2), pixel_y = rand(-2, 2), time = 2)
 		addtimer(CALLBACK(src, PROC_REF(reset_screen_shake), H), 2)
 
-/datum/quirk/vice/tremors/proc/reset_screen_shake(mob/living/carbon/human/H)
+/datum/quirk/negative/tremors/proc/reset_screen_shake(mob/living/carbon/human/H)
 	if(H?.client)
 		animate(H.client, pixel_x = 0, pixel_y = 0, time = 2)
 
@@ -347,7 +347,7 @@
 	name = "Trembling Hands"
 	desc = "My hands are shaking uncontrollably! I can't grip anything!"
 /*
-/datum/quirk/vice/heretic_outlaw
+/datum/quirk/negative/heretic_outlaw
 	name = "Heretic or Outlaw"
 	desc = "You begin your journey marked as either a heretic or an outlaw, despised by society."
 	point_value = 2
@@ -356,7 +356,7 @@
 	customization_options = list("Heretic", "Outlaw")
 	preview_render = FALSE
 
-/datum/quirk/vice/heretic_outlaw/on_spawn()
+/datum/quirk/negative/heretic_outlaw/on_spawn()
 	if(!owner || !ishuman(owner))
 		return
 

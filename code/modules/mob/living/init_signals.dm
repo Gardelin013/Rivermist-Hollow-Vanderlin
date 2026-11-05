@@ -161,7 +161,7 @@
 ///Called when TRAIT_LEPROSY is added to the mob.
 /mob/living/proc/on_leprosy_trait_gain(datum/source)
 	SIGNAL_HANDLER
-	if(has_quirk(/datum/quirk/vice/leprosy))
+	if(has_quirk(/datum/quirk/negative/leprosy))
 		attributes?.add_sheet(/datum/attribute_holder/sheet/job/leper_vice)
 
 	else
@@ -178,7 +178,7 @@
 ///Called when TRAIT_LEPROSY is removed from the mob.
 /mob/living/proc/on_leprosy_trait_loss(datum/source)
 	SIGNAL_HANDLER
-	if(has_quirk(/datum/quirk/vice/leprosy))
+	if(has_quirk(/datum/quirk/negative/leprosy))
 		attributes?.subtract_sheet(/datum/attribute_holder/sheet/job/leper_vice)
 	remove_stat_modifier(TRAIT_LEPROSY)
 

@@ -121,7 +121,7 @@
 		to_chat(L, "*----*")
 		if(ishuman(usr))
 			var/mob/living/carbon/human/M = usr
-			for(var/datum/quirk/vice/vices in M.quirks)
+			for(var/datum/quirk/negative/vices in M.quirks)
 				to_chat(M, "<span class='info'>[vices.get_desc()]</span>")
 			to_chat(M, "*----*")
 			if(M.mind)

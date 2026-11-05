@@ -1,53 +1,53 @@
-/datum/quirk/boon
-	abstract_type = /datum/quirk/boon
-	quirk_category = QUIRK_BOON
+/datum/quirk/positive
+	abstract_type = /datum/quirk/positive
+	quirk_category = QUIRK_POSITIVE
 
-/datum/quirk/boon/keen_eye
+/datum/quirk/positive/keen_eye
 	name = "Keen Eye"
 	desc = "Years of hunting and tracking have honed your sight. You're better at noticing details and spotting hidden things."
 	point_value = -5
 	incompatible_quirks = list(
-		/datum/quirk/vice/bad_sight
+		/datum/quirk/negative/bad_sight
 	)
 
-/datum/quirk/boon/light_footed
+/datum/quirk/positive/light_footed
 	name = "Light Footed"
 	desc = "You move with grace and agility. Your steps are quieter then most."
 	point_value = -6
 
-/datum/quirk/boon/light_footed/on_spawn()
+/datum/quirk/positive/light_footed/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_LIGHT_STEP, "[type]")
 
-/datum/quirk/boon/light_footed/on_remove()
+/datum/quirk/positive/light_footed/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_LIGHT_STEP, "[type]")
 
-/datum/quirk/boon/quick_learner
+/datum/quirk/positive/quick_learner
 	name = "Quick Learner"
 	desc = "You pick up new skills faster than most. Your mind is sharp and eager to learn."
 	point_value = -5
 
-/datum/quirk/boon/iron_will
+/datum/quirk/positive/iron_will
 	name = "Iron Will"
 	desc = "Your resolve is unshakeable. You handle the horrors of war better then most."
 	point_value = -4
 
-/datum/quirk/boon/iron_will/on_spawn()
+/datum/quirk/positive/iron_will/on_spawn()
 	ADD_TRAIT(owner, TRAIT_STEELHEARTED, "[type]")
 
-/datum/quirk/boon/iron_will/on_remove()
+/datum/quirk/positive/iron_will/on_remove()
 	if(owner)
 		REMOVE_TRAIT(owner, TRAIT_STEELHEARTED, "[type]")
 
-/datum/quirk/boon/composed
+/datum/quirk/positive/composed
 	name = "Composed"
 	desc = "You handle stress better than most. Pressure doesn't get to you as easily."
 	point_value = -3
 
-/datum/quirk/boon/composed/on_life(mob/living/user)
+/datum/quirk/positive/composed/on_life(mob/living/user)
 	if(!ishuman(user))
 		return
 	var/mob/living/carbon/human/H = user
@@ -55,22 +55,22 @@
 		H.adjust_stress(-1)
 
 /* This is a future idea
-/datum/quirk/boon/light_sleeper
+/datum/quirk/positive/light_sleeper
 	name = "Light Sleeper"
 	desc = "You wake easily and need less sleep than most. Years of dangerous living have trained you to be alert even in rest."
 	point_value = -2
 
-/datum/quirk/boon/light_sleeper/on_spawn()
+/datum/quirk/positive/light_sleeper/on_spawn()
 	ADD_TRAIT(owner, TRAIT_LIGHT_SLEEPER, "[type]")
 
-/datum/quirk/boon/light_sleeper/on_remove()
+/datum/quirk/positive/light_sleeper/on_remove()
 	REMOVE_TRAIT(owner, TRAIT_LIGHT_SLEEPER, "[type]")
 */
 
-/datum/quirk/boon/second_language
+/datum/quirk/positive/second_language
 	name = "Second Language"
 	desc = "You know an additional language."
-	quirk_category = QUIRK_BOON
+	quirk_category = QUIRK_POSITIVE
 	point_value = -1
 	customization_label = "Choose Language"
 	customization_options = list(
@@ -83,7 +83,7 @@
 		/datum/language/orcish,
 	)
 
-/datum/quirk/boon/second_language/on_spawn()
+/datum/quirk/positive/second_language/on_spawn()
 	if(!customization_value || !ispath(customization_value, /datum/language))
 		return
 	if(!(customization_value in customization_options))
@@ -93,7 +93,7 @@
 		var/mob/living/carbon/human/H = owner
 		H.grant_language(customization_value)
 
-/datum/quirk/boon/pet
+/datum/quirk/positive/pet
 	name = "Loyal Companion"
 	desc = "You have a loyal animal companion that will follow and protect you."
 	point_value = -3
@@ -111,7 +111,7 @@
 	/// Reference to the spawned pet
 	var/mob/living/simple_animal/pet_mob
 
-/datum/quirk/boon/pet/on_spawn()
+/datum/quirk/positive/pet/on_spawn()
 	if(!get_turf(owner))
 		addtimer(CALLBACK(src, PROC_REF(on_spawn)), 0.5 SECONDS)
 		return
@@ -148,26 +148,26 @@
 			pet_mob.ai_controller?.set_blackboard_key(BB_CURRENT_PET_TARGET, H)
 			follow_command.execute_action(pet_mob.ai_controller)
 
-/datum/quirk/boon/pet/on_remove()
+/datum/quirk/positive/pet/on_remove()
 	// Don't delete the pet when quirk is removed, just release it
 	if(pet_mob && !QDELETED(pet_mob))
 		pet_mob.owner = null
 		pet_mob.tame = FALSE
 		pet_mob = null
 
-/datum/quirk/boon/pet/get_option_name(option)
+/datum/quirk/positive/pet/get_option_name(option)
 	if(ispath(option, /mob/living/simple_animal))
 		var/mob/living/simple_animal/A = option
 		return initial(A.name)
 	return ..()
 
-/datum/quirk/boon/folk_hero
+/datum/quirk/positive/folk_hero
 	name = "Folk Hero"
 	desc = "You're a local legend who saved your community from great danger. People recognize you, even as a foreigner."
 	point_value = -10
 	preview_render = FALSE
 
-/datum/quirk/boon/folk_hero/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/positive/folk_hero/on_examined(mob/user, list/P, list/examine_contents)
 	if(user == owner)
 		return
 	var/mob/living/carbon/source_mob = owner
@@ -187,41 +187,41 @@
 	if(!examiner.mind.do_i_know(source_mob.mind))
 		examiner.mind.share_identities(source_mob.mind)
 
-/datum/quirk/boon/quick_hands
+/datum/quirk/positive/quick_hands
 	name = "Quick Hands"
 	desc = "You have great hand-eye coordination and know how to move your fingers fast. All crafts are 10% faster."
 	point_value = -4
 
-/datum/quirk/boon/quick_hands/on_spawn()
+/datum/quirk/positive/quick_hands/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_QUICK_HANDS, "[type]")
 
-/datum/quirk/boon/quick_hands/on_remove()
+/datum/quirk/positive/quick_hands/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_QUICK_HANDS, "[type]")
 
-/datum/quirk/boon/naturalist
+/datum/quirk/positive/naturalist
 	name = "Naturalist"
 	desc = "Your body is attuned to the natural world. You extract more nourishment from unprocessed, natural foods - fruits, vegetables, and simple preparations sustain you better than they do others."
 	point_value = -8
 
-/datum/quirk/boon/naturalist/on_spawn()
+/datum/quirk/positive/naturalist/on_spawn()
 	ADD_TRAIT(owner, TRAIT_FORAGER, "[type]")
 
-/datum/quirk/boon/naturalist/on_remove()
+/datum/quirk/positive/naturalist/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_FORAGER, "[type]")
 
-/datum/quirk/boon/always_prepared
+/datum/quirk/positive/always_prepared
 	name = "Always Prepared"
 	desc = "You start with a cart, lantern, and tent. You're ready for anything."
 	point_value = -6
 	preview_render = FALSE
 	incompatible_quirks = list(
-		/datum/quirk/vice/rough_start,
+		/datum/quirk/negative/rough_start,
 	)
 	customization_label = "With or Without Cart"
 	customization_options = list(
@@ -232,7 +232,7 @@
 	var/obj/item/flashlight/flare/torch/lantern/L
 	var/obj/item/tent_kit/tent
 
-/datum/quirk/boon/always_prepared/on_spawn()
+/datum/quirk/positive/always_prepared/on_spawn()
 	if(!owner)
 		return
 	if(!customization_value)
@@ -250,7 +250,7 @@
 
 	to_chat(owner, span_notice("Your equipment is ready. You're well prepared for the journey ahead."))
 
-/datum/quirk/boon/always_prepared/after_job_spawn(datum/job/job)
+/datum/quirk/positive/always_prepared/after_job_spawn(datum/job/job)
 	if(customization_value == "Without Cart") // we run this shit back incase jobs changed stuff
 		var/turf/T = get_turf(owner)
 		L = new(T)
@@ -268,24 +268,24 @@
 	L = null
 	tent = null
 
-/datum/quirk/boon/packmule
+/datum/quirk/positive/packmule
 	name = "Packmule"
 	desc = "There's no such thing as having too much storage! You start with a backpack."
 	point_value = -8
 	preview_render = FALSE
 
-/datum/quirk/boon/packmule/after_job_spawn(datum/job/job)
+/datum/quirk/positive/packmule/after_job_spawn(datum/job/job)
 	var/obj/item/storage/backpack/backpack/pack = new(get_turf(owner))
 	if(!owner.equip_to_appropriate_slot(pack))
 		owner.put_in_hands(pack)
 
-/datum/quirk/boon/rider
+/datum/quirk/positive/rider
 	name = "Experienced Rider"
 	desc = "You begin with expert riding skills and your own mount."
 	point_value = -6
 	preview_render = FALSE
 
-/datum/quirk/boon/rider/on_spawn()
+/datum/quirk/positive/rider/on_spawn()
 	if(!owner || !ishuman(owner))
 		return
 
@@ -299,7 +299,7 @@
 
 	to_chat(owner, span_notice("Your trusted mount awaits you."))
 
-/datum/quirk/boon/rider/after_job_spawn(datum/job/job)
+/datum/quirk/positive/rider/after_job_spawn(datum/job/job)
 	. = ..()
 	if(!owner || !ishuman(owner))
 		return
@@ -307,12 +307,12 @@
 	var/mob/living/carbon/human/H = owner
 	H.clamped_adjust_skill_level(/datum/attribute/skill/misc/riding, 20, 20, TRUE)
 
-/datum/quirk/boon/beautiful
+/datum/quirk/positive/beautiful
 	name = "Strikingly Beautiful"
 	desc = "You are remarkably attractive, improving social interactions."
 	point_value = -4
 
-/datum/quirk/boon/beautiful/on_spawn()
+/datum/quirk/positive/beautiful/on_spawn()
 	if(!owner)
 		return
 
@@ -320,55 +320,55 @@
 
 	to_chat(owner, span_notice("You catch your reflection and can't help but admire yourself."))
 
-/datum/quirk/boon/beautiful/on_remove()
+/datum/quirk/positive/beautiful/on_remove()
 	if(!owner)
 		return
 	REMOVE_TRAIT(owner, TRAIT_BEAUTIFUL, "[type]")
 
-/datum/quirk/boon/combat_aware
+/datum/quirk/positive/combat_aware
 	name = "Combat Aware"
 	desc = "I can read the shape of a fight and spot important combat details as they happen - armor wear, penetration, openings."
 	point_value = -3
 
-/datum/quirk/boon/combat_aware/on_spawn()
+/datum/quirk/positive/combat_aware/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_COMBAT_AWARE, "[type]")
 
-/datum/quirk/boon/combat_aware/on_remove()
+/datum/quirk/positive/combat_aware/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_COMBAT_AWARE, "[type]")
 
-/datum/quirk/boon/tempo
+/datum/quirk/positive/tempo
 	name = "Sense of Tempo"
 	desc = "I can keep up with multiple opponents at once. Fighting outnumbered, I find a rhythm - my defenses grow cheaper and faster the more foes press me."
 	point_value = -3
 
-/datum/quirk/boon/tempo/on_spawn()
+/datum/quirk/positive/tempo/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_TEMPO, "[type]")
 
-/datum/quirk/boon/tempo/on_remove()
+/datum/quirk/positive/tempo/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_TEMPO, "[type]")
 
 //prosthetic boons, since those limbs provide more resillience than normal.
 //iron is worst, steel is heavy punching and resillient, bronze is most durable by integrity and close to steel in damage, gold is just stylish and nearly just as bad as iron.
-/datum/quirk/boon/iron_arm_right
+/datum/quirk/positive/iron_arm_right
 	name = "Iron Arm (R)"
 	desc = "I lost my right arm long ago, but the iron arm doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_right,
-		/datum/quirk/boon/steel_arm_right,
-		/datum/quirk/boon/gold_arm_right,
-		/datum/quirk/boon/bronze_arm_right,
+		/datum/quirk/negative/wooden_arm_right,
+		/datum/quirk/positive/steel_arm_right,
+		/datum/quirk/positive/gold_arm_right,
+		/datum/quirk/positive/bronze_arm_right,
 	)
 	point_value = -1
 
-/datum/quirk/boon/iron_arm_right/on_spawn()
+/datum/quirk/positive/iron_arm_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -379,18 +379,18 @@
 	var/obj/item/bodypart/r_arm/prosthetic/iron/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/iron_arm_left
+/datum/quirk/positive/iron_arm_left
 	name = "Iron Arm (L)"
 	desc = "I lost my left arm long ago, but the iron arm doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_left,
-		/datum/quirk/boon/steel_arm_left,
-		/datum/quirk/boon/gold_arm_left,
-		/datum/quirk/boon/bronze_arm_left,
+		/datum/quirk/negative/wooden_arm_left,
+		/datum/quirk/positive/steel_arm_left,
+		/datum/quirk/positive/gold_arm_left,
+		/datum/quirk/positive/bronze_arm_left,
 	)
 	point_value = -1
 
-/datum/quirk/boon/iron_arm_left/on_spawn()
+/datum/quirk/positive/iron_arm_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -401,18 +401,18 @@
 	var/obj/item/bodypart/l_arm/prosthetic/iron/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/steel_arm_right
+/datum/quirk/positive/steel_arm_right
 	name = "Steel Arm (R)"
 	desc = "I lost my right arm long ago, but the steel arm doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_right,
-		/datum/quirk/boon/iron_arm_right,
-		/datum/quirk/boon/gold_arm_right,
-		/datum/quirk/boon/bronze_arm_right,
+		/datum/quirk/negative/wooden_arm_right,
+		/datum/quirk/positive/iron_arm_right,
+		/datum/quirk/positive/gold_arm_right,
+		/datum/quirk/positive/bronze_arm_right,
 	)
 	point_value = -2
 
-/datum/quirk/boon/steel_arm_right/on_spawn()
+/datum/quirk/positive/steel_arm_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -423,18 +423,18 @@
 	var/obj/item/bodypart/r_arm/prosthetic/steel/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/steel_arm_left
+/datum/quirk/positive/steel_arm_left
 	name = "Steel Arm (L)"
 	desc = "I lost my left arm long ago, but the steel arm doesn't bleed as much and work close enough."
 	point_value = -2
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_left,
-		/datum/quirk/boon/iron_arm_left,
-		/datum/quirk/boon/gold_arm_left,
-		/datum/quirk/boon/bronze_arm_left,
+		/datum/quirk/negative/wooden_arm_left,
+		/datum/quirk/positive/iron_arm_left,
+		/datum/quirk/positive/gold_arm_left,
+		/datum/quirk/positive/bronze_arm_left,
 	)
 
-/datum/quirk/boon/steel_arm_left/on_spawn()
+/datum/quirk/positive/steel_arm_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -445,17 +445,17 @@
 	var/obj/item/bodypart/l_arm/prosthetic/steel/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/gold_arm_right
+/datum/quirk/positive/gold_arm_right
 	name = "Gold Arm (R)"
 	desc = "I lost my right arm long ago, but the gold arm doesn't bleed as much and work close enough."
 	point_value = -2
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_right,
-		/datum/quirk/boon/iron_arm_right,
-		/datum/quirk/boon/steel_arm_right,
-		/datum/quirk/boon/bronze_arm_right,
+		/datum/quirk/negative/wooden_arm_right,
+		/datum/quirk/positive/iron_arm_right,
+		/datum/quirk/positive/steel_arm_right,
+		/datum/quirk/positive/bronze_arm_right,
 	)
-/datum/quirk/boon/gold_arm_right/on_spawn()
+/datum/quirk/positive/gold_arm_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -466,18 +466,18 @@
 	var/obj/item/bodypart/r_arm/prosthetic/gold/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/gold_arm_left
+/datum/quirk/positive/gold_arm_left
 	name = "Gold Arm (L)"
 	desc = "I lost my left arm long ago, but the gold arm doesn't bleed as much and work close enough."
 	point_value = -2
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_left,
-		/datum/quirk/boon/iron_arm_left,
-		/datum/quirk/boon/steel_arm_left,
-		/datum/quirk/boon/bronze_arm_left,
+		/datum/quirk/negative/wooden_arm_left,
+		/datum/quirk/positive/iron_arm_left,
+		/datum/quirk/positive/steel_arm_left,
+		/datum/quirk/positive/bronze_arm_left,
 	)
 
-/datum/quirk/boon/gold_arm_left/on_spawn()
+/datum/quirk/positive/gold_arm_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -488,18 +488,18 @@
 	var/obj/item/bodypart/l_arm/prosthetic/gold/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/bronze_arm_right
+/datum/quirk/positive/bronze_arm_right
 	name = "Bronze Arm (R)"
 	desc = "I lost my right arm long ago, but the bronze arm doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_right,
-		/datum/quirk/boon/iron_arm_right,
-		/datum/quirk/boon/steel_arm_right,
-		/datum/quirk/boon/gold_arm_right,
+		/datum/quirk/negative/wooden_arm_right,
+		/datum/quirk/positive/iron_arm_right,
+		/datum/quirk/positive/steel_arm_right,
+		/datum/quirk/positive/gold_arm_right,
 	)
 	point_value = -2
 
-/datum/quirk/boon/bronze_arm_right/on_spawn()
+/datum/quirk/positive/bronze_arm_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -510,18 +510,18 @@
 	var/obj/item/bodypart/r_arm/prosthetic/bronze/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/bronze_arm_left
+/datum/quirk/positive/bronze_arm_left
 	name = "Bronze Arm (L)"
 	desc = "I lost my left arm long ago, but the bronze arm doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_left,
-		/datum/quirk/boon/iron_arm_left,
-		/datum/quirk/boon/steel_arm_left,
-		/datum/quirk/boon/gold_arm_left,
+		/datum/quirk/negative/wooden_arm_left,
+		/datum/quirk/positive/iron_arm_left,
+		/datum/quirk/positive/steel_arm_left,
+		/datum/quirk/positive/gold_arm_left,
 	)
 	point_value = -2
 
-/datum/quirk/boon/bronze_arm_left/on_spawn()
+/datum/quirk/positive/bronze_arm_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -533,20 +533,20 @@
 	L.attach_limb(H)
 
 //legs
-/datum/quirk/boon/iron_leg_right
+/datum/quirk/positive/iron_leg_right
 	name = "Iron Leg (R)"
 	desc = "I lost my right leg long ago, but the iron leg doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_right,
-		/datum/quirk/boon/steel_leg_right,
-		/datum/quirk/boon/gold_leg_right,
+		/datum/quirk/negative/wooden_leg_right,
+		/datum/quirk/positive/steel_leg_right,
+		/datum/quirk/positive/gold_leg_right,
 		/*
-		/datum/quirk/boon/bronze_leg_right,
+		/datum/quirk/positive/bronze_leg_right,
 		*/
 	)
 	point_value = -1
 
-/datum/quirk/boon/iron_leg_right/on_spawn()
+/datum/quirk/positive/iron_leg_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -557,20 +557,20 @@
 	var/obj/item/bodypart/r_leg/prosthetic/iron/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/iron_leg_left
+/datum/quirk/positive/iron_leg_left
 	name = "Iron Leg (L)"
 	desc = "I lost my left leg long ago, but the iron leg doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_left,
-		/datum/quirk/boon/steel_leg_left,
-		/datum/quirk/boon/gold_leg_left,
+		/datum/quirk/negative/wooden_leg_left,
+		/datum/quirk/positive/steel_leg_left,
+		/datum/quirk/positive/gold_leg_left,
 		/*
-		/datum/quirk/boon/bronze_leg_left,
+		/datum/quirk/positive/bronze_leg_left,
 		*/
 	)
 	point_value = -1
 
-/datum/quirk/boon/iron_leg_left/on_spawn()
+/datum/quirk/positive/iron_leg_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -581,20 +581,20 @@
 	var/obj/item/bodypart/l_leg/prosthetic/iron/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/steel_leg_right
+/datum/quirk/positive/steel_leg_right
 	name = "Steel Leg (R)"
 	desc = "I lost my right leg long ago, but the steel leg doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_right,
-		/datum/quirk/boon/iron_leg_right,
-		/datum/quirk/boon/gold_leg_right,
+		/datum/quirk/negative/wooden_leg_right,
+		/datum/quirk/positive/iron_leg_right,
+		/datum/quirk/positive/gold_leg_right,
 		/*
-		/datum/quirk/boon/bronze_leg_right,
+		/datum/quirk/positive/bronze_leg_right,
 		*/
 	)
 	point_value = -2
 
-/datum/quirk/boon/steel_leg_right/on_spawn()
+/datum/quirk/positive/steel_leg_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -605,20 +605,20 @@
 	var/obj/item/bodypart/r_leg/prosthetic/steel/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/steel_leg_left
+/datum/quirk/positive/steel_leg_left
 	name = "Steel Leg (L)"
 	desc = "I lost my left leg long ago, but the steel leg doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_left,
-		/datum/quirk/boon/iron_leg_left,
-		/datum/quirk/boon/gold_leg_left,
+		/datum/quirk/negative/wooden_leg_left,
+		/datum/quirk/positive/iron_leg_left,
+		/datum/quirk/positive/gold_leg_left,
 		/*
-		/datum/quirk/boon/bronze_leg_left,
+		/datum/quirk/positive/bronze_leg_left,
 		*/
 	)
 	point_value = -2
 
-/datum/quirk/boon/steel_leg_left/on_spawn()
+/datum/quirk/positive/steel_leg_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -629,20 +629,20 @@
 	var/obj/item/bodypart/l_leg/prosthetic/steel/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/gold_leg_right
+/datum/quirk/positive/gold_leg_right
 	name = "Gold Leg (R)"
 	desc = "I lost my right leg long ago, but the gold leg doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_right,
-		/datum/quirk/boon/iron_leg_right,
-		/datum/quirk/boon/steel_leg_right,
+		/datum/quirk/negative/wooden_leg_right,
+		/datum/quirk/positive/iron_leg_right,
+		/datum/quirk/positive/steel_leg_right,
 		/*
-		/datum/quirk/boon/bronze_leg_right,
+		/datum/quirk/positive/bronze_leg_right,
 		*/
 	)
 	point_value = -2
 
-/datum/quirk/boon/gold_leg_right/on_spawn()
+/datum/quirk/positive/gold_leg_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -653,20 +653,20 @@
 	var/obj/item/bodypart/r_leg/prosthetic/gold/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/gold_leg_left
+/datum/quirk/positive/gold_leg_left
 	name = "Gold Leg (L)"
 	desc = "I lost my left leg long ago, but the gold leg doesn't bleed as much and work close enough."
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_left,
-		/datum/quirk/boon/iron_leg_left,
-		/datum/quirk/boon/steel_leg_left,
+		/datum/quirk/negative/wooden_leg_left,
+		/datum/quirk/positive/iron_leg_left,
+		/datum/quirk/positive/steel_leg_left,
 		/*
-		/datum/quirk/boon/bronze_leg_left,
+		/datum/quirk/positive/bronze_leg_left,
 		*/
 	)
 	point_value = -2
 
-/datum/quirk/boon/gold_leg_left/on_spawn()
+/datum/quirk/positive/gold_leg_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -678,12 +678,12 @@
 	L.attach_limb(H)
 
 /* those dont exist for some reason
-/datum/quirk/boon/bronze_leg_right
+/datum/quirk/positive/bronze_leg_right
 	name = "Bronze Leg (R)"
 	desc = "I lost my right leg long ago, but the bronze leg doesn't bleed as much and work close enough."
 	point_value = -2
 
-/datum/quirk/boon/bronze_leg_right/on_spawn()
+/datum/quirk/positive/bronze_leg_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -694,12 +694,12 @@
 	var/obj/item/bodypart/r_leg/prosthetic/bronze/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/boon/bronze_leg_left
+/datum/quirk/positive/bronze_leg_left
 	name = "Bronze Leg (L)"
 	desc = "I lost my left leg long ago, but the bronze leg doesn't bleed as much and work close enough."
 	point_value = -2
 
-/datum/quirk/boon/bronze_leg_left/on_spawn()
+/datum/quirk/positive/bronze_leg_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner

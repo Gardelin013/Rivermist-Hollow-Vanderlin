@@ -3,18 +3,18 @@
 /// A crafted export must not turn a quirk option into an arbitrary path: the pet quirk spawns it.
 /datum/unit_test/character_creator_import_quirk_value/Run()
 	var/datum/preferences/prefs = allocate(/datum/preferences)
-	var/datum/quirk/pet = GLOB.quirk_singletons[/datum/quirk/boon/pet]
+	var/datum/quirk/pet = GLOB.quirk_singletons[/datum/quirk/positive/pet]
 	TEST_ASSERT_NOTNULL(pet, "The pet quirk singleton should exist")
 	TEST_ASSERT(length(pet.customization_options), "The pet quirk should offer at least one pet")
 	var/offered = pet.customization_options[1]
 
-	TEST_ASSERT_EQUAL(prefs.character_creator_quirk_value(/datum/quirk/boon/pet, "[offered]"), offered, "An offered pet should be kept")
-	TEST_ASSERT_NULL(prefs.character_creator_quirk_value(/datum/quirk/boon/pet, "/mob/living/simple_animal/hostile"), "A mob type the quirk does not offer must be dropped")
-	TEST_ASSERT_NULL(prefs.character_creator_quirk_value(/datum/quirk/boon/pet, "/obj/item"), "A non-mob path must be dropped")
-	TEST_ASSERT_NULL(prefs.character_creator_quirk_value(/datum/quirk/boon/pet, 5), "A number must be dropped for a select quirk")
+	TEST_ASSERT_EQUAL(prefs.character_creator_quirk_value(/datum/quirk/positive/pet, "[offered]"), offered, "An offered pet should be kept")
+	TEST_ASSERT_NULL(prefs.character_creator_quirk_value(/datum/quirk/positive/pet, "/mob/living/simple_animal/hostile"), "A mob type the quirk does not offer must be dropped")
+	TEST_ASSERT_NULL(prefs.character_creator_quirk_value(/datum/quirk/positive/pet, "/obj/item"), "A non-mob path must be dropped")
+	TEST_ASSERT_NULL(prefs.character_creator_quirk_value(/datum/quirk/positive/pet, 5), "A number must be dropped for a select quirk")
 
-	prefs.character_creator_import_quirks(list(list("type" = "[/datum/quirk/boon/pet]", "value" = "/mob/living/simple_animal/hostile")))
-	TEST_ASSERT(prefs.quirk_customizations[/datum/quirk/boon/pet] != /mob/living/simple_animal/hostile, "The importer must never store an unoffered pet path")
+	prefs.character_creator_import_quirks(list(list("type" = "[/datum/quirk/positive/pet]", "value" = "/mob/living/simple_animal/hostile")))
+	TEST_ASSERT(prefs.quirk_customizations[/datum/quirk/positive/pet] != /mob/living/simple_animal/hostile, "The importer must never store an unoffered pet path")
 
 /// The customizer importer may only write the fields the editor itself changes.
 /datum/unit_test/character_creator_import_customizer_fields/Run()

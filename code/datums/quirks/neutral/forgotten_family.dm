@@ -1,4 +1,4 @@
-/datum/quirk/peculiarity/forgotten_family
+/datum/quirk/neutral/forgotten_family
 	name = "Forgotten Family"
 	desc = "Some faces stir half-forgotten family memories. I can mutually remember a nearby person with this peculiarity as close family."
 	desc_hint = "Both players must consent. Established characters in different houses cannot join their family trees this way."
@@ -7,14 +7,14 @@
 	var/datum/action/remember_family/family_action
 	var/remember_request_pending = FALSE
 
-/datum/quirk/peculiarity/forgotten_family/on_spawn()
+/datum/quirk/neutral/forgotten_family/on_spawn()
 	. = ..()
 	if(!ishuman(owner))
 		return
 	family_action = new(src)
 	family_action.Grant(owner)
 
-/datum/quirk/peculiarity/forgotten_family/on_remove()
+/datum/quirk/neutral/forgotten_family/on_remove()
 	remember_request_pending = FALSE
 	QDEL_NULL(family_action)
 	return ..()
@@ -30,7 +30,7 @@
 	if(!..())
 		return FALSE
 
-	var/datum/quirk/peculiarity/forgotten_family/source_quirk = target
+	var/datum/quirk/neutral/forgotten_family/source_quirk = target
 	var/mob/living/carbon/human/rememberer = owner
 	if(!istype(source_quirk) || !istype(rememberer) || source_quirk.remember_request_pending)
 		return FALSE
@@ -96,7 +96,7 @@
 		ClearPending(source_quirk)
 		return TRUE
 
-	var/datum/quirk/peculiarity/forgotten_family/relative_quirk = relative.get_quirk(/datum/quirk/peculiarity/forgotten_family)
+	var/datum/quirk/neutral/forgotten_family/relative_quirk = relative.get_quirk(/datum/quirk/neutral/forgotten_family)
 	if(!relative_quirk || relative_quirk.remember_request_pending)
 		to_chat(rememberer, span_warning("[relative.real_name] is already occupied by another memory."))
 		ClearPending(source_quirk)
@@ -133,7 +133,7 @@
 	log_game("[key_name(rememberer)] and [key_name(relative)] mutually established a [relation_type] family memory.")
 	return TRUE
 
-/datum/action/remember_family/proc/CanOfferMemory(mob/living/carbon/human/rememberer, mob/living/carbon/human/relative, datum/quirk/peculiarity/forgotten_family/source_quirk, ignore_pending = FALSE)
+/datum/action/remember_family/proc/CanOfferMemory(mob/living/carbon/human/rememberer, mob/living/carbon/human/relative, datum/quirk/neutral/forgotten_family/source_quirk, ignore_pending = FALSE)
 	if(QDELETED(rememberer) || QDELETED(relative) || QDELETED(source_quirk))
 		return FALSE
 	if(owner != rememberer || target != source_quirk || source_quirk.owner != rememberer)
@@ -144,12 +144,12 @@
 		return FALSE
 	if(rememberer.z != relative.z || get_dist(rememberer, relative) > 2)
 		return FALSE
-	var/datum/quirk/peculiarity/forgotten_family/relative_quirk = relative.get_quirk(/datum/quirk/peculiarity/forgotten_family)
+	var/datum/quirk/neutral/forgotten_family/relative_quirk = relative.get_quirk(/datum/quirk/neutral/forgotten_family)
 	if(!relative_quirk || (!ignore_pending && relative_quirk.remember_request_pending))
 		return FALSE
 	return TRUE
 
-/datum/action/remember_family/proc/ClearPending(datum/quirk/peculiarity/forgotten_family/source_quirk, datum/quirk/peculiarity/forgotten_family/relative_quirk)
+/datum/action/remember_family/proc/ClearPending(datum/quirk/neutral/forgotten_family/source_quirk, datum/quirk/neutral/forgotten_family/relative_quirk)
 	if(!QDELETED(source_quirk))
 		source_quirk.remember_request_pending = FALSE
 	if(!QDELETED(relative_quirk))
