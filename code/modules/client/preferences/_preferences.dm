@@ -2520,6 +2520,7 @@ GLOBAL_LIST_INIT(name_adjustments, list())
 		"i.lensdump.com",
 		"images2.imgbox.com",
 		"thumbs2.imgbox.com",
+		"thumbs4.imgbox.com",
 		"files.catbox.moe",
 		"i.postimg.cc",
 		"iili.io",
