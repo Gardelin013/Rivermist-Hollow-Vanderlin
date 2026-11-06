@@ -490,7 +490,6 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_IWASREVIVED "iwasrevived" //prevents PQ gain from reviving the same person twice
 #define TRAIT_IWASUNZOMBIFIED "iwasunzombified" //prevents PQ gain from curing a zombie twice
 #define TRAIT_ZIZOID_HUNTED "zizoidhunted" // Used to signal character has been marked by death by the Zizoid cult
-#define TRAIT_LEPROSY "Leprosy"
 #define TRAIT_NUDE_SLEEPER "Nude Sleeper"
 #define TRAIT_BEAUTIFUL "Beautiful"
 #define TRAIT_UGLY "Ugly"

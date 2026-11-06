@@ -357,9 +357,6 @@
 	// Maniac, higher up than others
 	if(HAS_TRAIT(src, TRAIT_MANIAC_AWOKEN))
 		LAZYADDASSOCLIST(examine_list, EXAMINE_SECT_FACE, span_big(span_phobia("THE WORLD TWISTS! MANIAC!")))
-	// Leper
-	if(HAS_TRAIT(src, TRAIT_LEPROSY))
-		. += span_necrosis("A LEPER...")
 	// Fat
 	if(HAS_TRAIT(src, TRAIT_FAT))
 		. += span_boldnotice("[P[THEYRE]] obese!")

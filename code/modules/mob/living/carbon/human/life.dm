@@ -59,25 +59,6 @@
 			remove_status_effect(/datum/status_effect/debuff/sleepytime)
 			if(has_status_effect(/datum/status_effect/debuff/dreamytime))
 				finish_night_rest()
-	if(!HAS_TRAIT(src, TRAIT_STASIS))
-		if(HAS_TRAIT(src, TRAIT_LEPROSY))
-			if(MOBTIMER_FINISHED(src, MT_LEPERBLEED, 12 MINUTES))
-				if(prob(5))
-					to_chat(src, span_warning("My skin opens up and bleeds..."))
-					MOBTIMER_SET(src, MT_LEPERBLEED)
-					var/obj/item/bodypart/part = pick(bodyparts)
-					if(part)
-						part.create_injury(WOUND_SLASH, 5, TRUE)
-					adjustToxLoss(10)
-		update_stamina()
-		update_energy()
-		handle_environment()
-		handle_hygiene()
-		handle_comfy()
-		handle_body_hair_growth()
-		if(dna?.species)
-			dna.species.spec_life(src) // for mutantraces
-
 	//heart attack stuff
 	handle_curses()
 

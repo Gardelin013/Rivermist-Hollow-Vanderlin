@@ -160,39 +160,6 @@
 	var/obj/item/bodypart/l_leg/prosthetic/wood/L = new()
 	L.attach_limb(H)
 
-
-/datum/quirk/negative/leprosy
-	name = "Leprosy"
-	desc = "Become a leper. You will be hated, you will be shunned, you will bleed and you will be weak."
-	point_value = 8
-
-/datum/quirk/negative/leprosy/on_spawn()
-	if(!ishuman(owner))
-		return
-
-	var/mob/living/carbon/human/H = owner
-
-	ADD_TRAIT(H, TRAIT_LEPROSY, QUIRK_TRAIT)
-	ADD_TRAIT(H, TRAIT_NOPAIN, QUIRK_TRAIT)
-
-	// Equip iron mask - remove existing mask if present
-	if(H.wear_mask)
-		var/type = H.wear_mask.type
-		QDEL_NULL(H.wear_mask)
-		H.put_in_hands(new type(get_turf(H)))
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/face/facemask(H), ITEM_SLOT_MASK)
-
-/datum/quirk/negative/leprosy/on_remove()
-	if(!ishuman(owner))
-		return
-
-	var/mob/living/carbon/human/H = owner
-
-	// Remove traits when quirk is removed
-	REMOVE_TRAIT(H, TRAIT_LEPROSY, QUIRK_TRAIT)
-	REMOVE_TRAIT(H, TRAIT_NOPAIN, QUIRK_TRAIT)
-
 /datum/quirk/negative/crippled_arm
 	name = "Missing Arm"
 	desc = "You're missing an arm. It was lost in an accident or battle, and the stump is too damaged for anything but prosthetics."
