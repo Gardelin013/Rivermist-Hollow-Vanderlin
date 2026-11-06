@@ -450,13 +450,6 @@
 
 /// General miscellaneous stuff that's typically good to know about someone.
 /mob/living/carbon/proc/get_examine_warnings(mob/user, list/P, list/examine_list)
-	//var/self_inspect = user == src
-	//var/pl = self_inspect ? "" : p_s()
-	//var/mob/dead/observer/O = isobserver(user) ? user : null
-	var/mob/living/L = isliving(user) ? user : null
-	//var/mob/living/carbon/C = iscarbon(user) ? user : null
-	//var/mob/living/carbon/human/H = ishuman(user) ? user : null
-
 	. = list()
 
 	//Cuffs
@@ -476,9 +469,6 @@
 	var/fire_str
 	if(on_fire)
 		fire_str = span_boldwarning("on fire!")
-		if(L?.has_quirk(/datum/quirk/negative/addiction/pyromaniac)) // living only
-			fire_str += span_boldred(" IT'S BEAUTIFUL!")
-			L.sate_addiction(/datum/quirk/negative/addiction/pyromaniac)
 	else if(fire_stacks + divine_fire_stacks > 0)
 		fire_str += "covered in something flammable."
 	else if(fire_stacks < 0 && !on_fire)

@@ -107,18 +107,6 @@
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Narco..."))
 
-/datum/quirk/negative/addiction/pyromaniac
-	name = "Fire Servant"
-	desc = "The warmth and just seeing something turn to ash is so much fun!"
-	point_value = 3
-	time = 10 MINUTES
-	debuff = /datum/status_effect/debuff/addiction/pyromaniac
-	needsate_text = "I need to see something turn to ash, or be on fire. Anything!"
-
-/datum/quirk/negative/addiction/pyromaniac/on_examined(mob/user, list/P, list/examine_contents)
-	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
-		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Pyro!"))
-
 /datum/quirk/negative/addiction/kleptomaniac
 	name = "Thief-Borne"
 	desc = "As a child I had to rely on theft to survive. Whether that changed or not, I just can't get over it."
@@ -180,10 +168,6 @@
 	parent_type = /datum/quirk/negative/addiction/junkie
 	abstract_type = /datum/quirk/negative/junkie
 
-/datum/quirk/negative/pyromaniac
-	parent_type = /datum/quirk/negative/addiction/pyromaniac
-	abstract_type = /datum/quirk/negative/pyromaniac
-
 /datum/quirk/negative/kleptomaniac
 	parent_type = /datum/quirk/negative/addiction/kleptomaniac
 	abstract_type = /datum/quirk/negative/kleptomaniac
@@ -191,10 +175,6 @@
 /datum/quirk/negative/godfearing
 	parent_type = /datum/quirk/negative/addiction/godfearing
 	abstract_type = /datum/quirk/negative/godfearing
-
-/datum/quirk/negative/maniac
-	parent_type = /datum/quirk/negative/addiction/sadist
-	abstract_type = /datum/quirk/negative/maniac
 
 /datum/quirk/negative/sadist
 	parent_type = /datum/quirk/negative/addiction/sadist

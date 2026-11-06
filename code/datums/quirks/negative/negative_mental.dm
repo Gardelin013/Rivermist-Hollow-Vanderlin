@@ -26,10 +26,6 @@
 	id = "addiction_junkie"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/junkie
 
-/datum/status_effect/debuff/addiction/pyromaniac
-	id = "addiction_pyromaniac"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/pyromaniac
-
 /datum/status_effect/debuff/addiction/kleptomaniac
 	id = "addiction_kleptomaniac"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/kleptomaniac
@@ -66,10 +62,6 @@
 /atom/movable/screen/alert/status_effect/debuff/addiction/junkie
 	name = "Drug Craving"
 	desc = "I need a high."
-
-/atom/movable/screen/alert/status_effect/debuff/addiction/pyromaniac
-	name = "Pyromania Craving"
-	desc = "I need to see something burn."
 
 /atom/movable/screen/alert/status_effect/debuff/addiction/kleptomaniac
 	name = "Theft Craving"
