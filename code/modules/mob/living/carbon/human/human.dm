@@ -940,9 +940,20 @@
 	return (istype(target) && target.stat == CONSCIOUS)
 
 /mob/living/carbon/human/proc/can_be_firemanned(mob/living/target)
-	return !QDELETED(target) && ((ishuman(target) && target.body_position == LYING_DOWN) || (isanimal(target) && (target.living_flags & CAN_BE_FIREMANNED)))
+	if(QDELETED(target))
+		return FALSE
+	if(ishuman(target))
+		return target.body_position == LYING_DOWN
+	if(!isanimal(target))
+		return FALSE
+	// Any spent creature can be hauled off, not only the small ones flagged for it.
+	return (target.living_flags & CAN_BE_FIREMANNED) || target.has_status_effect(/datum/status_effect/mob_horny_knockout)
 
 /mob/living/carbon/human/proc/fireman_carry(mob/living/target)
+	if(!can_be_firemanned(target) || incapacitated(IGNORE_GRAB) || pulling != target || !Adjacent(target))
+		return FALSE
+	if(!target.confirm_mob_horny_ko_lift(src))
+		return FALSE
 	if(!can_be_firemanned(target) || incapacitated(IGNORE_GRAB) || pulling != target || !Adjacent(target))
 		return FALSE
 	var/fitness_level = GET_MOB_SKILL_VALUE_OLD(src, /datum/attribute/skill/misc/athletics) - 1
@@ -954,7 +965,9 @@
 		return FALSE
 	if(incapacitated(IGNORE_GRAB) || pulling != target || !Adjacent(target))
 		return FALSE
-	return buckle_mob(target, force = TRUE, check_loc = FALSE, buckle_mob_flags = CARRIER_NEEDS_ARM)
+	. = buckle_mob(target, force = TRUE, check_loc = FALSE, buckle_mob_flags = CARRIER_NEEDS_ARM)
+	if(.)
+		target.roll_mob_horny_ko_lash_out(src)
 
 /mob/living/carbon/human/proc/piggyback(mob/living/carbon/target)
 	if(!can_piggyback(target) || pulling != target || cmode || !Adjacent(target))

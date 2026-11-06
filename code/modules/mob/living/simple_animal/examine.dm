@@ -75,6 +75,8 @@
 
 	if(stat >= UNCONSCIOUS)
 		msg += "[m1] unconscious."
+	else if(has_status_effect(/datum/status_effect/mob_horny_knockout))
+		msg += "[m1] spent and senseless."
 
 	if(length(msg))
 		. += "<span class='warning'>[msg.Join("\n")]</span>"

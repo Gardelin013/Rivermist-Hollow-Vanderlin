@@ -195,7 +195,11 @@
 	ADD_TRAIT(owner, TRAIT_FLOORED, TRAIT_STATUS_EFFECT(id))
 	ADD_TRAIT(owner, TRAIT_HANDS_BLOCKED, TRAIT_STATUS_EFFECT(id))
 	ADD_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
+	// A bare status change is undone by the next z-level or pause update; the trait holds it off.
+	ADD_TRAIT(owner, TRAIT_AI_PAUSED, TRAIT_STATUS_EFFECT(id))
 	owner.ai_controller?.set_ai_status(AI_STATUS_OFF)
+	owner.drop_all_grabs()
+	LAZYNULL(owner.docile_restraints)
 	SEND_SIGNAL(owner, COMSIG_LIVING_DEFEATED)
 	owner.visible_message(span_userdanger("[owner] sinks down, overwhelmed and spent!"))
 	cleanup_timer = addtimer(CALLBACK(src, PROC_REF(mob_horny_ko_cleanup_check)), DEFEAT_MOB_HORNY_KO_DURATION, TIMER_STOPPABLE)
@@ -217,10 +221,13 @@
 	if(!owner || QDELETED(owner))
 		return
 	owner.reset_horny_defeat_progress()
+	// Bonds put on while spent are accepted; the mob wakes without fighting them.
+	owner.remember_docile_restraints()
 	REMOVE_TRAIT(owner, TRAIT_IMMOBILIZED, TRAIT_STATUS_EFFECT(id))
 	REMOVE_TRAIT(owner, TRAIT_FLOORED, TRAIT_STATUS_EFFECT(id))
 	REMOVE_TRAIT(owner, TRAIT_HANDS_BLOCKED, TRAIT_STATUS_EFFECT(id))
 	REMOVE_TRAIT(owner, TRAIT_PACIFISM, TRAIT_STATUS_EFFECT(id))
+	REMOVE_TRAIT(owner, TRAIT_AI_PAUSED, TRAIT_STATUS_EFFECT(id))
 	owner.ai_controller?.set_ai_status(owner.ai_controller.get_expected_ai_status())
 	return ..()
 

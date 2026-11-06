@@ -538,6 +538,8 @@
 
 	if(has_status_effect(/datum/status_effect/defeat_knockout))
 		. += span_boldwarning("[P[THEYRE]] defeated and unable to rise.")
+	else if(has_status_effect(/datum/status_effect/mob_horny_knockout))
+		. += span_boldwarning("[P[THEYRE]] spent and senseless. A gentle hand could bring [P[THEM]] round.")
 
 	// Health statuses
 	if(stat == DEAD || (HAS_TRAIT(src, TRAIT_FAKEDEATH)))

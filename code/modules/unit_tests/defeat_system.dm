@@ -2155,6 +2155,75 @@
 
 	TEST_ASSERT(!beast.enter_mob_horny_defeat(aggressor), "A mob already in horny KO should not re-enter it.")
 
+/datum/unit_test/mob_horny_ko_pauses_ai_and_frees_hold
+
+/datum/unit_test/mob_horny_ko_pauses_ai_and_frees_hold/Run()
+	var/mob/living/simple_animal/hostile/beast = allocate(/mob/living/simple_animal/hostile)
+	var/mob/living/carbon/human/prey = allocate(/mob/living/carbon/human)
+	beast.mob_horny_defeat_enabled = TRUE
+	beast.start_handless_pull(prey, GRAB_PASSIVE, MOVE_FORCE_OVERPOWERING, suppress_message = TRUE)
+	TEST_ASSERT_EQUAL(beast.pulling, prey, "Setup: the beast should be holding its prey.")
+
+	beast.apply_status_effect(/datum/status_effect/mob_horny_knockout)
+	TEST_ASSERT(HAS_TRAIT(beast, TRAIT_AI_PAUSED), "The mob KO must pause the AI through the trait, not a bare status change.")
+	TEST_ASSERT_NULL(beast.pulling, "A spent mob must let go of what it holds.")
+
+	beast.remove_status_effect(/datum/status_effect/mob_horny_knockout)
+	TEST_ASSERT(!HAS_TRAIT(beast, TRAIT_AI_PAUSED), "Waking must lift the AI pause.")
+
+/datum/unit_test/mob_horny_ko_help_up_and_carry
+
+/datum/unit_test/mob_horny_ko_help_up_and_carry/Run()
+	var/mob/living/simple_animal/hostile/beast = allocate(/mob/living/simple_animal/hostile)
+	var/mob/living/carbon/human/helper = allocate(/mob/living/carbon/human)
+	beast.mob_horny_defeat_enabled = TRUE
+	beast.living_flags &= ~CAN_BE_FIREMANNED
+
+	TEST_ASSERT(!helper.can_be_firemanned(beast), "An awake creature without the carry flag must not be liftable.")
+	TEST_ASSERT(!beast.try_mob_horny_ko_help_up(helper), "Help-up must not use the click on an awake mob.")
+
+	beast.apply_status_effect(/datum/status_effect/mob_horny_knockout)
+	TEST_ASSERT(helper.can_be_firemanned(beast), "Any spent creature must be liftable.")
+	TEST_ASSERT(beast.confirm_mob_horny_ko_lift(helper), "A clientless lifter gets no popup and may lift.")
+
+	TEST_ASSERT(beast.try_mob_horny_ko_help_up(helper), "Help-up must use the click on a spent mob.")
+	TEST_ASSERT_NULL(beast.has_status_effect(/datum/status_effect/mob_horny_knockout), "A finished help-up must end the mob KO.")
+
+/datum/unit_test/mob_horny_ko_bonds_stay_docile
+
+/datum/unit_test/mob_horny_ko_bonds_stay_docile/Run()
+	var/mob/living/carbon/human/species/goblin/npc/goblin = allocate(/mob/living/carbon/human/species/goblin/npc)
+	var/obj/item/rope/arm_rope = allocate(/obj/item/rope)
+	var/obj/item/rope/leg_rope = allocate(/obj/item/rope)
+	var/mob/living/carbon/human/carrier = allocate(/mob/living/carbon/human)
+	goblin.mob_horny_defeat_enabled = TRUE
+
+	goblin.apply_status_effect(/datum/status_effect/mob_horny_knockout)
+	arm_rope.apply_cuffs(goblin, null)
+	TEST_ASSERT_EQUAL(goblin.handcuffed, arm_rope, "Setup: the goblin should be tied while spent.")
+	TEST_ASSERT(!goblin.roll_mob_horny_ko_lash_out(carrier), "A mob with tied arms must never lash out when lifted.")
+
+	goblin.remove_status_effect(/datum/status_effect/mob_horny_knockout)
+	TEST_ASSERT(goblin.restraints_all_docile(), "Bonds put on while spent must be accepted on waking.")
+	goblin.cuff_resist(arm_rope, instant = TRUE)
+	TEST_ASSERT_EQUAL(goblin.handcuffed, arm_rope, "A docile mob must not break the bonds it woke up in.")
+
+	leg_rope.apply_cuffs(goblin, null, leg = TRUE)
+	TEST_ASSERT(!goblin.restraints_all_docile(), "Fresh bonds put on an awake mob are fought as usual.")
+
+/datum/unit_test/defeat_keyless_npc_mind_not_eligible
+
+/datum/unit_test/defeat_keyless_npc_mind_not_eligible/Run()
+	var/mob/living/carbon/human/npc = allocate(/mob/living/carbon/human)
+	npc.mind = allocate(/datum/mind)
+	npc.mind.current = npc
+	TEST_ASSERT(!npc.defeat_system_is_eligible(), "An NPC with a keyless mind must not get the regular defeat KO.")
+
+	npc.mind.key = "defeat-keyless-npc-player"
+	TEST_ASSERT(npc.defeat_system_is_eligible(), "A keyed mind is a player and keeps the regular defeat KO.")
+	npc.mind.current = null
+	npc.mind = null
+
 /datum/unit_test/mob_horny_defeat_ko_after_threshold
 
 /datum/unit_test/mob_horny_defeat_ko_after_threshold/Run()
