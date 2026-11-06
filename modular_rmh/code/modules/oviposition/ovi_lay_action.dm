@@ -239,18 +239,21 @@
 	show_lay_lines(user, target, "withdraw", 0)
 
 /datum/sex_action/sex/lay_eggs/vaginal
+	name = "Lay in pussy"
 	hole_id = ORGAN_SLOT_VAGINA
 
 /datum/sex_action/sex/lay_eggs/vaginal/target_has_hole(mob/living/target)
 	return !!target.getorganslot(ORGAN_SLOT_VAGINA)
 
 /datum/sex_action/sex/lay_eggs/anal
+	name = "Lay in ass"
 	hole_id = ORGAN_SLOT_ANUS
 
 /datum/sex_action/sex/lay_eggs/anal/target_has_hole(mob/living/target)
 	return !!target.getorganslot(ORGAN_SLOT_ANUS)
 
 /datum/sex_action/sex/lay_eggs/throat
+	name = "Lay in throat"
 	hole_id = BODY_ZONE_PRECISE_MOUTH
 	target_menu_zone_mask = SEX_UI_ZONE_MOUTH
 	gags_target = TRUE
@@ -271,7 +274,7 @@
 // ---- On the floor ----
 
 /datum/sex_action/lay_eggs_floor
-	name = "Lay eggs"
+	name = "Lay on ground"
 	description = "Squat and lay your clutch on the ground, one egg at a time."
 	user_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS
@@ -313,7 +316,7 @@
 // ---- Bearing down on a ripe womb egg ----
 
 /datum/sex_action/lay_womb_eggs
-	name = "Lay eggs"
+	name = "Birth egg"
 	description = "Bear down and bring a ripe egg out of your womb."
 	user_menu_zone_mask = SEX_UI_ZONE_GENITALS
 	target_menu_zone_mask = SEX_UI_ZONE_GENITALS

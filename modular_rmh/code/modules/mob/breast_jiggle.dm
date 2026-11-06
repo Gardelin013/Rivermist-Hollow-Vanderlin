@@ -73,7 +73,7 @@
 
 /mob/living/carbon/human/verb/emote_bjiggle()
 	set name = "Jiggle"
-	set category = "Emotes"
+	set category = "Emotes.Slent"
 
 	var/datum/component/breast_animation/animation = GetComponent(/datum/component/breast_animation)
 	if(animation?.jiggling)

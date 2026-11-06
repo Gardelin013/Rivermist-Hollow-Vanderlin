@@ -637,6 +637,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	// Descriptor entries
 	WRITE_FILE(S["descriptor_entries"], descriptor_entries)
 	WRITE_FILE(S["custom_descriptors"], custom_descriptors)
+	WRITE_FILE(S["job_preferences"], job_preferences)
 	WRITE_FILE(S["alt_job_selections"], alt_job_selections)
 
 	save_quirks(S)

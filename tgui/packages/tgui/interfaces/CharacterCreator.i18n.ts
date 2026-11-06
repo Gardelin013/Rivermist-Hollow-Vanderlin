@@ -89,14 +89,6 @@ const en = {
   setNsfwHeadshot: 'Set NSFW headshot URL',
   playerRecord: 'Player record',
   roundReady: 'ready',
-  roundStates: {
-    countdown: 'Starts in',
-    started: 'Round started',
-    setup: 'Setting up',
-    delayed: 'Delayed',
-    soon: 'Starting soon',
-    unknown: '',
-  },
   searchPlaceholder: 'Search the editor...',
   // Doll and card
   randomAppearance: 'Random appearance',
@@ -623,14 +615,6 @@ const ru: CharacterCreatorStrings = {
   setNsfwHeadshot: 'Указать ссылку на NSFW-портрет',
   playerRecord: 'Досье игрока',
   roundReady: 'готовы',
-  roundStates: {
-    countdown: 'Старт через',
-    started: 'Раунд начался',
-    setup: 'Подготовка',
-    delayed: 'Отложен',
-    soon: 'Скоро старт',
-    unknown: '',
-  },
   searchPlaceholder: 'Поиск по редактору...',
   randomAppearance: 'Случайная внешность',
   randomWarning:

@@ -954,26 +954,13 @@ GLOBAL_VAR_INIT(character_setup_debug, FALSE)
 	var/mob/dead/new_player/new_player
 	if(istype(user, /mob/dead/new_player))
 		new_player = user
-	if(new_player && SSticker)
-		if(SSticker.IsRoundInProgress())
-			data["round_start_state"] = "started"
-		else if(SSticker.current_state == GAME_STATE_SETTING_UP)
-			data["round_start_state"] = "setup"
-		else if(SSticker.current_state <= GAME_STATE_PREGAME)
-			var/time_remaining = SSticker.GetTimeLeft()
-			if(time_remaining > 0)
-				data["round_start_state"] = "countdown"
-				data["round_start_seconds"] = max(0, round(time_remaining / 10))
-			else if(time_remaining == -10)
-				data["round_start_state"] = "delayed"
-			else
-				data["round_start_state"] = "soon"
-			var/ready_count = 0
-			for(var/mob/dead/new_player/lobby_player as anything in GLOB.new_player_list)
-				if(lobby_player.ready == PLAYER_READY_TO_PLAY)
-					ready_count++
-			data["round_ready_players"] = ready_count
-			data["round_total_players"] = length(GLOB.new_player_list)
+	if(new_player && SSticker && SSticker.current_state <= GAME_STATE_PREGAME)
+		var/ready_count = 0
+		for(var/mob/dead/new_player/lobby_player as anything in GLOB.new_player_list)
+			if(lobby_player.ready == PLAYER_READY_TO_PLAY)
+				ready_count++
+		data["round_ready_players"] = ready_count
+		data["round_total_players"] = length(GLOB.new_player_list)
 	data["round_action_label"] = "Unavailable"
 	data["round_action_icon"] = "ban"
 	data["round_action_color"] = null

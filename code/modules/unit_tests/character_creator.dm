@@ -65,6 +65,33 @@
 	TEST_ASSERT_EQUAL(high_count, 1, "Exactly one imported job may stay at High")
 	TEST_ASSERT(!("Character Creator Test Job" in prefs.job_preferences), "Unknown jobs must be skipped")
 
+/// Job priorities must survive a save and reload, or old saves keep their stale job list.
+/datum/unit_test/character_creator_job_priorities_save
+	var/save_path
+
+/datum/unit_test/character_creator_job_priorities_save/Destroy()
+	if(save_path)
+		fdel(save_path)
+	return ..()
+
+/datum/unit_test/character_creator_job_priorities_save/Run()
+	var/datum/preferences/prefs = allocate(/datum/preferences)
+	save_path = "[GLOB.log_directory]/character_creator_jobs_test.sav"
+	fdel(save_path)
+	prefs.path = save_path
+	prefs.job_preferences = list("Saved Old Job" = JP_HIGH)
+	TEST_ASSERT(prefs.save_character(), "The first save should succeed")
+
+	prefs.job_preferences = list("Saved High Job" = JP_HIGH, "Saved Medium Job" = JP_MEDIUM, "Saved Low Job" = JP_LOW)
+	TEST_ASSERT(prefs.save_character(), "The second save should succeed")
+	prefs.job_preferences = list()
+	TEST_ASSERT(prefs.load_character(prefs.default_slot), "The saved character should load")
+
+	TEST_ASSERT_EQUAL(length(prefs.job_preferences), 3, "Every saved job priority should load back")
+	TEST_ASSERT_EQUAL(prefs.job_preferences["Saved High Job"], JP_HIGH, "The High job should load back")
+	TEST_ASSERT_EQUAL(prefs.job_preferences["Saved Medium Job"], JP_MEDIUM, "The Medium job should load back")
+	TEST_ASSERT(!("Saved Old Job" in prefs.job_preferences), "A later save must replace the earlier job list")
+
 /// The preferred subclass only moves an already rolled class to the front.
 /datum/unit_test/character_creator_preferred_class_order/Run()
 	var/list/rolled = list("first" = 1, "second" = 2, "third" = 3)

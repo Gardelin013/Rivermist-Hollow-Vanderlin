@@ -19,6 +19,8 @@
 	if(!.)
 		return FALSE
 	var/obj/item/dildo = user.get_active_held_item()
+	if(!check_location_accessible(user, target, BODY_ZONE_CHEST, TRUE))
+		return FALSE
 	if(!dildo)
 		return FALSE
 	if(check_sex_lock(target, ORGAN_SLOT_BREASTS, null, dildo))
@@ -118,6 +120,8 @@
 /datum/sex_action/hole_storage/boobs_remove/can_perform(mob/living/user, mob/living/target)
 	. = ..()
 	if(!.)
+		return FALSE
+	if(!check_location_accessible(user, target, BODY_ZONE_CHEST, TRUE))
 		return FALSE
 	if(user.get_active_held_item())
 		return FALSE

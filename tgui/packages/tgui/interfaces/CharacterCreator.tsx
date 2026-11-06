@@ -317,8 +317,6 @@ type CreatorData = {
   round_action_color: string | null;
   round_action_disabled: Booleanish;
   round_action_tooltip: string;
-  round_start_state?: string;
-  round_start_seconds?: number;
   round_ready_players?: number;
   round_total_players?: number;
   cc_unsaved?: Booleanish;
@@ -1506,13 +1504,6 @@ const TattooEditor = (props: {
 // Main window
 // ---------------------------------------------------------------------------
 
-const formatSeconds = (total: number) => {
-  const safe = Math.max(0, Math.floor(total));
-  const minutes = Math.floor(safe / 60);
-  const seconds = safe % 60;
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-};
-
 export const CharacterCreator = () => {
   const { act, data } = useBackend<CreatorData>();
   const lang = data.cc_lang === 'ru' ? 'ru' : 'en';
@@ -1557,19 +1548,6 @@ export const CharacterCreator = () => {
 
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dollBoxRef = useRef<HTMLDivElement>(null);
-
-  // The lobby countdown ticks locally between data pushes.
-  const [roundSeconds, setRoundSeconds] = useState<number>(-1);
-  useEffect(() => {
-    setRoundSeconds(Number(data.round_start_seconds ?? -1));
-  }, [data.round_start_seconds]);
-  useEffect(() => {
-    if (roundSeconds <= 0) {
-      return;
-    }
-    const timer = setTimeout(() => setRoundSeconds(roundSeconds - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [roundSeconds]);
 
   // ---- Effects ----
 
@@ -5230,13 +5208,6 @@ export const CharacterCreator = () => {
       doPref('finished');
     }
   };
-  const roundState = (data.round_start_state ||
-    '') as keyof CharacterCreatorStrings['roundStates'];
-  const roundLabel = roundState ? L.roundStates[roundState] || '' : '';
-  const roundText =
-    roundState === 'countdown'
-      ? `${roundLabel} ${formatSeconds(roundSeconds)}`
-      : roundLabel;
   const readyText = data.round_total_players
     ? `${data.round_ready_players ?? 0}/${data.round_total_players} ${L.roundReady}`
     : '';
@@ -5295,14 +5266,9 @@ export const CharacterCreator = () => {
       >
         {text(data.round_action_label)}
       </Btn>
-      {roundText || readyText ? (
+      {readyText ? (
         <div className="cc-round-line cc-topbar-extra">
-          {roundText ? (
-            <span className="cc-round-time">{roundText}</span>
-          ) : null}
-          {readyText ? (
-            <span className="cc-round-ready">{readyText}</span>
-          ) : null}
+          <span className="cc-round-ready">{readyText}</span>
         </div>
       ) : null}
       <div className="cc-grow" />
