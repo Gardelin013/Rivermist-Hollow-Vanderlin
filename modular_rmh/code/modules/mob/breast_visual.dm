@@ -171,7 +171,8 @@ GLOBAL_LIST_INIT(breast_emote_shots, list(
 /datum/component/breast_animation/proc/refresh_garments(obj/item/organ/genitals/filling_organ/breasts/breasts)
 	var/mob/living/carbon/human/human = parent
 	// A child draws above every overlay, so a plain garment over the chest leaves no garment child.
-	if(breasts.visible_through_clothes == DRAW_ABOVE || !breasts_visible_under_clothes(human))
+	// Plain layers beneath the sized garments only hide the breasts; the garments keep their front cloth.
+	if(breasts.visible_through_clothes == DRAW_ABOVE || !breasts_visible_under_clothes(human, skip_under_layers = TRUE))
 		remove_garment_visuals()
 		return
 	var/list/garments = human.get_breast_sized_garments()
@@ -358,10 +359,11 @@ GLOBAL_LIST_INIT(breast_emote_shots, list(
 		var/obj/item/garment = human.get_chest_slot_item(slot)
 		if(!garment || (child.vis_flags & VIS_HIDE))
 			continue
-		flick("[garment.icon_state]_f_[size]_[shot]_front", child)
+		// The prefix carries the race clothing tag, so small races flick their own frames.
+		flick("[get_garment_state_prefix(garment, FALSE)]_[shot]_front", child)
 		var/atom/movable/breast_visual/detail = LAZYACCESS(garment_detail_visuals, slot)
 		if(detail)
-			flick("[garment.icon_state]_f_detail_[size]_[shot]_front", detail)
+			flick("[get_garment_state_prefix(garment, TRUE)]_[shot]_front", detail)
 
 /datum/component/breast_animation/proc/set_running(new_running)
 	if(running == new_running || !visual)

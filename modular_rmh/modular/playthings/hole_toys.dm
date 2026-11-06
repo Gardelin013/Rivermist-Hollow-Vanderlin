@@ -392,7 +392,7 @@
 
 /// Whether this body can tell its stored items apart by feel.
 /mob/living/carbon/human/proc/can_feel_stored_items()
-	return has_quirk(/datum/quirk/peculiarity/selfawaregeni)
+	return has_quirk(/datum/quirk/neutral/selfawaregeni)
 
 /// The items in [hole] a hand could work out; eggs, hatchlings and stand-ins have their own ways.
 /mob/living/carbon/human/proc/get_pushable_toys(obj/item/organ/genitals/filling_organ/hole)

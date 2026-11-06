@@ -75,6 +75,7 @@
 #include "ai_planning_freezes.dm"
 #include "ai_targeting_allegiances.dm"
 #include "anchored_mobs.dm"
+#include "breast_sized_clothing.dm"
 #include "character_creator.dm"
 #include "chat_macros.dm"
 #include "component_tests.dm"

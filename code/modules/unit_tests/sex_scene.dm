@@ -628,3 +628,38 @@
 	TEST_ASSERT_NOTNULL(replacement_controller, "a failed horny encounter should not prevent the NPC from acquiring a different target")
 	qdel(replacement_controller)
 	qdel(horny_behavior)
+
+/// Records every mob that receives sex stimulation.
+/datum/sex_scene_receive_probe
+	var/list/receivers = list()
+
+/datum/sex_scene_receive_probe/proc/on_receive(mob/living/source)
+	SIGNAL_HANDLER
+	receivers += source
+
+/// Putting an item into a partner's body stimulates the partner, not the one who inserts it.
+/datum/unit_test/hole_storage_insert_stimulates_receiver/Run()
+	var/mob/living/carbon/human/user = allocate(/mob/living/carbon/human)
+	var/mob/living/carbon/human/target = allocate(/mob/living/carbon/human)
+	target.gender = FEMALE
+	target.give_genitals()
+	TEST_ASSERT_NOTNULL(target.getorganslot(ORGAN_SLOT_BREASTS), "Test setup: the target needs breasts")
+	var/obj/item/stored = allocate(/obj/item)
+	stored.w_class = WEIGHT_CLASS_TINY
+	user.put_in_active_hand(stored)
+
+	var/datum/sex_scene_controller/session = user.open_sex_scene(target, show_ui = FALSE)
+	var/datum/sex_action/hole_storage/boobs_store/action = session.instantiate_action(/datum/sex_action/hole_storage/boobs_store)
+	TEST_ASSERT(action.bind_runtime(session), "Test setup: the action should bind to the session")
+	var/datum/sex_scene_receive_probe/probe = allocate(/datum/sex_scene_receive_probe)
+	probe.RegisterSignal(user, COMSIG_SEX_RECEIVE_ACTION, TYPE_PROC_REF(/datum/sex_scene_receive_probe, on_receive))
+	probe.RegisterSignal(target, COMSIG_SEX_RECEIVE_ACTION, TYPE_PROC_REF(/datum/sex_scene_receive_probe, on_receive))
+
+	action.on_perform(user, target)
+
+	TEST_ASSERT(stored.loc != user, "Test setup: the item should leave the inserter's hand")
+	TEST_ASSERT(target in probe.receivers, "The partner receiving the item should feel it")
+	TEST_ASSERT(!(user in probe.receivers), "The inserter must not feel the partner's insertion")
+
+	qdel(action)
+	qdel(session)

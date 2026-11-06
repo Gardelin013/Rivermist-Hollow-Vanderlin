@@ -94,7 +94,7 @@
 
 	user.update_inv_hands()
 	user.update_a_intents()
-	perform_sex_action(user, target, 0.5, pain_amt, 0)
+	perform_sex_action(target, user, 0.5, pain_amt, 0)
 	handle_passive_ejaculation()
 
 /datum/sex_action/hole_storage/boobs_remove //do_time
@@ -169,6 +169,6 @@
 			user.visible_message(spanify_force("I fish out the [removed_item] from between [target]'s boobs..."))
 		removed_item.doMove(get_turf(user))
 		user.put_in_active_hand(removed_item)
-	perform_sex_action(user, target, 0.5, pain_amt, 0)
+	perform_sex_action(target, user, 0.5, pain_amt, 0)
 	handle_passive_ejaculation()
 
