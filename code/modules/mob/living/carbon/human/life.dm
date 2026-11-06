@@ -59,6 +59,16 @@
 			remove_status_effect(/datum/status_effect/debuff/sleepytime)
 			if(has_status_effect(/datum/status_effect/debuff/dreamytime))
 				finish_night_rest()
+	if(!HAS_TRAIT(src, TRAIT_STASIS))
+		update_stamina()
+		update_energy()
+		handle_environment()
+		handle_hygiene()
+		handle_comfy()
+		handle_body_hair_growth()
+		if(dna?.species)
+			dna.species.spec_life(src) // for mutantraces
+
 	//heart attack stuff
 	handle_curses()
 

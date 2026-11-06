@@ -195,7 +195,7 @@ const en = {
   triumphShop: 'Triumph shop',
   bodyBuild: 'Build',
   quirkBalanceHint:
-    'Points left after boons and vices. It cannot go below zero. Click to change quirks.',
+    'Points left after positive and negative quirks. It cannot go below zero. Click to change quirks.',
   playerQualityHint: 'Click to see your player quality record.',
   renameHint: 'Click to rename the character.',
   traits: 'Traits',
@@ -727,7 +727,7 @@ const ru: CharacterCreatorStrings = {
   triumphShop: 'Магазин триумфов',
   bodyBuild: 'Телосложение',
   quirkBalanceHint:
-    'Очки, оставшиеся после даров и пороков. Ниже нуля не опускаются. Нажмите, чтобы изменить причуды.',
+    'Очки, оставшиеся после положительных и отрицательных причуд. Ниже нуля не опускаются. Нажмите, чтобы изменить причуды.',
   playerQualityHint: 'Нажмите, чтобы открыть вашу репутацию игрока (PQ).',
   renameHint: 'Нажмите, чтобы переименовать персонажа.',
   traits: 'Черты',

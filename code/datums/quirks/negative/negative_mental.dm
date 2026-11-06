@@ -409,11 +409,6 @@
 		if(95 to INFINITY)
 			return MASO_THRESHOLD_FOUR
 
-// Hidden alias for characters saved before Masochist joined the addiction hierarchy.
-/datum/quirk/negative/masochist
-	parent_type = /datum/quirk/negative/addiction/masochist
-	abstract_type = /datum/quirk/negative/masochist
-
 // Chronic Pain Vices
 /datum/quirk/negative/chronic_arthritis
 	name = "Chronic Arthritis"

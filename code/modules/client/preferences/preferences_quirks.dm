@@ -22,6 +22,16 @@
 	if(pref_species && islist(customizer_entries))
 		validate_customizer_entries()
 
+/// Rewrites quirk paths from before the positive/negative/neutral rename in saved or exported text.
+/proc/migrate_legacy_quirk_text(text)
+	var/static/regex/old_addictions = regex(@"/datum/quirk/vice/(alcoholic|smoker|junkie|kleptomaniac|godfearing|sadist|lovefiend|masochist)\b", "g")
+	var/static/regex/old_maniac = regex(@"/datum/quirk/vice/maniac\b", "g")
+	text = old_addictions.Replace(text, "/datum/quirk/negative/addiction/$1")
+	text = old_maniac.Replace(text, "/datum/quirk/negative/addiction/sadist")
+	text = replacetext(text, "/datum/quirk/vice/", "/datum/quirk/negative/")
+	text = replacetext(text, "/datum/quirk/boon/", "/datum/quirk/positive/")
+	return replacetext(text, "/datum/quirk/peculiarity/", "/datum/quirk/neutral/")
+
 /// Fills the quirk lists from the savefile without validating them. Returns FALSE when the slot has no quirk data.
 /datum/preferences/proc/read_saved_quirks(savefile/S)
 	quirks = list()
@@ -30,16 +40,6 @@
 
 	var/list/quirk_data
 	S["quirks"] >> quirk_data
-	var/static/list/legacy_addiction_paths = list(
-		/datum/quirk/negative/alcoholic = /datum/quirk/negative/addiction/alcoholic,
-		/datum/quirk/negative/smoker = /datum/quirk/negative/addiction/smoker,
-		/datum/quirk/negative/junkie = /datum/quirk/negative/addiction/junkie,
-		/datum/quirk/negative/kleptomaniac = /datum/quirk/negative/addiction/kleptomaniac,
-		/datum/quirk/negative/godfearing = /datum/quirk/negative/addiction/godfearing,
-		/datum/quirk/negative/sadist = /datum/quirk/negative/addiction/sadist,
-		/datum/quirk/negative/lovefiend = /datum/quirk/negative/addiction/lovefiend,
-		/datum/quirk/negative/masochist = /datum/quirk/negative/addiction/masochist,
-	)
 
 	if(!islist(quirk_data))
 		return FALSE
@@ -48,7 +48,6 @@
 		if(!islist(entry))
 			continue
 		var/quirk_type = entry["type"]
-		quirk_type = legacy_addiction_paths[quirk_type] || quirk_type
 		var/custom_val = entry["value"]
 		var/list/extra_val = entry["extra"]
 
@@ -391,9 +390,9 @@
 
 	// Tab navigation
 	dat += "<div class='quirk-tabs'>"
-	dat += "<button class='tab-button active' data-tab='boons'>Boons</button>"
-	dat += "<button class='tab-button' data-tab='vices'>Vices</button>"
-	dat += "<button class='tab-button' data-tab='peculiarities'>Peculiarities</button>"
+	dat += "<button class='tab-button active' data-tab='boons'>Positive</button>"
+	dat += "<button class='tab-button' data-tab='vices'>Negative</button>"
+	dat += "<button class='tab-button' data-tab='peculiarities'>Neutral</button>"
 	dat += "</div>"
 
 	// Tab content

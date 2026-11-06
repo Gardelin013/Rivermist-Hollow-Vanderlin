@@ -227,7 +227,7 @@
 /datum/quirk/negative/weak_heart
 	name = "Weak Heart"
 	desc = "You were born with a weak heart. You can't handle stressful situations for fear of your heart giving out."
-	desc_hint = "Half threshold for heart attacks and heart attack from being overly stressed"
+	desc_hint = "Half threshold for heart attacks, and you collapse for a minute when overly stressed"
 	point_value = 4
 	incompatible_quirks = list(
 		/datum/quirk/positive/iron_will

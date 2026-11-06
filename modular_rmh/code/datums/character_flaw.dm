@@ -27,8 +27,3 @@
 /atom/movable/screen/alert/status_effect/debuff/addiction/lovefiend
 	name = "Nymphomaniac Craving"
 	desc = "I need intimacy."
-
-// Hidden until existing saves have been migrated to the addiction subtype.
-/datum/quirk/negative/lovefiend
-	parent_type = /datum/quirk/negative/addiction/lovefiend
-	abstract_type = /datum/quirk/negative/lovefiend

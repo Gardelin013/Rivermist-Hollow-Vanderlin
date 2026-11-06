@@ -47,10 +47,12 @@
 		stressbuffer = stress - STRESS_VGOOD
 		stress = STRESS_VGOOD
 
-	if(HAS_TRAIT(src, TRAIT_WEAK_HEART) && stress > 60)
+	if(HAS_TRAIT(src, TRAIT_WEAK_HEART) && stress > 60 && MOBTIMER_FINISHED(src, MT_WEAKHEART, 5 MINUTES))
+		MOBTIMER_SET(src, MT_WEAKHEART)
 		to_chat(src, span_warning("This is all too much for my weak heart!"))
 		Paralyze(60 SECONDS)
 		Knockdown(60 SECONDS)
+
 /mob/living/carbon/update_stress()
 	if(HAS_TRAIT(src, TRAIT_NOMOOD))
 		stress = 0

@@ -145,8 +145,6 @@
 		qdel(src)
 		return
 
-	for(var/mob/living/carbon/human/H in view(2, src))
-
 	perform_exposure()
 	return
 

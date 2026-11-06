@@ -154,28 +154,3 @@
 /datum/quirk/negative/addiction/sadist/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Sadist..."))
-
-// Temporary hidden aliases let existing character saves deserialize before load_quirks migrates them.
-/datum/quirk/negative/alcoholic
-	parent_type = /datum/quirk/negative/addiction/alcoholic
-	abstract_type = /datum/quirk/negative/alcoholic
-
-/datum/quirk/negative/smoker
-	parent_type = /datum/quirk/negative/addiction/smoker
-	abstract_type = /datum/quirk/negative/smoker
-
-/datum/quirk/negative/junkie
-	parent_type = /datum/quirk/negative/addiction/junkie
-	abstract_type = /datum/quirk/negative/junkie
-
-/datum/quirk/negative/kleptomaniac
-	parent_type = /datum/quirk/negative/addiction/kleptomaniac
-	abstract_type = /datum/quirk/negative/kleptomaniac
-
-/datum/quirk/negative/godfearing
-	parent_type = /datum/quirk/negative/addiction/godfearing
-	abstract_type = /datum/quirk/negative/godfearing
-
-/datum/quirk/negative/sadist
-	parent_type = /datum/quirk/negative/addiction/sadist
-	abstract_type = /datum/quirk/negative/sadist

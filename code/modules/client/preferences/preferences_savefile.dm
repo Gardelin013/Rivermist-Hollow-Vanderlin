@@ -5,7 +5,7 @@
 //	You do not need to raise this if you are adding new values that have sane defaults.
 //	Only raise this value when changing the meaning/format/name/layout of an existing value
 //	where you would want the updater procs below to run
-#define SAVEFILE_VERSION_MAX 37
+#define SAVEFILE_VERSION_MAX 38
 
 /*
 SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Carn
@@ -156,6 +156,12 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(current_version < 37)
 		// Accents are opt-in now, so clear whatever the old default left on the slot.
 		write_preference(/datum/preference/choiced/selected_accent, ACCENT_NONE)
+
+	if(current_version < 38)
+		// Unknown type paths load as null, so the old quirk paths are rewritten as text first.
+		var/quirk_text = S.ExportText("quirks")
+		if(quirk_text)
+			S.ImportText("quirks", migrate_legacy_quirk_text(quirk_text))
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
 	if(!ckey)
