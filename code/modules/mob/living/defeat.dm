@@ -490,6 +490,17 @@
 /mob/living/proc/get_defeat_damage_pool()
 	return getBruteLoss() + (getFireLoss() * DEFEAT_BURN_DAMAGE_WEIGHT) + getToxLoss() + getCloneLoss()
 
+/// Prosthetic limbs are left out: beating a wooden arm wears the device, not the wearer.
+/mob/living/carbon/get_defeat_damage_pool()
+	var/brute = 0
+	var/burn = 0
+	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
+		if(bodypart.is_prosthetic())
+			continue
+		brute += bodypart.brute_dam
+		burn += bodypart.burn_dam
+	return brute + (burn * DEFEAT_BURN_DAMAGE_WEIGHT) + getToxLoss() + getCloneLoss()
+
 /// Draws a blood tax from this mob to power the resurrection rune.
 /// Stub: currently just removes the blood. TODO: deposit the drawn blood into the
 /// vampire blood bank once it exists, so the rune is literally sustained by it.

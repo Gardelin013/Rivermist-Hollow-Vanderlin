@@ -2680,3 +2680,30 @@
 	TEST_ASSERT_EQUAL(product[2], 5, "Every generated Healer should carry five vials.")
 
 
+
+/// Beating a prosthetic wears the device, not the wearer, so it never fills the defeat pool.
+/datum/unit_test/defeat_pool_ignores_prosthetic_damage/Run()
+	var/mob/living/carbon/human/patient = allocate(/mob/living/carbon/human)
+	var/obj/item/bodypart/old_arm = patient.get_bodypart(BODY_ZONE_R_ARM)
+	old_arm.drop_limb()
+	qdel(old_arm)
+	var/obj/item/bodypart/r_arm/prosthetic/wood/arm = new(null)
+	arm.attach_limb(patient)
+	TEST_ASSERT_EQUAL(patient.get_bodypart(BODY_ZONE_R_ARM), arm, "Test setup: the wooden arm should be attached")
+	arm.bodypart_attacked_by(BCLASS_BLUNT, 40)
+	arm.update_damages()
+	TEST_ASSERT(arm.brute_dam > 0, "Test setup: the wooden arm should take damage")
+	TEST_ASSERT_EQUAL(patient.get_defeat_damage_pool(), 0, "Prosthetic damage must not count toward defeat")
+
+	var/obj/item/bodypart/left_arm = patient.get_bodypart(BODY_ZONE_L_ARM)
+	left_arm.create_injury(WOUND_BLUNT, 30)
+	left_arm.update_damages()
+	TEST_ASSERT(patient.get_defeat_damage_pool() > 0, "Damage to a flesh limb should still count toward defeat")
+
+	var/mob/living/carbon/human/automaton = allocate(/mob/living/carbon/human)
+	automaton.set_species(/datum/species/automaton)
+	var/obj/item/bodypart/brass_arm = automaton.get_bodypart(BODY_ZONE_R_ARM)
+	TEST_ASSERT(brass_arm.is_robotic_limb(), "Test setup: automaton limbs should be robotic")
+	brass_arm.bodypart_attacked_by(BCLASS_BLUNT, 40)
+	brass_arm.update_damages()
+	TEST_ASSERT(automaton.get_defeat_damage_pool() > 0, "An automaton's own limbs are its body and must still count")

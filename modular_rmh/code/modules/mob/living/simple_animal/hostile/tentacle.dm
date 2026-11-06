@@ -72,6 +72,15 @@
 	ai_controller = /datum/ai_controller/tentacle
 	kidnap_lair_tag = "tentacle_lair"
 	kidnap_captivity_profile = /datum/defeat_captivity_profile/shared/tentacle
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/meat/steak = 1, /obj/item/alch/viscera = 5)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/meat/steak = 2,
+						/obj/item/natural/hide = 1,
+						/obj/item/alch/sinew = 2
+						/obj/item/alch/viscera = 3)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/meat/steak = 3,
+						/obj/item/natural/hide = 2,
+						/obj/item/alch/sinew = 2,
+						/obj/item/alch/viscera = 2)
 
 	emote_see = list("slowly coils in on itself", "tastes the air with a questing tip", "ripples across the ground")
 

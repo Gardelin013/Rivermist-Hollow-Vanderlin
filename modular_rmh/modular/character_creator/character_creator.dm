@@ -204,7 +204,6 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 /// Display names for abstract culture parents that group selectable sub-origins.
 /datum/preferences/proc/character_creator_origin_group_name(group_type)
 	var/static/list/group_names = list(
-		/datum/culture/species/elven = "Elven Tribes",
 		/datum/culture/species/half_orc = "Orc Clans",
 	)
 	return group_names[group_type] || "Kindred"
