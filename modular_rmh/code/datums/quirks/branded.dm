@@ -1,11 +1,11 @@
 // RMH - Клеймо quirk: start the round already branded. Atmospheric, for exiles
 // and renegades who were marked before they ever arrived.
 
-/datum/quirk/vice/branded
+/datum/quirk/negative/branded
 	name = "Branded"
 	desc = "Someone marked you as theirs, or as an outcast, long before you came here. The brand never faded."
 	desc_hint = "Choose where the brand sits and what it reads. It is permanent unless a legendary healer cuts it away."
-	quirk_category = QUIRK_VICE
+	quirk_category = QUIRK_NEGATIVE
 	point_value = 2
 	preview_render = FALSE
 
@@ -35,10 +35,10 @@
 
 // Label the dropdown with the same wording examine uses, so "throat" in the menu
 // is "throat" in game. parse_zone has no case for stomach and returns it as-is.
-/datum/quirk/vice/branded/get_option_name(option)
+/datum/quirk/negative/branded/get_option_name(option)
 	return capitalize(parse_zone(option))
 
-/datum/quirk/vice/branded/on_spawn()
+/datum/quirk/negative/branded/on_spawn()
 	if(!owner || !ishuman(owner))
 		return
 

@@ -307,7 +307,6 @@ GLOBAL_LIST_INIT(roguetraits, list(
 	TRAIT_LEGENDARY_ALCHEMIST = span_info("An expert in the art of finding herbs in the wild."),
 	TRAIT_DECEIVING_MEEKNESS = "People look at me and think I am a weakling. They are mistaken.",
 	TRAIT_THIEVESGUILD = "I am a member of the thieves' guild!",
-	TRAIT_LEPROSY = span_necrosis("I'm a disgusting leper..."),
 	TRAIT_LIGHT_STEP = span_info("I will never trip a trap plate."),
 	TRAIT_NOFIRE = span_info("I am immune to most scorching flames."),
 	TRAIT_ENGINEERING_GOGGLES = span_info("I can find out more information from mechanical devices."),

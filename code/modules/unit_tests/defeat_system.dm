@@ -951,7 +951,7 @@
 	test_human.defeat_damage_threshold = 200
 	TEST_ASSERT_EQUAL(test_human.get_effective_defeat_threshold(), 200, "With no fragility quirks the effective threshold should equal the base.")
 
-	var/datum/quirk/vice/frail/frail_quirk = new()
+	var/datum/quirk/negative/frail/frail_quirk = new()
 	test_human.quirks += frail_quirk
 	TEST_ASSERT_EQUAL(test_human.get_effective_defeat_threshold(), round(200 * 0.6), "A fragility quirk should lower the effective defeat threshold.")
 

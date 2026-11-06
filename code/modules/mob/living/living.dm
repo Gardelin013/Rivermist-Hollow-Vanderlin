@@ -2780,7 +2780,7 @@
 	if(m_intent != MOVE_INTENT_SNEAK)
 		visible_message(span_info("[src] looks around."), span_info("I look around."))
 	var/looktime = 5 SECONDS - (GET_MOB_ATTRIBUTE_VALUE(src, STAT_PERCEPTION) * 2)
-	if(has_quirk(/datum/quirk/boon/keen_eye))
+	if(has_quirk(/datum/quirk/positive/keen_eye))
 		looktime *= 0.25
 	if(do_after(src, looktime))
 		// var/huhsneak

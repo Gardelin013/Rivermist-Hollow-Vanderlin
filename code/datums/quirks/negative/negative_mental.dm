@@ -26,10 +26,6 @@
 	id = "addiction_junkie"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/junkie
 
-/datum/status_effect/debuff/addiction/pyromaniac
-	id = "addiction_pyromaniac"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/pyromaniac
-
 /datum/status_effect/debuff/addiction/kleptomaniac
 	id = "addiction_kleptomaniac"
 	alert_type = /atom/movable/screen/alert/status_effect/debuff/addiction/kleptomaniac
@@ -67,10 +63,6 @@
 	name = "Drug Craving"
 	desc = "I need a high."
 
-/atom/movable/screen/alert/status_effect/debuff/addiction/pyromaniac
-	name = "Pyromania Craving"
-	desc = "I need to see something burn."
-
 /atom/movable/screen/alert/status_effect/debuff/addiction/kleptomaniac
 	name = "Theft Craving"
 	desc = "I need to steal something."
@@ -91,7 +83,7 @@
 	name = "Pain Craving"
 	desc = "I need pain."
 
-/datum/quirk/vice/greedy
+/datum/quirk/negative/greedy
 	name = "Greedy"
 	desc = "I can't get enough of amnas, I need more and more!"
 	point_value = 4
@@ -102,15 +94,15 @@
 	var/first_tick = FALSE
 	var/extra_increment_value = 0
 
-/datum/quirk/vice/greedy/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/greedy/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Greed..."))
 
-/datum/quirk/vice/greedy/on_spawn()
+/datum/quirk/negative/greedy/on_spawn()
 	next_mammon_increase = world.time + rand(15 MINUTES, 25 MINUTES)
 	last_passed_check = world.time
 
-/datum/quirk/vice/greedy/on_life(mob/living/user)
+/datum/quirk/negative/greedy/on_life(mob/living/user)
 	if(!ishuman(user))
 		return
 	var/mob/living/carbon/human/H = user
@@ -163,13 +155,13 @@
 
 	last_checked_mammons = new_mammon_amount
 
-/datum/quirk/vice/paranoid
+/datum/quirk/negative/paranoid
 	name = "Paranoid"
 	desc = "I'm even more anxious than most towners. I'm extra paranoid of other species, the price of higher intelligence."
 	point_value = 3
 	var/last_check = 0
 
-/datum/quirk/vice/paranoid/on_life(mob/living/user)
+/datum/quirk/negative/paranoid/on_life(mob/living/user)
 	if(world.time < last_check + 10 SECONDS)
 		return
 	if(!ishuman(user))
@@ -202,24 +194,24 @@
 	if(cnt > 6)
 		H.add_stress(/datum/stress_event/para/blood)
 
-/datum/quirk/vice/paranoid/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/paranoid/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Paranoid..."))
 
-/datum/quirk/vice/clingy
+/datum/quirk/negative/clingy
 	name = "Clingy"
 	desc = "I like being around people, it's just so lively..."
 	point_value = 2
 	incompatible_quirks = list(
-		/datum/quirk/vice/isolationist
+		/datum/quirk/negative/isolationist
 	)
 	var/last_check = 0
 
-/datum/quirk/vice/clingy/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/clingy/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Clingy..."))
 
-/datum/quirk/vice/clingy/on_life(mob/living/user)
+/datum/quirk/negative/clingy/on_life(mob/living/user)
 	if(world.time < last_check + 10 SECONDS)
 		return
 	if(!user)
@@ -242,20 +234,20 @@
 		var/mob/living/carbon/P = user
 		P.add_stress(/datum/stress_event/nopeople)
 
-/datum/quirk/vice/isolationist
+/datum/quirk/negative/isolationist
 	name = "Isolationist"
 	desc = "I don't like being near people. They might be trying to do something to me..."
 	point_value = 2
 	incompatible_quirks = list(
-		/datum/quirk/vice/clingy
+		/datum/quirk/negative/clingy
 	)
 	var/last_check = 0
 
-/datum/quirk/vice/isolationist/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/isolationist/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Introvert..."))
 
-/datum/quirk/vice/isolationist/on_life(mob/living/user)
+/datum/quirk/negative/isolationist/on_life(mob/living/user)
 	if(world.time < last_check + 10 SECONDS)
 		return
 	if(!user)
@@ -278,7 +270,7 @@
 		var/mob/living/carbon/P = user
 		P.add_stress(/datum/stress_event/crowd)
 
-/datum/quirk/vice/narcoleptic
+/datum/quirk/negative/narcoleptic
 	name = "Narcoleptic"
 	desc = "I get drowsy during the day and tend to fall asleep suddenly, but I can sleep easier if I want to, and moon dust can help me stay awake."
 	point_value = 4
@@ -289,17 +281,17 @@
 	var/pain_pity_charges = 3
 	var/drugged_up = FALSE
 
-/datum/quirk/vice/narcoleptic/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/narcoleptic/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Sleepy..."))
 
-/datum/quirk/vice/narcoleptic/on_spawn()
+/datum/quirk/negative/narcoleptic/on_spawn()
 	ADD_TRAIT(owner, TRAIT_FASTSLEEP, "[type]")
 	last_unconsciousness = world.time
 	concious_timer = rand(7 MINUTES, 15 MINUTES)
 	pain_pity_charges = rand(2, 4)
 
-/datum/quirk/vice/narcoleptic/on_life(mob/living/user)
+/datum/quirk/negative/narcoleptic/on_life(mob/living/user)
 	if(!ishuman(user))
 		return
 	var/mob/living/carbon/human/H = user
@@ -338,32 +330,32 @@
 			next_sleep = world.time + rand(7 SECONDS, 11 SECONDS)
 			do_sleep = TRUE
 
-/datum/quirk/vice/narcoleptic/on_remove()
+/datum/quirk/negative/narcoleptic/on_remove()
 	if(owner)
 		REMOVE_TRAIT(owner, TRAIT_FASTSLEEP, "[type]")
 
 /proc/narcolepsy_drug_up(mob/living/living)
-	var/datum/quirk/vice/narcoleptic/narco = living.get_quirk(/datum/quirk/vice/narcoleptic)
+	var/datum/quirk/negative/narcoleptic/narco = living.get_quirk(/datum/quirk/negative/narcoleptic)
 	if(!narco)
 		return
 	narco.drugged_up = TRUE
 
-/datum/quirk/vice/addiction/masochist
+/datum/quirk/negative/addiction/masochist
 	name = "Masochist"
 	desc = "I love the feeling of pain, so much I can't get enough of it."
 	point_value = 4
 	var/next_paincrave = 0
 	var/last_pain_threshold = NONE
 
-/datum/quirk/vice/addiction/masochist/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/addiction/masochist/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Masochist!"))
 
-/datum/quirk/vice/addiction/masochist/on_spawn()
+/datum/quirk/negative/addiction/masochist/on_spawn()
 	. = ..()
 	next_paincrave = world.time + rand(15 MINUTES, 25 MINUTES)
 
-/datum/quirk/vice/addiction/masochist/on_life(mob/living/user)
+/datum/quirk/negative/addiction/masochist/on_life(mob/living/user)
 	if(!ishuman(user))
 		return
 	var/mob/living/carbon/human/H = user
@@ -398,7 +390,7 @@
 	if(new_pain_threshold == MASO_THRESHOLD_FOUR)
 		sate(H)
 
-/datum/quirk/vice/addiction/masochist/sate(mob/living/carbon/human/user)
+/datum/quirk/negative/addiction/masochist/sate(mob/living/carbon/human/user)
 	if(next_paincrave <= world.time)
 		to_chat(user, span_blue("<b>[sated_text]</b>"))
 	next_paincrave = world.time + rand(35 MINUTES, 45 MINUTES)
@@ -406,7 +398,7 @@
 	user.remove_stress(/datum/stress_event/vice)
 	user.remove_status_effect(/datum/status_effect/debuff/addiction/masochist)
 
-/datum/quirk/vice/addiction/masochist/proc/get_pain_threshold(pain_amt)
+/datum/quirk/negative/addiction/masochist/proc/get_pain_threshold(pain_amt)
 	switch(pain_amt)
 		if(-INFINITY to 25)
 			return MASO_THRESHOLD_ONE
@@ -417,18 +409,13 @@
 		if(95 to INFINITY)
 			return MASO_THRESHOLD_FOUR
 
-// Hidden alias for characters saved before Masochist joined the addiction hierarchy.
-/datum/quirk/vice/masochist
-	parent_type = /datum/quirk/vice/addiction/masochist
-	abstract_type = /datum/quirk/vice/masochist
-
 // Chronic Pain Vices
-/datum/quirk/vice/chronic_arthritis
+/datum/quirk/negative/chronic_arthritis
 	name = "Chronic Arthritis"
 	desc = "Your joints ache constantly, causing periodic pain flares and reduced mobility."
 	point_value = 3
 
-/datum/quirk/vice/chronic_arthritis/on_spawn()
+/datum/quirk/negative/chronic_arthritis/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -447,12 +434,12 @@
 
 	to_chat(H, span_warning("Your joints feel stiff and painful - a reminder of your chronic arthritis."))
 
-/datum/quirk/vice/chronic_back_pain
+/datum/quirk/negative/chronic_back_pain
 	name = "Chronic Back Pain"
 	desc = "Years of wear and tear have left you with persistent lower back pain that affects your mobility."
 	point_value = 3
 
-/datum/quirk/vice/chronic_back_pain/on_spawn()
+/datum/quirk/negative/chronic_back_pain/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -462,12 +449,12 @@
 	BP?.update_chronic()
 	to_chat(H, span_warning("Your lower back aches with familiar, persistent pain."))
 
-/datum/quirk/vice/old_war_wound
+/datum/quirk/negative/old_war_wound
 	name = "Old War Wound"
 	desc = "An old injury from your past still haunts you, causing chronic pain and occasional flare-ups."
 	point_value = 5
 
-/datum/quirk/vice/old_war_wound/on_spawn()
+/datum/quirk/negative/old_war_wound/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -491,54 +478,44 @@
 			var/wound_desc = pick("shrapnel wound", "arrow wound", "deep scar", "poorly healed fracture")
 			to_chat(H, span_warning("You feel the familiar ache of your old [wound_desc] in your [wound_location]."))
 
-/datum/quirk/vice/loveless
-	name = "Loveless"
-	desc = "I am unable to show any kind of affection or love, whether carnal or platonic."
-	point_value = 3
-
-/datum/quirk/vice/loveless/on_spawn()
-	var/mob/living/carbon/human/H = owner
-	H.add_curse(/datum/curse/eora, TRUE)
-
-
-/datum/quirk/vice/nimrod
+/datum/quirk/negative/nimrod
 	name = "Nimrod"
 	desc = "In the past I learned slower than my peers, and I tend to be clumsy."
 	point_value = 6
 
-/datum/quirk/vice/nimrod/on_spawn()
+/datum/quirk/negative/nimrod/on_spawn()
 	var/mob/living/carbon/human/H = owner
 	H.change_stat("speed", -2)
 	H.change_stat("intelligence", -4)
 
-/datum/quirk/vice/unlucky
+/datum/quirk/negative/unlucky
 	name = "Unlucky"
 	desc = "Ever since you knocked over that glass vase, you just feel... off"
 	point_value = 6
 
-/datum/quirk/vice/unlucky/on_spawn()
+/datum/quirk/negative/unlucky/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	H.STALUC = rand(1, 10)
 
-/datum/quirk/vice/jesterphobia
+/datum/quirk/negative/jesterphobia
 	name = "Jesterphobic"
 	desc = "I have a severe, irrational fear of Jesters"
 	point_value = 1
 
-/datum/quirk/vice/jesterphobia/on_spawn()
+/datum/quirk/negative/jesterphobia/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_JESTERPHOBIA, "[type]")
 
-/datum/quirk/vice/nude_sleeper
+/datum/quirk/negative/nude_sleeper
 	name = "Picky Sleeper"
 	desc = "I just can't seem to fall asleep unless I'm <i>truly</i> comfortable..."
 	point_value = 3 //Sleeping people are already rather vulnerable. Having to take off literally everything is more than just bothersome.
 
-/datum/quirk/vice/nude_sleeper/on_spawn()
+/datum/quirk/negative/nude_sleeper/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner

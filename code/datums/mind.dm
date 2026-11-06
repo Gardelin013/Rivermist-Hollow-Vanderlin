@@ -648,7 +648,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 				output += " - [carbon.job]"
 
 			// Get the hunted quirk and display the reason
-			var/datum/quirk/vice/wanted/hunted_quirk = carbon.get_quirk(/datum/quirk/vice/wanted)
+			var/datum/quirk/negative/wanted/hunted_quirk = carbon.get_quirk(/datum/quirk/negative/wanted)
 			if(hunted_quirk && hunted_quirk.customization_value && hunted_quirk.customization_value != "")
 				output += "<br><i>Wanted for: [hunted_quirk.customization_value]</i>"
 			else
@@ -946,7 +946,7 @@ GLOBAL_LIST_EMPTY(personal_objective_minds)
 		return FALSE
 	amt *= GLOB.sleep_experience_modifier
 
-	if(current.has_quirk(/datum/quirk/boon/quick_learner))
+	if(current.has_quirk(/datum/quirk/positive/quick_learner))
 		amt *= 1.2
 
 	amt *= current.get_skill_exp_multiplier(skill)

@@ -4,12 +4,12 @@
 	effectedstats = list(STAT_PERCEPTION = -10, STAT_SPEED = -2, STAT_FORTUNE = -5)
 	duration = 5 SECONDS
 
-/datum/quirk/vice/bad_sight
+/datum/quirk/negative/bad_sight
 	name = "Poor Vision"
 	desc = "I need spectacles to see normally from my years spent reading books."
 	point_value = 2
 
-/datum/quirk/vice/bad_sight/on_spawn()
+/datum/quirk/negative/bad_sight/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -22,24 +22,24 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/face/spectacles(H), ITEM_SLOT_MASK)
 	H.become_nearsighted(type)
 
-/datum/quirk/vice/bad_sight/on_remove()
+/datum/quirk/negative/bad_sight/on_remove()
 	if(owner)
 		owner.cure_nearsighted(type)
 		owner.remove_status_effect(/datum/status_effect/debuff/badvision)
 	. = ..()
 
-/datum/quirk/vice/bad_sight/on_life(mob/living/user)
+/datum/quirk/negative/bad_sight/on_life(mob/living/user)
 	if(!ishuman(user))
 		return
 	if(user.is_nearsighted_currently())
 		user.apply_status_effect(/datum/status_effect/debuff/badvision)
 
-/datum/quirk/vice/cyclops_right
+/datum/quirk/negative/cyclops_right
 	name = "Cyclops (R)"
 	desc = "I lost my right eye long ago. But it made me great at noticing things."
 	point_value = 2
 
-/datum/quirk/vice/cyclops_right/on_spawn()
+/datum/quirk/negative/cyclops_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -51,12 +51,12 @@
 	ADD_TRAIT(H, TRAIT_CYCLOPS_RIGHT, QUIRK_TRAIT)
 	H.update_fov_angles()
 
-/datum/quirk/vice/cyclops_left
+/datum/quirk/negative/cyclops_left
 	name = "Cyclops (L)"
 	desc = "I lost my left eye long ago. But it made me great at noticing things."
 	point_value = 2
 
-/datum/quirk/vice/cyclops_left/on_spawn()
+/datum/quirk/negative/cyclops_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -68,31 +68,18 @@
 	ADD_TRAIT(H, TRAIT_CYCLOPS_LEFT, QUIRK_TRAIT)
 	H.update_fov_angles()
 
-/datum/quirk/vice/tongueless
-	name = "Tongueless"
-	desc = "I said one word too many to a noble, they cut out my tongue."
-	desc_hint = "Being mute is not an excuse to forego roleplay. Use of custom emotes is recommended"
-	point_value = 4
-
-/datum/quirk/vice/tongueless/on_spawn()
-	if(!ishuman(owner))
-		return
-	var/mob/living/carbon/human/H = owner
-	var/obj/item/bodypart/head/head = H.get_bodypart(BODY_ZONE_HEAD)
-	head?.add_wound(/datum/wound/facial/tongue/permanent)
-
-/datum/quirk/vice/wooden_arm_right
+/datum/quirk/negative/wooden_arm_right
 	name = "Wooden Arm (R)"
 	desc = "I lost my right arm long ago, but the wooden arm doesn't bleed as much."
 	incompatible_quirks = list(
-		/datum/quirk/boon/iron_arm_right,
-		/datum/quirk/boon/steel_arm_right,
-		/datum/quirk/boon/gold_arm_right,
-		/datum/quirk/boon/bronze_arm_right,
+		/datum/quirk/positive/iron_arm_right,
+		/datum/quirk/positive/steel_arm_right,
+		/datum/quirk/positive/gold_arm_right,
+		/datum/quirk/positive/bronze_arm_right,
 	)
 	point_value = 3
 
-/datum/quirk/vice/wooden_arm_right/on_spawn()
+/datum/quirk/negative/wooden_arm_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -103,18 +90,18 @@
 	var/obj/item/bodypart/r_arm/prosthetic/wood/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/vice/wooden_arm_left
+/datum/quirk/negative/wooden_arm_left
 	name = "Wooden Arm (L)"
 	desc = "I lost my left arm long ago, but the wooden arm doesn't bleed as much."
 	incompatible_quirks = list(
-		/datum/quirk/boon/iron_arm_left,
-		/datum/quirk/boon/steel_arm_left,
-		/datum/quirk/boon/gold_arm_left,
-		/datum/quirk/boon/bronze_arm_left,
+		/datum/quirk/positive/iron_arm_left,
+		/datum/quirk/positive/steel_arm_left,
+		/datum/quirk/positive/gold_arm_left,
+		/datum/quirk/positive/bronze_arm_left,
 	)
 	point_value = 3
 
-/datum/quirk/vice/wooden_arm_left/on_spawn()
+/datum/quirk/negative/wooden_arm_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -125,20 +112,20 @@
 	var/obj/item/bodypart/l_arm/prosthetic/wood/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/vice/wooden_leg_right
+/datum/quirk/negative/wooden_leg_right
 	name = "Wooden Leg (R)"
 	desc = "I lost my right leg long ago, but the wooden leg doesn't bleed as much."
 	point_value = 3
 	incompatible_quirks = list(
-		/datum/quirk/boon/iron_leg_right,
-		/datum/quirk/boon/steel_leg_right,
-		/datum/quirk/boon/gold_leg_right,
+		/datum/quirk/positive/iron_leg_right,
+		/datum/quirk/positive/steel_leg_right,
+		/datum/quirk/positive/gold_leg_right,
 		/*
-		/datum/quirk/boon/bronze_leg_right,
+		/datum/quirk/positive/bronze_leg_right,
 		*/
 	)
 
-/datum/quirk/vice/wooden_leg_right/on_spawn()
+/datum/quirk/negative/wooden_leg_right/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -149,20 +136,20 @@
 	var/obj/item/bodypart/r_leg/prosthetic/wood/L = new()
 	L.attach_limb(H)
 
-/datum/quirk/vice/wooden_leg_left
+/datum/quirk/negative/wooden_leg_left
 	name = "Wooden Leg (L)"
 	desc = "I lost my left leg long ago, but the wooden leg doesn't bleed as much."
 	incompatible_quirks = list(
-		/datum/quirk/boon/iron_leg_left,
-		/datum/quirk/boon/steel_leg_left,
-		/datum/quirk/boon/gold_leg_left,
+		/datum/quirk/positive/iron_leg_left,
+		/datum/quirk/positive/steel_leg_left,
+		/datum/quirk/positive/gold_leg_left,
 		/*
-		/datum/quirk/boon/bronze_leg_left,
+		/datum/quirk/positive/bronze_leg_left,
 		*/
 	)
 	point_value = 3
 
-/datum/quirk/vice/wooden_leg_left/on_spawn()
+/datum/quirk/negative/wooden_leg_left/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -173,62 +160,29 @@
 	var/obj/item/bodypart/l_leg/prosthetic/wood/L = new()
 	L.attach_limb(H)
 
-
-/datum/quirk/vice/leprosy
-	name = "Leprosy"
-	desc = "Become a leper. You will be hated, you will be shunned, you will bleed and you will be weak."
-	point_value = 8
-
-/datum/quirk/vice/leprosy/on_spawn()
-	if(!ishuman(owner))
-		return
-
-	var/mob/living/carbon/human/H = owner
-
-	ADD_TRAIT(H, TRAIT_LEPROSY, QUIRK_TRAIT)
-	ADD_TRAIT(H, TRAIT_NOPAIN, QUIRK_TRAIT)
-
-	// Equip iron mask - remove existing mask if present
-	if(H.wear_mask)
-		var/type = H.wear_mask.type
-		QDEL_NULL(H.wear_mask)
-		H.put_in_hands(new type(get_turf(H)))
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/face/facemask(H), ITEM_SLOT_MASK)
-
-/datum/quirk/vice/leprosy/on_remove()
-	if(!ishuman(owner))
-		return
-
-	var/mob/living/carbon/human/H = owner
-
-	// Remove traits when quirk is removed
-	REMOVE_TRAIT(H, TRAIT_LEPROSY, QUIRK_TRAIT)
-	REMOVE_TRAIT(H, TRAIT_NOPAIN, QUIRK_TRAIT)
-
-/datum/quirk/vice/crippled_arm
+/datum/quirk/negative/crippled_arm
 	name = "Missing Arm"
 	desc = "You're missing an arm. It was lost in an accident or battle, and the stump is too damaged for anything but prosthetics."
 	point_value = 5
 	customization_label = "Choose Missing Arm"
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_arm_right,
-		/datum/quirk/vice/wooden_arm_left,
-		/datum/quirk/boon/iron_arm_right,
-		/datum/quirk/boon/iron_arm_left,
-		/datum/quirk/boon/steel_arm_right,
-		/datum/quirk/boon/steel_arm_left,
-		/datum/quirk/boon/gold_arm_right,
-		/datum/quirk/boon/gold_arm_left,
-		/datum/quirk/boon/bronze_arm_right,
-		/datum/quirk/boon/bronze_arm_left,
+		/datum/quirk/negative/wooden_arm_right,
+		/datum/quirk/negative/wooden_arm_left,
+		/datum/quirk/positive/iron_arm_right,
+		/datum/quirk/positive/iron_arm_left,
+		/datum/quirk/positive/steel_arm_right,
+		/datum/quirk/positive/steel_arm_left,
+		/datum/quirk/positive/gold_arm_right,
+		/datum/quirk/positive/gold_arm_left,
+		/datum/quirk/positive/bronze_arm_right,
+		/datum/quirk/positive/bronze_arm_left,
 	)
 	customization_options = list(
 		BODY_ZONE_L_ARM,
 		BODY_ZONE_R_ARM,
 	)
 
-/datum/quirk/vice/crippled_arm/on_spawn()
+/datum/quirk/negative/crippled_arm/on_spawn()
 	if(!ishuman(owner))
 		return
 	if(!customization_value)
@@ -236,7 +190,7 @@
 
 	addtimer(CALLBACK(src, PROC_REF(remove_limb)), 0.5 SECONDS)
 
-/datum/quirk/vice/crippled_arm/proc/remove_limb()
+/datum/quirk/negative/crippled_arm/proc/remove_limb()
 	if(!ishuman(owner))
 		return
 
@@ -247,7 +201,7 @@
 		limb_to_remove.drop_limb()
 		qdel(limb_to_remove)
 
-/datum/quirk/vice/crippled_arm/get_option_name(option)
+/datum/quirk/negative/crippled_arm/get_option_name(option)
 	switch(option)
 		if(BODY_ZONE_L_ARM)
 			return "Left Arm"
@@ -255,23 +209,23 @@
 			return "Right Arm"
 	return "[option]"
 
-/datum/quirk/vice/crippled_leg
+/datum/quirk/negative/crippled_leg
 	name = "Missing Leg"
 	desc = "You're missing a leg. It was lost in an accident or battle, and the stump is too damaged for anything but prosthetics."
 	point_value = 5
 	customization_label = "Choose Missing Leg"
 	incompatible_quirks = list(
-		/datum/quirk/vice/wooden_leg_right,
-		/datum/quirk/vice/wooden_leg_left,
-		/datum/quirk/boon/iron_leg_right,
-		/datum/quirk/boon/iron_leg_left,
-		/datum/quirk/boon/steel_leg_right,
-		/datum/quirk/boon/steel_leg_left,
-		/datum/quirk/boon/gold_leg_right,
-		/datum/quirk/boon/gold_leg_left,
+		/datum/quirk/negative/wooden_leg_right,
+		/datum/quirk/negative/wooden_leg_left,
+		/datum/quirk/positive/iron_leg_right,
+		/datum/quirk/positive/iron_leg_left,
+		/datum/quirk/positive/steel_leg_right,
+		/datum/quirk/positive/steel_leg_left,
+		/datum/quirk/positive/gold_leg_right,
+		/datum/quirk/positive/gold_leg_left,
 		/*
-		/datum/quirk/boon/bronze_leg_right,
-		/datum/quirk/boon/bronze_leg_left,
+		/datum/quirk/positive/bronze_leg_right,
+		/datum/quirk/positive/bronze_leg_left,
 		*/
 	)
 	customization_options = list(
@@ -279,7 +233,7 @@
 		BODY_ZONE_R_LEG
 	)
 
-/datum/quirk/vice/crippled_leg/on_spawn()
+/datum/quirk/negative/crippled_leg/on_spawn()
 	if(!ishuman(owner))
 		return
 	if(!customization_value)
@@ -287,7 +241,7 @@
 
 	addtimer(CALLBACK(src, PROC_REF(remove_limb)), 0.5 SECONDS)
 
-/datum/quirk/vice/crippled_leg/proc/remove_limb()
+/datum/quirk/negative/crippled_leg/proc/remove_limb()
 	if(!ishuman(owner))
 		return
 
@@ -298,7 +252,7 @@
 		limb_to_remove.drop_limb()
 		qdel(limb_to_remove)
 
-/datum/quirk/vice/crippled_leg/get_option_name(option)
+/datum/quirk/negative/crippled_leg/get_option_name(option)
 	switch(option)
 		if(BODY_ZONE_L_LEG)
 			return "Left Leg"
@@ -306,7 +260,7 @@
 			return "Right Leg"
 	return "[option]"
 
-/datum/quirk/vice/tainted_soul
+/datum/quirk/negative/tainted_soul
 	name = "Tainted Soul"
 	desc = "You had an unfortunate run-in with a monster. A goblin saved you, but you've never felt the same since."
 	point_value = 2
@@ -319,28 +273,28 @@
 		/datum/species/orc,
 	)
 
-/datum/quirk/vice/tainted_soul/on_spawn()
+/datum/quirk/negative/tainted_soul/on_spawn()
 	if(!ishuman(owner))
 		return
 	ADD_TRAIT(owner, TRAIT_TAINTED_LUX, "[type]")
 
-/datum/quirk/vice/tainted_soul/on_remove()
+/datum/quirk/negative/tainted_soul/on_remove()
 	if(!ishuman(owner))
 		return
 	REMOVE_TRAIT(owner, TRAIT_TAINTED_LUX, "[type]")
 
-/datum/quirk/vice/rough_start
+/datum/quirk/negative/rough_start
 	name = "Rough Start"
 	desc = "You begin your journey drunk, drugged, beaten, with broken legs, and spawn somewhere random in the forest."
 	point_value = 4
 	apply_order = 10000 ///this should always be first tbh
 	incompatible_quirks = list(
-		/datum/quirk/vice/lost_keys,
-		/datum/quirk/boon/always_prepared,
+		/datum/quirk/negative/lost_keys,
+		/datum/quirk/positive/always_prepared,
 	)
 	preview_render = FALSE
 
-/datum/quirk/vice/rough_start/on_spawn()
+/datum/quirk/negative/rough_start/on_spawn()
 	if(!owner || !ishuman(owner))
 		return
 
@@ -380,16 +334,16 @@
 
 	to_chat(H, span_danger("You awaken battered and broken in an unfamiliar place..."))
 
-/datum/quirk/vice/lost_keys
+/datum/quirk/negative/lost_keys
 	name = "Lost Keys"
 	desc = "You've lost your keys! They're somewhere nearby, and you spawn at a vagrant location."
 	point_value = 1
 	incompatible_quirks = list(
-		/datum/quirk/vice/rough_start,
+		/datum/quirk/negative/rough_start,
 	)
 	preview_render = FALSE
 
-/datum/quirk/vice/lost_keys/on_spawn()
+/datum/quirk/negative/lost_keys/on_spawn()
 	if(!owner || !ishuman(owner))
 		return
 
@@ -405,7 +359,7 @@
 
 	to_chat(H, span_warning("Where did I leave my keys?"))
 
-/datum/quirk/vice/lost_keys/after_job_spawn(datum/job/job)
+/datum/quirk/negative/lost_keys/after_job_spawn(datum/job/job)
 	if(!owner || !ishuman(owner))
 		return
 
@@ -431,22 +385,22 @@
 			var/turf/key_location = pick(nearby_turfs)
 			K.forceMove(key_location)
 
-/datum/quirk/vice/nightmares
+/datum/quirk/negative/nightmares
 	name = "Nitemares"
 	desc = "You suffer from terrible nitemares. You scream in your sleep and take longer to rest."
 	point_value = 1
 	var/next_scream = 0
 
-/datum/quirk/vice/nightmares/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/nightmares/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Nitemares..."))
 
-/datum/quirk/vice/nightmares/on_spawn()
+/datum/quirk/negative/nightmares/on_spawn()
 	if(!owner)
 		return
 	START_PROCESSING(SSobj, src)
 
-/datum/quirk/vice/nightmares/process()
+/datum/quirk/negative/nightmares/process()
 	if(!owner)
 		return
 
@@ -455,7 +409,7 @@
 			next_scream = world.time + rand(30 SECONDS, 60 SECONDS)
 			owner.emote("scream")
 
-/datum/quirk/vice/nightmares/on_remove()
+/datum/quirk/negative/nightmares/on_remove()
 	STOP_PROCESSING(SSobj, src)
 
 /datum/stress_event/darkness
@@ -463,18 +417,18 @@
 	desc = span_red("I can't see! The darkness is terrifying!")
 	timer = 1 MINUTES
 
-/datum/quirk/vice/fear_darkness
+/datum/quirk/negative/fear_darkness
 	name = "Fear of Darkness"
 	desc = "The dark terrifies you. Without light, you panic and lose control."
 	point_value = 3
 	var/in_darkness = FALSE
 	var/next_panic = 0
 
-/datum/quirk/vice/fear_darkness/on_examined(mob/user, list/P, list/examine_contents)
+/datum/quirk/negative/fear_darkness/on_examined(mob/user, list/P, list/examine_contents)
 	if(HAS_TRAIT(user, TRAIT_RECOGNIZE_ADDICTS))
 		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, span_info("Scared of the Dark..."))
 
-/datum/quirk/vice/fear_darkness/on_life(mob/living/user)
+/datum/quirk/negative/fear_darkness/on_life(mob/living/user)
 	if(!owner)
 		return
 
@@ -509,23 +463,23 @@
 			to_chat(owner, span_notice("Finally, light! I can breathe again..."))
 
 
-/datum/quirk/vice/endowed
+/datum/quirk/negative/endowed
 	name = "Naturally Endowed"
 	desc = "I have massive bits... This makes life hard."
 	point_value = 2
 	revive_reapply = TRUE
 
-/datum/quirk/vice/endowed/on_spawn()
+/datum/quirk/negative/endowed/on_spawn()
 	var/mob/living/carbon/human/H = owner
 	H.remove_status_effect(/datum/status_effect/debuff/boobs_quirk)
 	H.apply_status_effect(/datum/status_effect/debuff/boobs_quirk)
 
-/datum/quirk/vice/nopouch
+/datum/quirk/negative/nopouch
 	name = "No Pouch"
 	desc = "I lost my pouch recently, I'm without an amna.."
 	point_value = 1
 
-/datum/quirk/vice/nopouch/after_job_spawn(datum/job/job)
+/datum/quirk/negative/nopouch/after_job_spawn(datum/job/job)
 	var/mob/living/carbon/human/H = owner
 	var/pouch = find_pouch(H)
 
@@ -544,7 +498,7 @@
 	to_chat(H, span_warning("I've lost my pouch... Damn it..."))
 
 /// Proc to find pouch in inventory, including slots and containers like satchels
-/datum/quirk/vice/nopouch/proc/find_pouch(mob/living/carbon/human/H)
+/datum/quirk/negative/nopouch/proc/find_pouch(mob/living/carbon/human/H)
 	var/obj/item/storage/belt/pouch/inventory_pouch
 	for(inventory_pouch in H.contents)
 		return inventory_pouch
@@ -553,12 +507,12 @@
 			return inventory_pouch
 	return null
 
-/datum/quirk/vice/wild_night
+/datum/quirk/negative/wild_night
 	name = "Wild Night"
 	desc = "I don't remember what I did last night, and now I'm lost!"
 	point_value = 1
 
-/datum/quirk/vice/wild_night/on_spawn()
+/datum/quirk/negative/wild_night/on_spawn()
 	var/mob/living/carbon/human/character = owner
 	var/turf/location = get_spawn_turf_for_job("Pilgrim") || get_turf(character)
 	if(location)
@@ -567,66 +521,66 @@
 	character.reagents.add_reagent(/datum/reagent/consumable/ethanol/beer, 72)
 	character.grant_lit_torch()
 
-/datum/quirk/vice/atrophy
+/datum/quirk/negative/atrophy
 	name = "Atrophy"
 	desc = "When growing up I could barely feed myself. This has left my body weak and fragile."
 	point_value = 6
 	defeat_threshold_mult = 0.6
 
-/datum/quirk/vice/atrophy/on_spawn()
+/datum/quirk/negative/atrophy/on_spawn()
 	var/mob/living/carbon/human/H = owner
 	H.change_stat("strength", -2)
 	H.change_stat("constitution", -2)
 	H.change_stat("endurance", -2)
 
-/datum/quirk/vice/monochromatic
+/datum/quirk/negative/monochromatic
 	name = "Monochromacy"
 	desc = "I see things all gray."
 	point_value = 2
 
-/datum/quirk/vice/monochromatic/on_spawn()
+/datum/quirk/negative/monochromatic/on_spawn()
 	. = ..()
 	owner.add_client_colour(/datum/client_colour/monochrome)
 
-/datum/quirk/vice/monochromatic/on_remove()
+/datum/quirk/negative/monochromatic/on_remove()
 	. = ..()
 	if(owner)
 		owner.remove_client_colour(/datum/client_colour/monochrome)
 
-/datum/quirk/vice/no_taste
+/datum/quirk/negative/no_taste
 	name = "Ageusia"
 	desc = "I can't taste a thing."
 	point_value = 1
 	gain_text = span_notice("I can't taste anything!")
 	lose_text = span_notice("I can taste again!")
 
-/datum/quirk/vice/no_taste/on_spawn()
+/datum/quirk/negative/no_taste/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_AGEUSIA, "[type]")
 
-/datum/quirk/vice/no_taste/on_remove()
+/datum/quirk/negative/no_taste/on_remove()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_AGEUSIA, "[type]")
 
-/datum/quirk/vice/vegetarian
+/datum/quirk/negative/vegetarian
 	name = "Vegetarian"
 	desc = "I can't eat meat."
 	point_value = 1
 	gain_text = span_notice("I feel repulsion at the idea of eating meat.")
 	lose_text = span_notice("I feel like eating meat isn't that bad.")
 
-/datum/quirk/vice/vegetarian/on_spawn()
+/datum/quirk/negative/vegetarian/on_spawn()
 	. = ..()
 	var/mob/living/carbon/human/H = owner
 	var/datum/species/species = H.dna.species
 	species.liked_food &= ~MEAT
 	species.disliked_food |= MEAT
 
-/datum/quirk/vice/vegetarian/on_remove()
+/datum/quirk/negative/vegetarian/on_remove()
 	. = ..()
 	var/mob/living/carbon/human/H = owner
 	if(H)
@@ -636,14 +590,14 @@
 		if(!(initial(species.disliked_food) & MEAT))
 			species.disliked_food &= ~MEAT
 
-/datum/quirk/vice/blooddeficiency
+/datum/quirk/negative/blooddeficiency
 	name = "Blood Deficiency"
 	desc = "My blood is not enough for me, I need to keep it in me."
 	point_value = 2
 	gain_text = span_danger("I feel my vigor slowly fading away.")
 	lose_text = span_notice("I feel vigorous again.")
 
-/datum/quirk/vice/blooddeficiency/on_life()
+/datum/quirk/negative/blooddeficiency/on_life()
 	var/mob/living/carbon/human/H = owner
 	if(NOBLOOD in H.dna.species.species_traits) //can't lose blood if my species doesn't have any
 		return
@@ -651,7 +605,7 @@
 		if (H.blood_volume > (BLOOD_VOLUME_NORMAL - 25)) // just barely survivable without treatment
 			H.blood_volume -= 0.275
 
-/datum/quirk/vice/frail
+/datum/quirk/negative/frail
 	name = "Frail"
 	desc = "My bones are like sticks."
 	point_value = 4
@@ -659,82 +613,82 @@
 	gain_text = span_danger("I feel frail.")
 	lose_text = span_notice("I feel sturdy again.")
 
-/datum/quirk/vice/frail/on_spawn()
+/datum/quirk/negative/frail/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_EASYLIMBDISABLE, "[type]")
 
-/datum/quirk/vice/frail/on_remove()
+/datum/quirk/negative/frail/on_remove()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_EASYLIMBDISABLE, "[type]")
 
-/datum/quirk/vice/heavy_sleeper
+/datum/quirk/negative/heavy_sleeper
 	name = "Heavy Sleeper"
 	desc = "I sleep like a rock."
 	point_value = 1
 	gain_text = span_danger("I feel sleepy.")
 	lose_text = span_notice("I feel awake again.")
 
-/datum/quirk/vice/heavy_sleeper/on_spawn()
+/datum/quirk/negative/heavy_sleeper/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_HEAVY_SLEEPER, "[type]")
 
-/datum/quirk/vice/heavy_sleeper/on_remove()
+/datum/quirk/negative/heavy_sleeper/on_remove()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_HEAVY_SLEEPER, "[type]")
 
-/datum/quirk/vice/light_drinker
+/datum/quirk/negative/light_drinker
 	name = "Light Drinker"
 	desc = "Even a drop of alcohol knocks me out."
 	point_value = 1
 	gain_text = span_notice("Just the thought of drinking alcohol makes my head spin.")
 	lose_text = span_danger("You're no longer severely affected by alcohol.")
 
-/datum/quirk/vice/light_drinker/on_spawn()
+/datum/quirk/negative/light_drinker/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_LIGHT_DRINKER, "[type]")
 
-/datum/quirk/vice/light_drinker/on_remove()
+/datum/quirk/negative/light_drinker/on_remove()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_LIGHT_DRINKER, "[type]")
 
-/datum/quirk/vice/poor_aim
+/datum/quirk/negative/poor_aim
 	name = "Poor Aim"
 	desc = "My aim is poor."
 	point_value = 1
 
-/datum/quirk/vice/poor_aim/on_spawn()
+/datum/quirk/negative/poor_aim/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_POOR_AIM, "[type]")
 
-/datum/quirk/vice/poor_aim/on_remove()
+/datum/quirk/negative/poor_aim/on_remove()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
 	ADD_TRAIT(H, TRAIT_POOR_AIM, "[type]")
 
-/datum/quirk/vice/missing_teeth
+/datum/quirk/negative/missing_teeth
 	name = "Missing Teeth"
 	desc = "Years of brawling, bad luck, or bad hygiene have cost you several teeth. You lisp noticeably."
 	point_value = 2
 	incompatible_quirks = list(
-		/datum/quirk/vice/toothless,
+		/datum/quirk/negative/toothless,
 	)
 
-/datum/quirk/vice/missing_teeth/on_spawn()
+/datum/quirk/negative/missing_teeth/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner
@@ -745,29 +699,29 @@
 	jaw.remove_teeth(to_remove)
 	to_chat(H, span_warning("You run your tongue across the gaps where your teeth used to be."))
 
-/datum/quirk/vice/no_dental
+/datum/quirk/negative/no_dental
 	name = "No Dental"
 	desc = "My teeth are loose, brittle, or terribly neglected. A hard blow can send them flying."
 	point_value = 2
 	incompatible_quirks = list(
-		/datum/quirk/vice/toothless,
+		/datum/quirk/negative/toothless,
 	)
 
-/datum/quirk/vice/no_dental/on_spawn()
+/datum/quirk/negative/no_dental/on_spawn()
 	if(!ishuman(owner))
 		return
 	to_chat(owner, span_warning("My teeth feel worryingly loose."))
 
-/datum/quirk/vice/toothless
+/datum/quirk/negative/toothless
 	name = "Toothless"
 	desc = "I have no teeth left at all. My speech and bite suffer for it."
 	point_value = 3
 	incompatible_quirks = list(
-		/datum/quirk/vice/missing_teeth,
-		/datum/quirk/vice/no_dental,
+		/datum/quirk/negative/missing_teeth,
+		/datum/quirk/negative/no_dental,
 	)
 
-/datum/quirk/vice/toothless/on_spawn()
+/datum/quirk/negative/toothless/on_spawn()
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/H = owner

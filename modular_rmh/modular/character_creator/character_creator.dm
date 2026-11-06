@@ -1123,7 +1123,7 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 	for(var/list/quirk_data in imported)
 		if(!islist(quirk_data))
 			continue
-		var/quirk_type = text2path("[quirk_data["type"]]")
+		var/quirk_type = text2path(migrate_legacy_quirk_text("[quirk_data["type"]]"))
 		if(!ispath(quirk_type, /datum/quirk) || (quirk_type in quirks))
 			continue
 		quirks += quirk_type
@@ -1133,7 +1133,7 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 	validate_quirks()
 	// Extra fields go through the regular per-field sanitizer once the quirk list is final.
 	for(var/list/quirk_data in imported)
-		var/quirk_type = text2path("[quirk_data["type"]]")
+		var/quirk_type = text2path(migrate_legacy_quirk_text("[quirk_data["type"]]"))
 		var/list/extra = quirk_data["extra"]
 		if(!(quirk_type in quirks) || !islist(extra))
 			continue

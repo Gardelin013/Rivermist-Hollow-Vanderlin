@@ -158,15 +158,15 @@
 	if(istype(entry, /datum/customizer_entry/organ/genitals/vagina))
 		var/datum/customizer_entry/organ/genitals/vagina/vagina_entry = entry
 		if(vagina_entry.disabled)
-			if(remove_quirk(/datum/quirk/peculiarity/egg_layer))
+			if(remove_quirk(/datum/quirk/neutral/egg_layer))
 				. = TRUE
 		return
 
 	if(istype(entry, /datum/customizer_entry/organ/genitals/penis))
-		if(has_selected_quirk(/datum/quirk/peculiarity/ovipositor))
+		if(has_selected_quirk(/datum/quirk/neutral/ovipositor))
 			. |= force_ovipositor_genital_entry()
 
-/datum/quirk/peculiarity/ovipositor
+/datum/quirk/neutral/ovipositor
 	name = "Oviposition"
 	desc = "My 'penis' is a functional ovipositor and can be used to lay eggs."
 	customization_label = "Choose Egg Type"
@@ -189,7 +189,7 @@
 		list("key" = "resource_dependent", "label" = "Resource-Dependent Yield", "type" = QUIRK_SELECT, "default" = "No", "options" = list("No", "Yes"))
 	)
 
-/datum/quirk/peculiarity/ovipositor/is_available(datum/preferences/prefs)
+/datum/quirk/neutral/ovipositor/is_available(datum/preferences/prefs)
 	if(!..())
 		return FALSE
 	if(!prefs)
@@ -197,7 +197,7 @@
 
 	return prefs.can_support_ovipositor_genitals()
 
-/datum/quirk/peculiarity/ovipositor/on_spawn()
+/datum/quirk/neutral/ovipositor/on_spawn()
 	if(!customization_value || !(customization_value in customization_options))
 		customization_value = OVI_EGG_NORMAL
 
@@ -228,14 +228,14 @@
 
 	set_ovipositor_functionality(ovipositor_organ, TRUE)
 
-/datum/quirk/peculiarity/ovipositor/on_remove()
+/datum/quirk/neutral/ovipositor/on_remove()
 	var/obj/item/organ/genitals/penis/ovipositor/ovipositor_organ = owner?.getorganslot(ORGAN_SLOT_PENIS)
 	set_ovipositor_functionality(ovipositor_organ, FALSE)
 
-/datum/quirk/peculiarity/ovipositor/get_option_name(option)
+/datum/quirk/neutral/ovipositor/get_option_name(option)
 	return get_oviposition_egg_type_option_name(option)
 
-/datum/quirk/peculiarity/egg_layer
+/datum/quirk/neutral/egg_layer
 	name = "Egg Layer"
 	desc = "My womb slowly forms eggs on its own."
 	customization_label = "Choose Egg Type"
@@ -257,7 +257,7 @@
 		list("key" = "resource_dependent", "label" = "Resource-Dependent Yield", "type" = QUIRK_SELECT, "default" = "No", "options" = list("No", "Yes"))
 	)
 
-/datum/quirk/peculiarity/egg_layer/is_available(datum/preferences/prefs)
+/datum/quirk/neutral/egg_layer/is_available(datum/preferences/prefs)
 	if(!..())
 		return FALSE
 	if(!prefs)
@@ -266,7 +266,7 @@
 	var/datum/customizer_entry/organ/genitals/vagina/vagina_entry = prefs.get_customizer_entry_of_type(/datum/customizer_entry/organ/genitals/vagina)
 	return vagina_entry && !vagina_entry.disabled
 
-/datum/quirk/peculiarity/egg_layer/on_spawn()
+/datum/quirk/neutral/egg_layer/on_spawn()
 	if(!customization_value || !(customization_value in customization_options))
 		customization_value = OVI_EGG_NORMAL
 
@@ -294,7 +294,7 @@
 		womb.resource_dependent_yield = (get_extra_value("resource_dependent", "No") == "Yes")
 		womb.update_custom_organ_desc()
 
-/datum/quirk/peculiarity/egg_layer/on_remove()
+/datum/quirk/neutral/egg_layer/on_remove()
 	if(!owner)
 		return
 
@@ -312,7 +312,7 @@
 		womb.resource_dependent_yield = FALSE
 		womb.update_custom_organ_desc()
 
-/datum/quirk/peculiarity/egg_layer/get_option_name(option)
+/datum/quirk/neutral/egg_layer/get_option_name(option)
 	return get_oviposition_egg_type_option_name(option)
 
 /// Validates a hex color string for oviposition egg tinting. Returns null if invalid.

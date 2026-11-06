@@ -10,7 +10,7 @@
 		if(istype(wear_neck, /obj/item/clothing/neck/talkstone))
 			return TRUE
 	if(!has_language(language))
-		if(has_quirk(/datum/quirk/vice/paranoid))
+		if(has_quirk(/datum/quirk/negative/paranoid))
 			V.add_stress(/datum/stress_event/para/talk)
 
 /mob/living/carbon/human/canBeHandcuffed()

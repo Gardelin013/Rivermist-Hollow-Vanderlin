@@ -111,7 +111,7 @@
 	if(!opening)
 		return 0
 	var/share = clamp((BIRTH_PAIN_STRAIN - opening.get_strain(girth)) / (BIRTH_PAIN_STRAIN - 1), 0, 1)
-	if(include_kinks && has_quirk(/datum/quirk/vice/addiction/masochist))
+	if(include_kinks && has_quirk(/datum/quirk/negative/addiction/masochist))
 		share = max(share, BIRTH_MASOCHIST_FLOOR)
 	return share
 
