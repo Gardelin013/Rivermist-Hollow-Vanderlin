@@ -30,6 +30,8 @@
 	var/hatch_decision = null
 	/// When a sealed host first kept this ripe egg from being laid.
 	var/blocked_since = 0
+	/// When the egg first ripened, for kinds that start labour after a fixed delay.
+	var/ripe_since = 0
 	COOLDOWN_DECLARE(stage_time)
 	COOLDOWN_DECLARE(hatch_request_cooldown)
 	COOLDOWN_DECLARE(lay_cooldown)
@@ -194,17 +196,27 @@
 		return
 	blocked_since = 0
 
-	if(COOLDOWN_FINISHED(src, lay_cooldown))
+	if(!ripe_since)
+		ripe_since = world.time
+		if(egg_profile?.labour_delay)
+			to_chat(carrier, span_warning("The [egg.name] in my [get_container_location_name()] is ripe. It will not wait long."))
+	// A kind with a fixed delay comes out once it is up; the rest roll for it every minute.
+	var/wants_out = FALSE
+	if(egg_profile?.labour_delay)
+		wants_out = world.time - ripe_since >= egg_profile.labour_delay
+	else if(COOLDOWN_FINISHED(src, lay_cooldown))
 		COOLDOWN_START(src, lay_cooldown, OVIPOSITION_LAY_COOLDOWN)
 		if(prob(20))
 			to_chat(carrier, span_warning("The egg in my [get_container_location_name()] feels ready to come out."))
-		// A ripe egg comes out through labour; only creatures still drop it on the spot.
-		if(prob(10))
-			if(iscarbon(carrier))
-				var/mob/living/carbon/carbon_carrier = carrier
-				carbon_carrier.start_labour(egg, container)
-			else
-				lay_egg(get_turf(carrier), TRUE)
+		wants_out = prob(egg_profile?.labour_chance || OVI_EGG_LABOUR_CHANCE)
+	if(!wants_out)
+		return
+	// A ripe egg comes out through labour; only creatures still drop it on the spot.
+	if(iscarbon(carrier))
+		var/mob/living/carbon/carbon_carrier = carrier
+		carbon_carrier.start_labour(egg, container)
+	else
+		lay_egg(get_turf(carrier), TRUE)
 
 /// Picks where the ripe egg hatches: its kind's mode, the host's consent and, for an either, a fill-swayed roll.
 /datum/component/pregnancy/proc/decide_hatch_place()

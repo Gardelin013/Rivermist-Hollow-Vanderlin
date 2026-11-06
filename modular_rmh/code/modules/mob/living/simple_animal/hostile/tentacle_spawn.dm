@@ -494,7 +494,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/tentacle/ambusher/maneater/Initialize(mapload)
 	. = ..()
-	var/obj/item/organ/genitals/penis/ovipositor/ovipositor = ensure_typed_ovipositor(src, OVI_EGG_MANEATER)
+	var/obj/item/organ/genitals/penis/ovipositor/ovipositor = ensure_typed_ovipositor(src, OVI_EGG_MANEATER, 1, 3, 2)
 	if(ovipositor)
 		ovipositor.name = "seed-bearing vine"
 		ovipositor.desc = "A prehensile plant tendril adapted to implant soft, root-filled eggs."

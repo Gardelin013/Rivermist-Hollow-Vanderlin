@@ -125,6 +125,13 @@
 /mob/living/proc/has_penis()
 	return getorganslot(ORGAN_SLOT_PENIS) || gender == MALE
 
+/// Like has_penis(), but a worn strapon does not count.
+/mob/living/proc/has_real_penis()
+	var/obj/item/organ/genitals/penis/penis = getorganslot(ORGAN_SLOT_PENIS)
+	if(penis?.is_false_organ())
+		return FALSE
+	return has_penis()
+
 /mob/living/proc/has_testicles()
 	return getorganslot(ORGAN_SLOT_TESTICLES) || gender == MALE
 
@@ -770,6 +777,33 @@
 /// Shown when this mob climaxes with nothing to release.
 /mob/living/proc/get_dry_climax_message()
 	return "[src] climaxes, yet nothing is released!"
+
+/// TRUE when a climax releases nothing: no testicles, and a penis or no vagina.
+/mob/living/proc/climaxes_dry()
+	if(getorganslot(ORGAN_SLOT_TESTICLES))
+		return FALSE
+	if(!getorganslot(ORGAN_SLOT_VAGINA))
+		return TRUE
+	// An ovipositor lays eggs on the climax signal and a strapon spills nothing, so the vagina still climaxes.
+	var/obj/item/organ/genitals/penis/penis = getorganslot(ORGAN_SLOT_PENIS)
+	return penis && !istype(penis, /obj/item/organ/genitals/penis/ovipositor) && !penis.is_false_organ()
+
+/// TRUE when [action] works this mob's strapon with no testicles behind it, so only the vagina climaxes.
+/mob/living/proc/climaxes_behind_strapon(datum/sex_action/action)
+	if(!action || getorganslot(ORGAN_SLOT_TESTICLES) || !getorganslot(ORGAN_SLOT_VAGINA))
+		return FALSE
+	var/obj/item/organ/genitals/penis/penis = getorganslot(ORGAN_SLOT_PENIS)
+	return penis?.is_false_organ() && action.uses_penis_of(src)
+
+/// Whether this act works [holder]'s penis slot: penetrating with it, its scene slot, or its organ-use lists.
+/datum/sex_action/proc/uses_penis_of(mob/living/holder)
+	if(!holder)
+		return FALSE
+	if(ispath(stored_item_type, /obj/item/organ/genitals/penis) && get_storage_insertor(action_user, action_target) == holder)
+		return TRUE
+	if(holder == action_user && (get_scene_user_slot() == ORGAN_SLOT_PENIS || (ORGAN_SLOT_PENIS in uses_user_organs)))
+		return TRUE
+	return holder == action_target && (get_scene_target_slot() == ORGAN_SLOT_PENIS || (ORGAN_SLOT_PENIS in uses_target_organs))
 
 /mob/living/proc/give_genitals()
 	var/mob/living/user = src

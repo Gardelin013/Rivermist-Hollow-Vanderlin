@@ -74,7 +74,16 @@
 /// The hunter's family words for this act.
 /datum/sex_action/npc/proc/get_act_words(mob/living/user, mob/living/target)
 	var/datum/horny_family_profile/profile = user.get_horny_family_profile()
-	return profile.get_act_words(user, target)
+	var/list/words = profile.get_act_words(user, target)
+	// A hunter with no seed, like a female spider on her ovipositor, only pulses.
+	if(!hunter_has_seed(user))
+		words["spill_room"] = "pulsing"
+		words["spill_me"] = "[user.p_they()] pulses"
+	return words
+
+/// Whether the hunter has testicles, so its climax lines may spill seed.
+/datum/sex_action/npc/proc/hunter_has_seed(mob/living/user)
+	return !!user.getorganslot(ORGAN_SLOT_TESTICLES)
 
 /// Whether the hunter's family has hands to grab with.
 /datum/sex_action/npc/proc/hunter_has_hands(mob/living/user)

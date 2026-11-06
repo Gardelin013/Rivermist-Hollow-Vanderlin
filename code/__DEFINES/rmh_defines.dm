@@ -68,6 +68,14 @@
 #define OVI_EGG_RESIDUE_APHRODISIAC 2
 #define OVI_EGG_RESIDUE_VENOM 0.5
 #define OVI_EGG_RESIDUE_VENOM_SORENESS 5
+/// Aphrodisiac units a laced egg holds and leaves behind.
+#define OVI_EGG_LACE_UNITS 2
+/// Share of the birth residue an egg leaves in the canal on the way in.
+#define OVI_EGG_DEPOSIT_RESIDUE_SHARE 0.5
+/// A fresh egg passes the opening at this share of its ripe width.
+#define OVI_EGG_LAY_GIRTH_SHARE 0.5
+/// Chance per minute that a ripe egg starts labour, for kinds without a fixed delay.
+#define OVI_EGG_LABOUR_CHANCE 10
 // How an egg kind hatches: on the floor once laid, inside its host, or either by a roll.
 #define OVI_HATCH_OUTSIDE 1
 #define OVI_HATCH_INSIDE 2

@@ -315,9 +315,7 @@
 		stop_runtime()
 		return
 
-	var/suppress_visible_messages = begin_remote_visible_message_suppression()
-	var/start_result = on_start(action_user, action_target)
-	end_remote_visible_message_suppression(suppress_visible_messages)
+	var/start_result = run_act_hook(PROC_REF(on_start), action_user, action_target)
 	if(start_result == FALSE || !is_runtime_active())
 		stop_runtime()
 		return
@@ -369,9 +367,7 @@
 			send_clench_prompt()
 			continue
 
-		suppress_visible_messages = begin_remote_visible_message_suppression()
-		on_perform(action_user, action_target)
-		end_remote_visible_message_suppression(suppress_visible_messages)
+		run_act_hook(PROC_REF(on_perform), action_user, action_target)
 		leave_perform_lipstick_marks()
 		on_orifice_cycle()
 		play_perform_breast_anim()
@@ -435,21 +431,52 @@
 		return FALSE
 	return TRUE
 
+/// Mutes the pair under a secret remote context; returns the muted mobs for the end call.
 /datum/sex_action/proc/begin_remote_visible_message_suppression()
 	var/datum/sex_remote_context/suppressing_context = get_valid_remote_context()
 	if(!suppressing_context || suppressing_context.allows_visible_messages)
-		return FALSE
-	action_user?.push_visible_message_suppression()
+		return null
+	var/list/muted = list()
+	if(action_user)
+		muted += action_user
 	if(action_target && action_target != action_user)
-		action_target.push_visible_message_suppression()
-	return TRUE
+		muted += action_target
+	for(var/mob/living/muted_mob as anything in muted)
+		muted_mob.push_visible_message_suppression()
+	return muted
 
-/datum/sex_action/proc/end_remote_visible_message_suppression(was_suppressed)
-	if(!was_suppressed)
-		return
-	action_user?.pop_visible_message_suppression()
-	if(action_target && action_target != action_user)
-		action_target.pop_visible_message_suppression()
+/// Unmutes the mobs the begin call muted, even if the act lost its pair meanwhile.
+/datum/sex_action/proc/end_remote_visible_message_suppression(list/muted)
+	for(var/mob/living/muted_mob as anything in muted)
+		muted_mob.pop_visible_message_suppression()
+
+/// Runs an act hook inside its message scopes; a runtime in the hook still closes them.
+/datum/sex_action/proc/run_act_hook(hook, mob/living/user, mob/living/target)
+	var/list/muted = begin_remote_visible_message_suppression()
+	begin_felt_lines(user, target)
+	try
+		. = call(src, hook)(user, target)
+	catch(var/exception/hook_error)
+		end_felt_lines(user, target)
+		end_remote_visible_message_suppression(muted)
+		throw hook_error
+	end_felt_lines(user, target)
+	end_remote_visible_message_suppression(muted)
+
+/// Both bodies in the act get its lines while blind or asleep; pair with end_felt_lines().
+/datum/sex_action/proc/begin_felt_lines(mob/living/user, mob/living/target)
+	user?.push_feels_own_body()
+	if(target && target != user)
+		target.push_feels_own_body()
+
+/datum/sex_action/proc/end_felt_lines(mob/living/user, mob/living/target)
+	user?.pop_feels_own_body()
+	if(target && target != user)
+		target.pop_feels_own_body()
+
+/// on_perform() inside its message scopes, for callers outside the act runtime.
+/datum/sex_action/proc/felt_perform(mob/living/user, mob/living/target)
+	run_act_hook(PROC_REF(on_perform), user, target)
 
 /// Never returns null - the result divides do_time, so an unlisted speed would be a division by zero.
 /datum/sex_action/proc/get_speed_multiplier()

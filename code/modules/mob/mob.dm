@@ -143,26 +143,32 @@ GLOBAL_VAR_INIT(mobids, 1)
 /mob/proc/show_message(msg, type, alt_msg, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
 	if(!client)
 		return
+	msg = get_perceived_message(msg, type, alt_msg, alt_type)
+	if(isnull(msg))
+		return
+	to_chat(src, msg)
 
+/// The line this mob perceives of a message, or null when its sight and hearing both miss it.
+/mob/proc/get_perceived_message(msg, type, alt_msg, alt_type)
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 
 	if(type)
-		if(type & MSG_VISUAL && is_blind() )//Vision related
+		if(type & MSG_VISUAL && is_blind() && !feels_own_body_count)//Vision related
 			if(!alt_msg)
-				return
+				return null
 			else
 				msg = alt_msg
 				type = alt_type
 
 		if(type & MSG_AUDIBLE && !can_hear())//Hearing related
 			if(!alt_msg)
-				return
+				return null
 			else
 				msg = alt_msg
 				type = alt_type
-				if(type & MSG_VISUAL && is_blind())
-					return
-	to_chat(src, msg)
+				if(type & MSG_VISUAL && is_blind() && !feels_own_body_count)
+					return null
+	return msg
 
 /mob/proc/get_portal_visible_message_recipients()
 	return null
@@ -272,6 +278,21 @@ GLOBAL_VAR_INIT(mobids, 1)
 	. = ..()
 	if(self_message)
 		show_message(self_message, MSG_VISUAL, blind_message, MSG_AUDIBLE)
+
+/// While above zero, visual lines reach this mob blind or asleep: something is done to its own body.
+/mob/var/tmp/feels_own_body_count = 0
+
+/mob/proc/push_feels_own_body()
+	feels_own_body_count++
+
+/mob/proc/pop_feels_own_body()
+	feels_own_body_count = max(feels_own_body_count - 1, 0)
+
+/// visible_message() from this mob that it gets too while blind or asleep; use for acts on its own body.
+/mob/proc/felt_visible_message(message, self_message, blind_message, vision_distance = DEFAULT_MESSAGE_RANGE)
+	push_feels_own_body()
+	visible_message(message, self_message, blind_message, vision_distance)
+	pop_feels_own_body()
 
 /**
  * Show a message to all mobs in earshot of this atom

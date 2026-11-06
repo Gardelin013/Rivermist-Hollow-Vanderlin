@@ -51,8 +51,15 @@
 	AddComponent(/datum/component/ai_aggro_system)
 	ADD_TRAIT(src, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_KNEESTINGER_IMMUNITY, INNATE_TRAIT)
+	AddElement(/datum/element/spider_habits, 25)
 
 	addtimer(CALLBACK(src, PROC_REF(find_lurker_to_follow)), 10)
+
+/mob/living/simple_animal/hostile/retaliate/mirespider/AttackingTarget(mob/living/passed_target)
+	. = ..()
+	var/mob/living/bitten = passed_target || target
+	if(. && isliving(bitten))
+		spider_bite_landed(bitten)
 
 /mob/living/simple_animal/hostile/retaliate/mirespider/proc/find_lurker_to_follow()
 	var/mob/living/simple_animal/hostile/mirespider_lurker/lurker = null
@@ -210,7 +217,14 @@
 	ADD_TRAIT(src, TRAIT_NOPAINSTUN, TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_KNEESTINGER_IMMUNITY, INNATE_TRAIT)
 	AddComponent(/datum/component/ai_aggro_system)
+	AddElement(/datum/element/spider_habits, 35)
 	// I'll replace this with something better later. Stopgap for now to make killing them more than just a nuisance.
+
+/mob/living/simple_animal/hostile/mirespider_lurker/AttackingTarget(mob/living/passed_target)
+	. = ..()
+	var/mob/living/bitten = passed_target || target
+	if(. && isliving(bitten))
+		spider_bite_landed(bitten)
 
 /mob/living/simple_animal/hostile/mirespider_lurker/death(gibbed)
 	..()
@@ -281,16 +295,19 @@
 /mob/living/simple_animal/hostile/mirespider_paralytic/Initialize()
 	. = ..()
 	AddComponent(/datum/component/ai_aggro_system)
+	// Its own strong venom replaces the numbing bite.
+	AddElement(/datum/element/spider_habits, 0)
 
 /datum/intent/simple/bite/mirespider_paralytic
 	clickcd = CLICK_CD_MELEE * 1.1
 
-/mob/living/simple_animal/hostile/mirespider_paralytic/AttackingTarget()
+/mob/living/simple_animal/hostile/mirespider_paralytic/AttackingTarget(mob/living/passed_target)
 	. = ..()
-	if(. && isliving(target))
-		var/mob/living/L = target
+	var/mob/living/L = passed_target || target
+	if(. && isliving(L))
 		if(L.reagents && prob(50))
 			L.reagents.add_reagent(/datum/reagent/toxin/spidervenom_paralytic, 5)
+		spider_bite_landed(L)
 
 /obj/random/spider
 	icon = 'icons/mob/mirespider_small.dmi'

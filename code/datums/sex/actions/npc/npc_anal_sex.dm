@@ -105,13 +105,15 @@
 	if(flipped)
 		var/list/hunter_words = get_act_words(partner, climaxer)
 		var/part = get_act_part(partner, hunter_words)
-		return act_lines("[climaxer] shakes and clenches around [partner]'s [part]!", "I shake and clench around [partner]'s [part]!", get_act_hear(hunter_words, "anal"))
+		var/victim_hole = get_act_hole(partner, climaxer)
+		return act_lines("[climaxer]'s [victim_hole] clenches around [partner]'s [part]!", "I shake as my [victim_hole] clenches around [partner]'s [part]!", get_act_hear(hunter_words, "anal"))
 	var/list/words = get_act_words(climaxer, partner)
 	var/part = get_act_part(climaxer, words)
 	var/hole = get_act_hole(climaxer, partner)
+	var/spills = hunter_has_seed(climaxer) ? "spills" : "pulses"
 	return act_lines(
-		"[climaxer] buries [words["their"]] [part] deep and spills into [partner]'s [hole]!",
-		"[climaxer] buries [words["their"]] [part] deep and spills into my [hole]!",
+		"[climaxer] buries [words["their"]] [part] deep and [spills] into [partner]'s [hole]!",
+		"[climaxer] buries [words["their"]] [part] deep and [spills] into my [hole]!",
 		get_act_hear(words, "anal")
 	)
 

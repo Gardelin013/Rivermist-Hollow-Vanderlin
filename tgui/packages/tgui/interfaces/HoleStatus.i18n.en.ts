@@ -83,6 +83,8 @@ export default {
     stuck: 'stuck',
     takeOut: 'Take out',
     pushDeeper: 'Push deeper',
+    pushOut: 'Push out',
+    pushOutHint: 'Work out whatever comes to hand. Telling them apart takes Sensitiveness.',
     insert: 'Work in',
     tuckIn: 'Tuck in',
     cleavage: 'Cleavage',

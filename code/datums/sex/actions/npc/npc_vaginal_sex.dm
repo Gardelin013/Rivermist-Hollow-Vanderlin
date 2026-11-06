@@ -54,7 +54,7 @@
 		return override
 	return act_lines(
 		"[user] [words["mount"]] [words["article"]] [get_act_part(user, words)] into [target]'s [hole]!",
-		"[user] [words["mount"]] into me in one hard push!",
+		"[user] [words["mount"]] into my [hole] in one hard push!",
 		hear
 	)
 
@@ -90,27 +90,28 @@
 		if("tied")
 			return tied_penetration_lines(user, target, words, hole, hear)
 		if("opening")
-			return act_lines("[user] settles [their] weight on [target] and finds a rhythm.", "[user] settles [their] weight on me and finds a rhythm.", hear)
+			return act_lines("[user] settles [their] weight on [target] and finds a rhythm in [target.p_their()] [hole].", "[user] settles [their] weight on me and finds a rhythm in my [hole].", hear)
 		if("late")
-			return act_lines("[user] [thrusts[3]] [target] faster, [body] stuttering.", "[user] [thrusts[3]] me faster, [body] stuttering against me.", hear)
+			return act_lines("[user] [thrusts[3]] [target]'s [hole] faster, [body] stuttering.", "[user] [thrusts[3]] my [hole] faster, [body] stuttering against me.", hear)
 	var/adverb = get_generic_force_adjective()
 	switch(variant)
 		if(1)
-			return act_lines("[user] [adverb] [thrusts[1]] into [target]'s [hole].", "[user] [thrusts[1]] into me, dragging my hips back to meet every thrust.", hear)
+			return act_lines("[user] [adverb] [thrusts[1]] into [target]'s [hole].", "[user] [thrusts[1]] into my [hole], dragging my hips back to meet every thrust.", hear)
 		if(2)
-			return act_lines("[user] [adverb] [thrusts[2]] into [target]'s [hole], [body] slapping.", "[user] [thrusts[2]] into me, wet slaps filling my ears.", hear)
-	return act_lines("[user] [words["hold"]] and [adverb] [thrusts[3]] [target.p_them()].", "[user]'s weight pins me and each thrust knocks the breath out of me.", hear)
+			return act_lines("[user] [adverb] [thrusts[2]] into [target]'s [hole], [body] slapping.", "[user] [thrusts[2]] into my [hole], wet slaps filling my ears.", hear)
+	return act_lines("[user] [words["hold"]] and [adverb] [thrusts[3]] [target.p_their()] [hole].", "[user]'s weight pins me and each thrust into my [hole] knocks the breath out of me.", hear)
 
 /datum/sex_action/npc/npc_vaginal_sex/get_climax_lines(mob/living/climaxer, mob/living/partner, flipped)
 	if(flipped)
 		var/list/hunter_words = get_act_words(partner, climaxer)
 		var/part = get_act_part(partner, hunter_words)
-		return act_lines("[climaxer] shudders and clamps down around [partner]'s [part]!", "I clamp down around [partner]'s [part] and shake through it!", get_act_hear(hunter_words, "vaginal"))
+		var/victim_hole = get_act_hole(partner, climaxer)
+		return act_lines("[climaxer]'s [victim_hole] clamps down around [partner]'s [part]!", "I shake as my [victim_hole] clamps down around [partner]'s [part]!", get_act_hear(hunter_words, "vaginal"))
 	var/list/words = get_act_words(climaxer, partner)
 	var/hole = get_act_hole(climaxer, partner)
 	return act_lines(
 		"[climaxer] [words["spill"]], [words["spill_room"]] into [partner]'s [hole]!",
-		"[climaxer] [words["spill"]], and [words["spill_me"]] into me!",
+		"[climaxer] [words["spill"]], and [words["spill_me"]] into my [hole]!",
 		get_act_hear(words, "vaginal")
 	)
 
@@ -131,9 +132,10 @@
 
 /datum/sex_action/npc/npc_vaginal_sex/compose_finish_lines(mob/living/user, mob/living/target)
 	var/list/words = get_act_words(user, target)
+	var/hole = get_act_hole(user, target)
 	return act_lines(
-		"[user] pulls [words["their"]] [get_act_part(user, words)] out of [target]'s [get_act_hole(user, target)].",
-		"[user] pulls out of me.",
+		"[user] pulls [words["their"]] [get_act_part(user, words)] out of [target]'s [hole].",
+		"[user] pulls out of my [hole].",
 		get_act_hear(words, "vaginal")
 	)
 

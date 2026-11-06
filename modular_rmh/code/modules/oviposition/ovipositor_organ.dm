@@ -77,7 +77,8 @@
 		qdel(ovipositor_component)
 	return TRUE
 
-/proc/ensure_typed_ovipositor(mob/living/owner, egg_type = OVI_EGG_NORMAL)
+/// Gives [owner] a working ovipositor of [egg_type]; a creature's clutch, store size and starting store follow.
+/proc/ensure_typed_ovipositor(mob/living/owner, egg_type = OVI_EGG_NORMAL, clutch = null, capacity = null, stored = null)
 	if(!owner)
 		return null
 
@@ -100,13 +101,21 @@
 
 	ovipositor.set_egg_type(egg_type)
 	set_ovipositor_functionality(ovipositor, TRUE)
+	if(!isnull(clutch))
+		ovipositor.set_clutch_size(clutch)
+	if(!isnull(capacity))
+		ovipositor.set_storage_capacity(capacity)
+	if(!isnull(stored))
+		var/datum/component/ovipositor/component = ovipositor.GetComponent(/datum/component/ovipositor)
+		component?.eggs_stored = clamp(round(stored), 0, component.get_max_stored_eggs())
 	return ovipositor
 
+/// Creatures spawn gravid: a spider carries most of a full store and rushes four at a climax.
 /proc/ensure_spider_ovipositor(mob/living/owner)
-	return ensure_typed_ovipositor(owner, OVI_EGG_SPIDER)
+	return ensure_typed_ovipositor(owner, OVI_EGG_SPIDER, 4, 10, 8)
 
 /proc/ensure_bog_bug_ovipositor(mob/living/owner)
-	return ensure_typed_ovipositor(owner, OVI_EGG_BOG_BUG)
+	return ensure_typed_ovipositor(owner, OVI_EGG_BOG_BUG, 3, 8, 6)
 
 /proc/get_oviposition_egg_type_option_name(option)
 	switch(option)

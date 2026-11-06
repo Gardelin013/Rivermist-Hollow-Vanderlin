@@ -175,7 +175,12 @@
 
 /// Pain multiplier from numbing balms inside the opening.
 /datum/orifice/proc/get_numbing_multiplier()
-	return has_lube_effect(/datum/reagent/lubricant/numbing) ? LUBE_NUMBING_PAIN_MULT : 1
+	// A numbing balm inside, or a spider's silk-venom in the blood, dulls the opening the same way.
+	if(has_lube_effect(/datum/reagent/lubricant/numbing))
+		return LUBE_NUMBING_PAIN_MULT
+	if(get_owner()?.reagents?.has_reagent(/datum/reagent/toxin/spidervenom_paralytic/weak))
+		return LUBE_NUMBING_PAIN_MULT
+	return 1
 
 /// Comfort elasticity added by limbering balms inside the opening.
 /datum/orifice/proc/get_lube_elasticity_bonus()

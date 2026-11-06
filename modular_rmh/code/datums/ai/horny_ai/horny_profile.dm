@@ -179,12 +179,50 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 
 // --- Acts ----------------------------------------------------------------------------------------
 
+/// Whether [hunter] is worked up enough to lay: eggs stored, a willing host, and arousal from ordinary acts first.
+/proc/horny_egg_lay_ready(mob/living/hunter, mob/living/target)
+	var/datum/component/ovipositor/ovipositor = get_working_ovipositor(hunter)
+	if(!ovipositor || ovipositor.eggs_stored <= 0)
+		return FALSE
+	if(!target_allows_mob_erp_action(hunter, target, /datum/erp_preference/boolean/allow_mob_oviposition))
+		return FALSE
+	// A victim wrapped in a cocoon is held and warmed by the silk; the lay needs no warm-up act.
+	if(istype(target.loc, /obj/structure/spider/cocoon))
+		return TRUE
+	var/list/arousal_data = list()
+	SEND_SIGNAL(hunter, COMSIG_SEX_GET_AROUSAL, arousal_data)
+	return (arousal_data["arousal"] || 0) >= HORNY_EGG_LAY_AROUSAL
+
+/// A hole slick enough to take eggs; the ordinary act before this is the lube-up.
+/proc/horny_egg_hole_ready(mob/living/target, slot)
+	var/obj/item/organ/genitals/filling_organ/hole = target.getorganslot(slot)
+	if(!istype(hole) || !hole.orifice_type)
+		return TRUE
+	return hole.get_orifice().get_dryness_multiplier() < ORIFICE_DRY_WARNING_MULT
+
+/// Egg acts for a worked-up hunter; TRUE when it added any, and then nothing else is on the table.
+/datum/horny_family_profile/proc/add_egg_act_choices(list/weighted_actions, mob/living/hunter, mob/living/target)
+	if(!horny_egg_lay_ready(hunter, target))
+		return FALSE
+	var/added = FALSE
+	if(target.getorganslot(ORGAN_SLOT_VAGINA) && npc_penetration_can_fit(hunter, target, ORGAN_SLOT_VAGINA) && horny_egg_hole_ready(target, ORGAN_SLOT_VAGINA))
+		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_vaginal_sex/lay_eggs, 4)
+		added = TRUE
+	if(npc_penetration_can_fit(hunter, target, ORGAN_SLOT_ANUS) && horny_egg_hole_ready(target, ORGAN_SLOT_ANUS))
+		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_anal_sex/lay_eggs, 3)
+		added = TRUE
+	if(!added)
+		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_throat_sex/lay_eggs, 2)
+	return TRUE
+
 /// Adds this family's act types to a weighted list, heavier entries more likely.
 /datum/horny_family_profile/proc/add_act_choices(list/weighted_actions, mob/living/hunter, mob/living/target)
 	var/has_penis = !!hunter.getorganslot(ORGAN_SLOT_PENIS)
 	var/has_vagina = !!hunter.getorganslot(ORGAN_SLOT_VAGINA)
 	var/target_has_penis = !!target.getorganslot(ORGAN_SLOT_PENIS)
 	var/target_has_vagina = !!target.getorganslot(ORGAN_SLOT_VAGINA)
+	if(add_egg_act_choices(weighted_actions, hunter, target))
+		return
 
 	// Skeletons: a funny bone gets its own acts, and one with nothing below the belt can only pet.
 	if(istype(hunter.getorganslot(ORGAN_SLOT_PENIS), /obj/item/organ/genitals/penis/funny_bone))
@@ -410,48 +448,64 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	pain_factor = 1.5
 	hurt_limit = 0.3
 	break_off = HORNY_BREAK_OFF_FLEE
-	extra_strip_chance = 20
+	// Fangs and legs make short work of clothes: spiders keep tearing well past the first piece.
+	extra_strip_chance = 60
 	restraint_type = /obj/item/rope/spider_silk
 	seize_move = HORNY_MOVE_POUNCE
 	bear_down_bonus = 15
 	pounces = TRUE
 	spits_web = TRUE
+	// Silk goes on in this order: mouth, eyes, wrists, then the thighs wound open.
+	prep_step_types = list(
+		/datum/horny_prep_step/disarm,
+		/datum/horny_prep_step/strip,
+		/datum/horny_prep_step/silk_gag,
+		/datum/horny_prep_step/silk_blindfold,
+		/datum/horny_prep_step/bind,
+		/datum/horny_prep_step/silk_hobble,
+	)
+
+/// Spiders also lap at a wet hole; a beespider turns what it laps into honey.
+/datum/horny_family_profile/spiders/add_act_choices(list/weighted_actions, mob/living/hunter, mob/living/target)
+	..()
+	if(target.getorganslot(ORGAN_SLOT_VAGINA) || target.getorganslot(ORGAN_SLOT_PENIS))
+		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_spider_lap, 2)
 
 /datum/horny_family_profile/spiders/get_notice_message(mob/living/hunter, mob/living/target)
-	return "[hunter] goes still, every eye fixed on [target], then its legs begin to twitch."
+	return "[hunter] turns all its eyes on [target]."
 
 /datum/horny_family_profile/spiders/get_hold_message(mob/living/hunter, mob/living/target)
-	return "[hunter] pins [target] down under a tangle of bristling legs!"
+	return "[hunter] pins [target] down with its legs!"
 
 /datum/horny_family_profile/spiders/get_unsatisfied_message(mob/living/hunter)
-	return "[hunter] clicks its mandibles and skitters in a tight, frustrated circle!"
+	return "[hunter] clicks its mandibles and skitters in a circle!"
 
 /datum/horny_family_profile/spiders/get_sated_message(mob/living/hunter, mob/living/target, heavy = FALSE)
-	return heavy ? "[hunter] goes still, sated, and lets [target] be for now." : "[hunter] settles with a satisfied chitter."
+	return heavy ? "[hunter] lets go of [target] and goes still." : "[hunter] settles down and chitters."
 
 /datum/horny_family_profile/spiders/get_flinch_message(mob/living/hunter, atom/source)
 	return "[hunter] skitters sideways, then rushes in!"
 
 /datum/horny_family_profile/spiders/get_break_off_message(mob/living/hunter, mob/living/target)
-	return "[hunter] skitters back into the dark, eyes still on [target]."
+	return "[hunter] skitters away from [target]."
 
 /datum/horny_family_profile/spiders/get_present_message(mob/living/hunter, mob/living/target)
-	return "[hunter]'s legs fold under it and it lies there, chittering weakly."
+	return "[hunter]'s legs fold and it lies still, chittering."
 
 /datum/horny_family_profile/spiders/get_pounce_message(mob/living/hunter, mob/living/target)
-	return "[hunter] springs at [target] in a blur of legs!"
+	return "[hunter] jumps at [target]!"
 
 /datum/horny_family_profile/spiders/get_bear_down_message(mob/living/hunter, mob/living/target)
-	return "[hunter] drags [target] down under a tangle of legs!"
+	return "[hunter] drags [target] down with its legs!"
 
 /datum/horny_family_profile/spiders/get_bind_lines(mob/living/hunter, mob/living/target)
 	return list(
-		"start" = "[hunter] starts winding sticky silk around [target]'s wrists!",
-		"start_target" = "[hunter] starts winding sticky silk around my wrists!",
-		"start_hear" = "I hear wet strands of silk stretching tight.",
-		"done" = "[hunter] binds [target]'s wrists in spider silk!",
-		"done_target" = "[hunter] binds my wrists in sticky spider silk!",
-		"done_hear" = "I hear silk tightening around someone's wrists.",
+		"start" = "[hunter] starts to wind silk around [target]'s wrists!",
+		"start_target" = "[hunter] starts to wind silk around my wrists!",
+		"start_hear" = "I hear silk stretching.",
+		"done" = "[hunter] binds [target]'s wrists with silk!",
+		"done_target" = "[hunter] binds my wrists with silk!",
+		"done_hear" = "I hear silk pulling tight.",
 	)
 
 /datum/horny_family_profile/bog_bugs
@@ -684,6 +738,8 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	)
 
 /datum/horny_family_profile/tentacles/add_act_choices(list/weighted_actions, mob/living/hunter, mob/living/target)
+	if(add_egg_act_choices(weighted_actions, hunter, target))
+		return
 	if(hunter.getorganslot(ORGAN_SLOT_PENIS))
 		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_throat_sex/tentacle, 2)
 		if(npc_penetration_can_fit(hunter, target, ORGAN_SLOT_ANUS))
@@ -745,6 +801,8 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	)
 
 /datum/horny_family_profile/maneaters/add_act_choices(list/weighted_actions, mob/living/hunter, mob/living/target)
+	if(add_egg_act_choices(weighted_actions, hunter, target))
+		return
 	if(hunter.getorganslot(ORGAN_SLOT_PENIS))
 		add_weighted_horny_ai_choice(weighted_actions, /datum/sex_action/npc/npc_throat_sex/tentacle/maneater, 2)
 		if(npc_penetration_can_fit(hunter, target, ORGAN_SLOT_ANUS))
@@ -859,17 +917,20 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 		"their" = "its",
 		"them" = "it",
 		"body" = "abdomen",
-		"mount" = "clamps on and pushes",
+		"mount" = "climbs on and pushes",
+		"start_vaginal" = list("room" = "[user] climbs onto [target] and pushes its cock into [target.p_their()] %HOLE%!", "me" = "[user] climbs onto me and pushes its cock into my %HOLE%!"),
+		"start_anal" = list("room" = "[user] climbs onto [target] from behind and pushes its cock into [target.p_their()] %HOLE%!", "me" = "[user] climbs onto me from behind and pushes its cock into my %HOLE%!"),
+		"start_throat" = list("room" = "[user] pins [target]'s head with its legs and pushes its cock down [target.p_their()] %HOLE%!", "me" = "[user] pins my head with its legs and pushes its cock down my %HOLE%!"),
 		"thrusts" = list("pumps", "works", "fucks"),
-		"tied" = list("room" = "grinds its swollen knot deeper into", "me" = "grinds its swollen knot deeper into me"),
-		"hold" = "wraps its bristling legs around [target]",
+		"tied" = list("room" = "grinds its knot deeper into", "me" = "grinds its knot deeper into me"),
+		"hold" = "wraps its legs around [target]",
 		"body_tails" = list(
-			list("id" = "legs", "room" = ", bristling legs locked around [target]", "me" = ", bristling legs locked around me"),
-			list("id" = "mandibles", "room" = ", mandibles clicking at [target]'s ear", "me" = ", mandibles clicking at my ear"),
+			list("id" = "legs", "room" = ", its legs locked around [target]", "me" = ", its legs locked around me"),
+			list("id" = "mandibles", "room" = ", its mandibles clicking at [target]'s ear", "me" = ", its mandibles clicking at my ear"),
 		),
-		"spill" = "goes rigid, legs clenching",
-		"spill_room" = "pulsing seed",
-		"spill_me" = "seed pulses",
+		"spill" = "goes rigid",
+		"spill_room" = "pumping seed",
+		"spill_me" = "seed pumps",
 		"hear" = "chittering",
 		"hear_acts" = list(
 			"vaginal" = "a sharp gasp and chittering",

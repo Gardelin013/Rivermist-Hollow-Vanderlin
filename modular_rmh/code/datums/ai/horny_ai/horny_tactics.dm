@@ -1,5 +1,10 @@
 // Hunt tactics beyond the chase: pack calls, scent, circling, the pounce, the lash and thrown traps.
 
+/// A fall on the web this soon after a spit counts as webbed.
+#define HORNY_WEB_FALL_WINDOW (8 SECONDS)
+/// How long a webbed, fallen target lies presented.
+#define HORNY_PRESENTED_TIME (10 SECONDS)
+
 /// Thrown trap this mob carries for a target it cannot reach; null for most mobs.
 /mob/living/var/horny_trap_type = null
 
@@ -106,7 +111,7 @@
 		return TRUE
 	var/turf/closer = get_step(target, get_dir(target, hunter))
 	if(closer && !closer.density && step_towards(target, hunter))
-		hunter.visible_message(span_danger(profile.get_lash_message(hunter, target)), null, span_hear("I hear a wet lash and a stumble."))
+		target.felt_visible_message(span_danger(profile.get_lash_message(hunter, target)), null, span_hear("I hear a wet lash and a stumble."))
 	return TRUE
 
 /// Angered hunters throw their trap at a target they cannot reach; web spitters spit. TRUE when something flew.
@@ -143,6 +148,29 @@
 			return FALSE
 		controller.set_blackboard_key(BB_HORNY_TRAP_COOLDOWN, world.time + HORNY_TRAP_COOLDOWN)
 		controller.set_blackboard_key(BB_HORNY_RUSH_UNTIL, world.time + HORNY_RUSH_TIME)
+		controller.set_blackboard_key(BB_HORNY_WEB_SPAT_AT, world.time)
 		spitter.OpenFire(target)
 		return TRUE
 	return FALSE
+
+/// A target the spit caught who goes down on the web lies presented a while. TRUE when it just began.
+/proc/horny_note_webbed_fall(mob/living/target, datum/ai_controller/controller)
+	var/spat_at = controller.blackboard[BB_HORNY_WEB_SPAT_AT]
+	if(isnull(spat_at))
+		return FALSE
+	if(world.time > spat_at + HORNY_WEB_FALL_WINDOW)
+		controller.clear_blackboard_key(BB_HORNY_WEB_SPAT_AT)
+		return FALSE
+	if(target.body_position != LYING_DOWN || !(locate(/obj/structure/spider/stickyweb) in get_turf(target)))
+		return FALSE
+	controller.clear_blackboard_key(BB_HORNY_WEB_SPAT_AT)
+	controller.set_blackboard_key(BB_HORNY_PRESENTED_UNTIL, world.time + HORNY_PRESENTED_TIME)
+	target.felt_visible_message(span_danger("[target] goes down tangled in silk, legs stuck wide."), span_userdanger("I go down in the silk, my legs stuck wide."))
+	return TRUE
+
+/// TRUE while a webbed target lies presented: the handless bear-down lands without its roll.
+/proc/horny_target_presented(datum/ai_controller/controller)
+	return world.time < (controller?.blackboard[BB_HORNY_PRESENTED_UNTIL] || 0)
+
+#undef HORNY_WEB_FALL_WINDOW
+#undef HORNY_PRESENTED_TIME

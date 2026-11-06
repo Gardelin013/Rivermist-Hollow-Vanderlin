@@ -64,6 +64,23 @@
 #define BB_BASIC_FOODS "BB_basic_foods"
 ///What creature we want to cocoon
 #define BB_BASIC_MOB_COCOON_TARGET "BB_basic_mob_cocoon_target"
+/// The partner a spider just came with; only they may be wrapped while merely yielding.
+#define BB_SPIDER_SATED_WITH "BB_spider_sated_with"
+/// The unsealed cocoon a spider walks to and lays its eggs into.
+#define BB_SPIDER_BROOD_COCOON "BB_spider_brood_cocoon"
+/// world.time the brood began; the walk gives up after a while.
+#define BB_SPIDER_BROOD_SINCE "BB_spider_brood_since"
+/// world.time the spider parted the silk; a climax after it ends the brood.
+#define BB_SPIDER_BROOD_OPENED_AT "BB_spider_brood_opened_at"
+/// The lay act last started, and the eggs stored just before it.
+#define BB_SPIDER_BROOD_LAST_ACT "BB_spider_brood_last_act"
+#define BB_SPIDER_BROOD_EGGS_BEFORE "BB_spider_brood_eggs_before"
+/// Lay acts that took no egg this brood; they are not tried again.
+#define BB_SPIDER_BROOD_REFUSED "BB_spider_brood_refused"
+/// world.time of the hunter's last web spit; a fall on the web soon after presents the target.
+#define BB_HORNY_WEB_SPAT_AT "BB_horny_web_spat_at"
+/// world.time until which a webbed, fallen target lies presented: the bear-down needs no roll.
+#define BB_HORNY_PRESENTED_UNTIL "BB_horny_presented_until"
 
 /// Flag to set on or off if you want your mob to prioritise running away
 #define BB_BASIC_MOB_FLEEING "BB_basic_fleeing"

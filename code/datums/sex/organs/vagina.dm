@@ -35,8 +35,9 @@
 	var/burst_to_drip = 0
 
 /obj/item/organ/genitals/filling_organ/vagina/Insert(mob/living/M, special, drop_if_replaced, new_zone = null)
-	if(M?.femcum)
-		set_reagent_to_make(M.femcum)
+	var/list/nectar = M?.get_femcum_mix()
+	if(nectar)
+		set_reagent_to_make(nectar)
 	. = ..()
 	if(!.)
 		return FALSE
@@ -87,15 +88,11 @@
 			return reagents.maximum_volume
 	return max_wetness * get_capacity_multiplier()
 
-/// Takes back own femcum without leaking it; foreign fluid stays.
+/// Takes back own femcum without leaking it, the natural mix evenly before any swap; foreign fluid stays.
 /obj/item/organ/genitals/filling_organ/vagina/proc/fade_wetness(amount)
-	for(var/reagent_type in get_own_fluid_types())
-		if(amount <= 0)
-			return
-		var/removed = min(reagents.get_reagent_amount(reagent_type), amount)
-		if(removed > 0)
-			reagents.remove_reagent(reagent_type, removed)
-			amount -= removed
+	amount -= remove_fluid_types(get_natural_fluid_types(), amount)
+	if(amount > 0)
+		remove_fluid_types(get_own_fluid_types(), amount)
 
 /obj/item/organ/genitals/filling_organ/vagina/proc/get_owner_arousal()
 	var/list/arousal_data = list()

@@ -45,8 +45,10 @@
 	var/max_reagents = 30
 	/// TRUE if capacity scales with organ_size set in prefs.
 	var/organ_sizeable = FALSE
-	/// Reagent this organ produces; null for organs that only hold fluid.
+	/// Main reagent this organ produces, the one that carries maker data; null for organs that only hold fluid.
 	var/datum/reagent/reagent_to_make = /datum/reagent/consumable/nutriment
+	/// Natural fluid as reagent type = share when it mixes several types, main type first; null for one type.
+	var/list/fluid_mix
 	/// Base setting for production; fluid modifiers can force or block it. Read is_producing().
 	var/produces_fluid = FALSE
 	/// Units produced per second while producing.
@@ -397,14 +399,32 @@
 /obj/item/organ/genitals/filling_organ/proc/get_produced_reagent()
 	return LAZYACCESS(owner?.fluid_reagent_overrides, slot) || reagent_to_make
 
-/// Reagent types that count as the organ's own: its natural fluid and any active swap.
-/obj/item/organ/genitals/filling_organ/proc/get_own_fluid_types()
+/// The main natural fluid and any active swap: the types that carry maker data.
+/obj/item/organ/genitals/filling_organ/proc/get_main_fluid_types()
 	var/datum/reagent/produced = get_produced_reagent()
 	if(!produced)
 		return null
 	if(!reagent_to_make || produced == reagent_to_make)
 		return list(produced)
 	return list(reagent_to_make, produced)
+
+/// Every type of the natural fluid mix; callers must not change the returned list.
+/obj/item/organ/genitals/filling_organ/proc/get_natural_fluid_types()
+	if(fluid_mix)
+		return fluid_mix
+	return reagent_to_make ? list(reagent_to_make) : null
+
+/// Reagent types that count as the organ's own: its whole natural mix and any active swap.
+/obj/item/organ/genitals/filling_organ/proc/get_own_fluid_types()
+	if(!fluid_mix)
+		return get_main_fluid_types()
+	var/list/own_types = list()
+	for(var/reagent_type in fluid_mix)
+		own_types += reagent_type
+	var/datum/reagent/swap = LAZYACCESS(owner?.fluid_reagent_overrides, slot)
+	if(swap)
+		own_types |= swap
+	return own_types
 
 /obj/item/organ/genitals/filling_organ/proc/is_own_fluid(datum/reagent/reagent_type)
 	var/list/own_types = get_own_fluid_types()
@@ -414,6 +434,22 @@
 	. = 0
 	for(var/reagent_type in get_own_fluid_types())
 		. += reagents.get_reagent_amount(reagent_type)
+
+/// Takes up to [amount] units of [reagent_types], in proportion to what each holds; returns the units taken.
+/obj/item/organ/genitals/filling_organ/proc/remove_fluid_types(list/reagent_types, amount)
+	if(!reagents || amount <= 0)
+		return 0
+	var/held_total = 0
+	for(var/reagent_type in reagent_types)
+		held_total += reagents.get_reagent_amount(reagent_type)
+	if(held_total <= 0)
+		return 0
+	var/share = min(amount / held_total, 1)
+	for(var/reagent_type in reagent_types)
+		var/held = reagents.get_reagent_amount(reagent_type)
+		if(held > 0)
+			reagents.remove_reagent(reagent_type, held * share)
+	return held_total * share
 
 /// Share of capacity filled with the organ's own fluid, from 0 to 1.
 /obj/item/organ/genitals/filling_organ/proc/get_own_fullness()
@@ -488,49 +524,81 @@
 /obj/item/organ/genitals/filling_organ/proc/is_pent_up()
 	return FALSE
 
-/// Nutrition per unit made; a swapped fluid never costs less than it feeds, so drinking it cannot profit.
+/// Nutrition per unit made; swapped or mixed-in fluid never costs less than it feeds, so drinking it cannot profit.
 /obj/item/organ/genitals/filling_organ/proc/get_nutrition_cost_per_unit()
 	var/cost = nutrition_per_unit
 	var/datum/reagent/produced = get_produced_reagent()
 	if(produced != reagent_to_make)
-		var/datum/reagent/consumable/food = GLOB.chemical_reagents_list[produced]
-		if(istype(food))
-			cost = max(cost, food.nutriment_factor * FLUID_SWAP_NUTRITION_MARGIN)
+		cost = get_foreign_fluid_cost(produced)
+	else if(fluid_mix)
+		cost = 0
+		for(var/reagent_type in fluid_mix)
+			cost += fluid_mix[reagent_type] * (reagent_type == reagent_to_make ? nutrition_per_unit : get_foreign_fluid_cost(reagent_type))
 	return cost * get_nutrition_cost_multiplier()
+
+/// Nutrition per unit of a fluid other than the main one: never less than drinking it feeds.
+/obj/item/organ/genitals/filling_organ/proc/get_foreign_fluid_cost(datum/reagent/reagent_type)
+	var/datum/reagent/consumable/food = GLOB.chemical_reagents_list[reagent_type]
+	if(istype(food))
+		return max(nutrition_per_unit, food.nutriment_factor * FLUID_SWAP_NUTRITION_MARGIN)
+	return nutrition_per_unit
 
 /obj/item/organ/genitals/filling_organ/proc/pay_for_fluid(amount)
 	if(amount <= 0 || HAS_TRAIT(owner, TRAIT_NOHUNGER))
 		return
 	owner.adjust_nutrition(-amount * get_nutrition_cost_per_unit())
 
-/// Adds own fluid up to the free space and returns the units actually added.
+/// Adds own fluid up to the free space, split by the natural mix, and returns the units actually added.
 /obj/item/organ/genitals/filling_organ/proc/add_produced_fluid(amount)
 	var/datum/reagent/produced = get_produced_reagent()
 	if(!produced || !reagents)
 		return 0
-	amount = min(amount, reagents.maximum_volume - reagents.total_volume)
-	if(amount <= 0)
+	var/free_space = reagents.maximum_volume - reagents.total_volume
+	if(min(amount, free_space) <= 0)
 		return 0
-	// Drops under the 0.05 unit reagent floor would vanish in an empty organ, so they add up first.
-	if(reagents.get_reagent_amount(produced) < 0.05)
-		production_carry += amount
-		if(production_carry < 0.05)
-			return 0
-		amount = production_carry
+	amount = min(amount + production_carry, free_space)
+	// A swap makes its one reagent; the natural fluid makes its whole mix.
+	var/list/mix = LAZYACCESS(owner?.fluid_reagent_overrides, slot) ? null : fluid_mix
+	// Parts under the 0.05 unit reagent floor would vanish in an empty organ, so they add up first.
+	if(amount < free_space && fluid_part_would_vanish(produced, mix, amount))
+		production_carry = amount
+		return 0
 	production_carry = 0
-	reagents.add_reagent(produced, amount)
+	add_fluid_mix(produced, mix, amount)
 	return amount
 
-/// Switches the produced reagent and converts the stored own fluid, keeping the holder and capacity.
-/obj/item/organ/genitals/filling_organ/proc/set_reagent_to_make(datum/reagent/new_reagent)
-	if(!new_reagent || new_reagent == reagent_to_make)
+/// Adds [amount] units as [mix] shares, or all as [main_type] when there is no mix.
+/obj/item/organ/genitals/filling_organ/proc/add_fluid_mix(datum/reagent/main_type, list/mix, amount)
+	if(!mix)
+		reagents.add_reagent(main_type, amount)
 		return
-	var/datum/reagent/old_reagent = reagent_to_make
-	reagent_to_make = new_reagent
-	var/own_fluid = reagents?.get_reagent_amount(old_reagent)
+	for(var/reagent_type in mix)
+		reagents.add_reagent(reagent_type, amount * mix[reagent_type])
+
+/// Whether a type's part of [amount] units would fall under the reagent floor and vanish.
+/obj/item/organ/genitals/filling_organ/proc/fluid_part_would_vanish(datum/reagent/main_type, list/mix, amount)
+	if(!mix)
+		return amount < 0.05 && reagents.get_reagent_amount(main_type) < 0.05
+	for(var/reagent_type in mix)
+		if(amount * mix[reagent_type] < 0.05 && reagents.get_reagent_amount(reagent_type) < 0.05)
+			return TRUE
+	return FALSE
+
+/// Sets the natural fluid, one type or a weighted list, and converts the stored own fluid to it.
+/obj/item/organ/genitals/filling_organ/proc/set_reagent_to_make(fluid)
+	var/list/new_mix = normalize_fluid_mix(fluid)
+	if(!length(new_mix))
+		return
+	var/datum/reagent/new_main = new_mix[1]
+	if(length(new_mix) == 1)
+		new_mix = null
+	if(new_main == reagent_to_make && fluid_mixes_match(new_mix, fluid_mix))
+		return
+	var/own_fluid = remove_fluid_types(get_natural_fluid_types(), INFINITY)
+	reagent_to_make = new_main
+	fluid_mix = new_mix
 	if(own_fluid > 0)
-		reagents.remove_reagent(old_reagent, own_fluid)
-		reagents.add_reagent(new_reagent, own_fluid)
+		add_fluid_mix(reagent_to_make, fluid_mix, own_fluid)
 
 /// Applies the current capacity, alerting self-aware owners about large shifts.
 /obj/item/organ/genitals/filling_organ/proc/update_reagent_capacity()
@@ -603,11 +671,14 @@
 
 /// Turns this organ's own fluid back into nutrition, at a loss.
 /obj/item/organ/genitals/filling_organ/proc/reabsorb_for_nutrition(seconds)
-	var/own_fluid = reagents.get_reagent_amount(reagent_to_make)
+	var/list/natural_types = get_natural_fluid_types()
+	var/own_fluid = 0
+	for(var/reagent_type in natural_types)
+		own_fluid += reagents.get_reagent_amount(reagent_type)
 	var/nutrition_gain = min(production_rate * seconds, own_fluid / FLUID_REABSORB_COST)
 	if(nutrition_gain <= 0)
 		return
-	reagents.remove_reagent(reagent_to_make, nutrition_gain * FLUID_REABSORB_COST)
+	remove_fluid_types(natural_types, nutrition_gain * FLUID_REABSORB_COST)
 	owner.adjust_nutrition(nutrition_gain)
 
 /// Moves foreign reagents into the owner's blood; the organ keeps its own fluid.

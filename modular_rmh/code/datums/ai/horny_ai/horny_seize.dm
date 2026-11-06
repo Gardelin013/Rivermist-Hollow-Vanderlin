@@ -84,7 +84,7 @@
 	// The engine's own grab line is suppressed above; this one names the limb, so a mouth grab reads as the gag it is.
 	var/datum/horny_family_profile/profile = hunter.get_horny_family_profile()
 	var/zone = parse_zone(new_grab.sublimb_grabbed) || "arm"
-	target.visible_message(span_danger(profile.get_grab_message(hunter, target, zone)), span_userdanger(profile.get_grab_message(hunter, target, zone, TRUE)), span_hear("I hear aggressive shuffling!"), COMBAT_MESSAGE_RANGE)
+	target.felt_visible_message(span_danger(profile.get_grab_message(hunter, target, zone)), span_userdanger(profile.get_grab_message(hunter, target, zone, TRUE)), span_hear("I hear aggressive shuffling!"), COMBAT_MESSAGE_RANGE)
 	return TRUE
 
 /// Keeps at least one grip on the target between beats; waits out a grace window after a break.
@@ -139,7 +139,7 @@
 	if(target.surrendering)
 		if(target.body_position != LYING_DOWN)
 			target.Knockdown(50)
-			hunter.visible_message(span_danger("[hunter] eases the yielding [target] down."))
+			target.felt_visible_message(span_danger("[hunter] eases the yielding [target] down."))
 			hunter.changeNext_move(CLICK_CD_GRABBING)
 			return HORNY_SEIZE_ACTED
 		if(held || (target.pulledby && target.pulledby != hunter))

@@ -50,6 +50,8 @@
 #define HORNY_LUST_PER_EDGE 10
 #define HORNY_LUST_PER_SECOND_NEAR_AROUSED 1
 #define HORNY_LUST_TARGET_AROUSAL 80
+/// An ovipositor hunter works itself up with ordinary acts to this arousal before it lays.
+#define HORNY_EGG_LAY_AROUSAL 50
 
 // Mortal danger beats lust: damage from the hunted target past this share of max health ends the hunt and starts a fight.
 #define HORNY_LETHAL_DAMAGE_SHARE 0.35

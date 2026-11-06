@@ -155,6 +155,7 @@ type HoleData = {
   fill: FillData;
   can_hold_in: boolean;
   items: ItemData[];
+  can_push_out: boolean;
   insert: InsertData;
   eggs: EggData[];
   egg_count: number;
@@ -239,6 +240,8 @@ export type HoleStatusLocale = {
     stuck: string;
     takeOut: string;
     pushDeeper: string;
+    pushOut: string;
+    pushOutHint: string;
     insert: string;
     tuckIn: string;
     cleavage: string;
@@ -807,6 +810,17 @@ const HoleBody = (props: {
             locale={locale}
             flat={cleavage}
           />
+          {hole.can_push_out && (
+            <Button
+              ml={0.5}
+              compact
+              icon="hand"
+              tooltip={locale.items.pushOutHint}
+              onClick={() => act('push_out', { hole: hole.id })}
+            >
+              {locale.items.pushOut}
+            </Button>
+          )}
         </LabeledList.Item>
       </LabeledList>
       {hole.insert && (

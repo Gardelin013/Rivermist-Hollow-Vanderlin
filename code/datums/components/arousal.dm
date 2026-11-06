@@ -531,9 +531,17 @@
 	apply_orifice_climax_moods(mob, action)
 	playsound(parent, 'sound/misc/mat/endout.ogg', 50, TRUE, ignore_walls = FALSE)
 	// Special cases for when the user has a penis but no testicles & for eunuchs
-	if((!mob.getorganslot(ORGAN_SLOT_TESTICLES) && mob.getorganslot(ORGAN_SLOT_PENIS)) || (!mob.getorganslot(ORGAN_SLOT_TESTICLES) && !mob.getorganslot(ORGAN_SLOT_VAGINA)))
+	if(mob.climaxes_dry())
 		mob.visible_message(span_love(mob.get_dry_climax_message()))
 		after_ejaculation(FALSE, parent, null, action, action_initiator, action_target, action_performer)
+		return
+	// The act's own climax lines would spill from the strapon, so only the wearer's vagina climaxes.
+	if(target && mob.climaxes_behind_strapon(action))
+		mob.visible_message(span_love("[mob] shudders and climaxes, [mob.p_their()] hips bucking behind [mob.p_their()] strapon!"), span_love("I shudder and climax, my hips bucking behind my strapon!"))
+		var/obj/item/organ/genitals/filling_organ/vagina/strapon_vag = mob.getorganslot(ORGAN_SLOT_VAGINA)
+		if(strapon_vag?.reagents)
+			strapon_vag.produce_climax_fluid()
+		after_ejaculation(FALSE, parent, target, action, action_initiator, action_target, action_performer)
 		return
 	var/obj/item/organ/genitals/filling_organ/testicles/climax_testes = mob.getorganslot(ORGAN_SLOT_TESTICLES)
 	if(climax_testes?.is_pent_up() && mob.getorganslot(ORGAN_SLOT_PENIS))
@@ -827,7 +835,8 @@
 
 	add_orgasm_strain(user)
 
-	if(user.has_penis())
+	// A worn strapon is no penis, so its wearer follows the edging rules for a vagina.
+	if(user.has_real_penis())
 		if(is_spent())
 			to_chat(user, span_warn("This is really starting to hurt my dick!"))
 			user.apply_status_effect(/datum/status_effect/edged_penis_cooldown)
@@ -1251,7 +1260,7 @@
 		if(orgasm_strain >= OVER_THE_TOP_ORGASM_STRAIN_GAIN + nymph_mod)
 			user.apply_status_effect(/datum/status_effect/debuff/nympho_addiction)
 
-	if(user.has_penis())
+	if(user.has_real_penis())
 		if(user.has_status_effect(/datum/status_effect/blue_balls))
 			if(edging_charge <= 20)
 				user.remove_status_effect(/datum/status_effect/blue_balls)

@@ -388,6 +388,32 @@
 	SEND_SIGNAL(src, COMSIG_SEX_GENERIC_ACTION, src, toy.get_body_storage_stir_pleasure(layer), 0, 0, src)
 	return TRUE
 
+// ---- Push out, blind ----
+
+/// Whether this body can tell its stored items apart by feel.
+/mob/living/carbon/human/proc/can_feel_stored_items()
+	return has_quirk(/datum/quirk/peculiarity/selfawaregeni)
+
+/// The items in [hole] a hand could work out; eggs, hatchlings and stand-ins have their own ways.
+/mob/living/carbon/human/proc/get_pushable_toys(obj/item/organ/genitals/filling_organ/hole)
+	var/list/toys = list()
+	if(!istype(hole))
+		return toys
+	for(var/layer in list(STORAGE_LAYER_OUTER, STORAGE_LAYER_INNER, STORAGE_LAYER_DEEP))
+		for(var/obj/item/stored as anything in hole.get_body_storage_items_for_interaction(layer, BODYSTORAGE_REMOVE_MANUAL))
+			if(istype(stored, /obj/item/oviposition_egg) || istype(stored, /obj/item/mob_holder/internal_womb) || istype(stored, /obj/item/penis_fake))
+				continue
+			toys += stored
+	return toys
+
+/// Works whatever comes to hand out of [hole]: the same take-out, with the item picked blind.
+/mob/living/carbon/human/proc/try_push_out_random_toy(obj/item/organ/genitals/filling_organ/hole)
+	var/list/toys = get_pushable_toys(hole)
+	if(!length(toys))
+		to_chat(src, span_warning("There is nothing in there I could push out."))
+		return FALSE
+	return try_remove_toy(pick(toys))
+
 // ---- Push deeper ----
 
 /// Whether [toy] can be pushed from the inside layer into the deep one, with the reason when not.

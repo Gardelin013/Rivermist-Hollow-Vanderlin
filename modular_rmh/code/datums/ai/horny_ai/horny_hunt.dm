@@ -15,6 +15,9 @@
 
 /datum/ai_behavior/horny/setup(datum/ai_controller/controller, target_key, targetting_datum_key)
 	. = ..()
+	// A brooding spider finishes its cocoon before it hunts again.
+	if(controller.blackboard[BB_SPIDER_BROOD_COCOON])
+		return FALSE
 	var/datum/targetting_datum/targetting_datum = controller.blackboard[targetting_datum_key]
 	if(isnull(targetting_datum))
 		CRASH("No target datum was supplied in the blackboard for [controller.pawn]")
@@ -64,6 +67,8 @@
 	controller.clear_blackboard_key(BB_HORNY_SCENT_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_TIE_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_TIE_NEXT_TUG)
+	controller.clear_blackboard_key(BB_HORNY_WEB_SPAT_AT)
+	controller.clear_blackboard_key(BB_HORNY_PRESENTED_UNTIL)
 
 	basic_mob.visible_message(span_boldwarning(basic_mob.get_horny_seek_message(target_living)))
 
@@ -136,6 +141,8 @@
 
 	controller.decay_horny_temper()
 	var/datum/horny_family_profile/profile = basic_mob.get_horny_family_profile()
+	if(profile.spits_web)
+		horny_note_webbed_fall(target_living, controller)
 	if(target_living.surrendering && controller.blackboard[BB_HORNY_TEMPER] > 0)
 		controller.horny_react(HORNY_REACT_YIELD, target_living)
 
@@ -332,7 +339,12 @@
 		return FALSE
 
 	// Handless hunters bear down, coil or hoist, then hold.
-	switch(horny_handless_seize_step(basic_mob, human_target, controller, profile))
+	var/was_standing = human_target.body_position != LYING_DOWN
+	var/seize_result = horny_handless_seize_step(basic_mob, human_target, controller, profile)
+	// A pounce that puts a standing target down bites as it lands.
+	if(was_standing && profile.seize_move == HORNY_MOVE_POUNCE && human_target.body_position == LYING_DOWN && !human_target.surrendering)
+		basic_mob.spider_bite_landed(human_target)
+	switch(seize_result)
 		if(HORNY_SEIZE_DONE)
 			set_phase(controller, basic_mob, target_living, HORNY_PHASE_SUBDUE)
 			return TRUE
@@ -431,6 +443,10 @@
 	if(ishuman(target_living))
 		ensure_hold(controller, basic_mob, target_living, profile)
 		horny_squeeze(basic_mob, target_living, profile)
+	// Worked up by the ordinary act: an ovipositor hunter pulls out and lays instead.
+	if(should_switch_to_egg_act(basic_mob, target_living, scene_controller))
+		scene_controller.stop_action()
+		return FALSE
 	if(start_horny_action(controller, basic_mob, target_living, scene_controller, target_key))
 		return FALSE
 	if(!LAZYACCESS(controller.current_behaviors, src))
@@ -461,7 +477,7 @@
 		return FALSE
 	controller.set_blackboard_key(BB_HORNY_TIE_NEXT_TUG, world.time + HORNY_TIE_TUG_INTERVAL)
 	var/list/lines = profile.get_tie_lines(basic_mob, target_living)
-	target_living.visible_message(span_love(lines["tug"]), span_love(lines["tug_me"]), span_hear(lines["tug_hear"]))
+	target_living.felt_visible_message(span_love(lines["tug"]), span_love(lines["tug_me"]), span_hear(lines["tug_hear"]))
 	var/list/active_actions = scene_controller.get_active_actions()
 	if(length(active_actions))
 		var/datum/sex_action/action = active_actions[1]
@@ -727,6 +743,28 @@
 
 	return pick(valid_actions)
 
+/// TRUE when an ordinary act runs, the hunter is ready to lay and nothing ties them together.
+/datum/ai_behavior/horny/proc/should_switch_to_egg_act(mob/living/basic_mob, mob/living/target_living, datum/sex_scene_controller/scene_controller)
+	var/list/active = scene_controller.get_active_actions()
+	if(!length(active))
+		return FALSE
+	for(var/datum/sex_action/action as anything in active)
+		if(is_lay_egg_act(action))
+			return FALSE
+	return horny_should_pull_out_to_lay(basic_mob, target_living)
+
+/// TRUE when an AI hunter's ordinary act should end so its hunt starts a lay act.
+/proc/horny_should_pull_out_to_lay(mob/living/hunter, mob/living/target)
+	if(!hunter?.ai_controller || hunter.client || horny_knot_between(hunter, target))
+		return FALSE
+	return horny_egg_lay_ready(hunter, target)
+
+/// The AI's egg acts, by type.
+/proc/is_lay_egg_act(datum/sex_action/action)
+	return istype(action, /datum/sex_action/npc/npc_vaginal_sex/lay_eggs) \
+		|| istype(action, /datum/sex_action/npc/npc_anal_sex/lay_eggs) \
+		|| istype(action, /datum/sex_action/npc/npc_throat_sex/lay_eggs)
+
 /// Holds the next prep step back a moment, so the moves read one at a time.
 /datum/ai_behavior/horny/proc/pause_after_prep(datum/ai_controller/controller)
 	controller.set_blackboard_key(BB_HORNY_ACTIONLESS_TICKS, 0)
@@ -941,6 +979,7 @@
 	. = ..()
 	var/mob/living/basic_mob = controller.pawn
 	var/atom/finished_target = controller.blackboard[target_key]
+	var/hunt_started = controller.blackboard[BB_HORNY_TIME_START]
 	var/datum/sex_scene_controller/scene_controller = basic_mob.sex_scene?.get_controller(basic_mob)
 
 	stop_active_horny_actions(basic_mob)
@@ -1003,6 +1042,8 @@
 	controller.clear_blackboard_key(BB_HORNY_PINNED)
 	controller.clear_blackboard_key(BB_HORNY_TIE_UNTIL)
 	controller.clear_blackboard_key(BB_HORNY_TIE_NEXT_TUG)
+	controller.clear_blackboard_key(BB_HORNY_WEB_SPAT_AT)
+	controller.clear_blackboard_key(BB_HORNY_PRESENTED_UNTIL)
 	controller.clear_blackboard_key(target_key)
 	controller.clear_blackboard_key(BB_HORNY_TIME_START)
 	if(basic_mob.is_dead())
@@ -1031,6 +1072,22 @@
 	basic_mob.visible_message(span_danger(basic_mob.get_horny_sated_message(finished_target, heavily_sated)))
 	bark(controller, basic_mob, finished_target, HORNY_BARK_SATED)
 	controller.modify_cooldown(src, world.time)
+	spider_claim_spent_partner(controller, basic_mob, finished_target, hunt_started)
+
+/// A spider that came winds up a partner who yields or lies senseless; a willing one walks away.
+/datum/ai_behavior/horny/proc/spider_claim_spent_partner(datum/ai_controller/controller, mob/living/basic_mob, atom/finished_target, hunt_started)
+	if(controller.horny_pref_family_flag != HORNY_MOB_TYPE_SPIDERS || !isliving(finished_target))
+		return FALSE
+	var/list/arousal_data = list()
+	SEND_SIGNAL(basic_mob, COMSIG_SEX_GET_AROUSAL, arousal_data)
+	if((arousal_data["last_ejaculation_time"] || 0) < (hunt_started || world.time))
+		return FALSE
+	controller.set_blackboard_key(BB_SPIDER_SATED_WITH, finished_target)
+	if(!spider_can_wrap(basic_mob, finished_target))
+		controller.clear_blackboard_key(BB_SPIDER_SATED_WITH)
+		return FALSE
+	controller.set_blackboard_key(BB_BASIC_MOB_COCOON_TARGET, finished_target)
+	return TRUE
 
 #undef HORNY_ACTION_BLEED_HEAL_AMOUNT
 #undef BB_HORNY_BLEED_HEAL_DONE

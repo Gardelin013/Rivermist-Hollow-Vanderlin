@@ -33,7 +33,8 @@
 	hunter.changeNext_move(CLICK_CD_GRABBING)
 	hunter.face_atom(target)
 	horny_jolt(hunter, target)
-	if(!prob(chance + rand(-5, 5)))
+	// A target still tangled in fresh web is already down for the taking: no roll.
+	if(!horny_target_presented(controller) && !prob(chance + rand(-5, 5)))
 		horny_add_pressure(controller, target)
 		hunter.visible_message(span_danger(profile.get_bear_down_miss_message(hunter, target)), null, span_hear("I hear a scuffle."))
 		return FALSE
@@ -41,7 +42,7 @@
 	target.Knockdown(HORNY_BEAR_DOWN_KNOCKDOWN)
 	if(profile.seize_move == HORNY_MOVE_HOIST)
 		target.Immobilize(HORNY_HOIST_IMMOBILIZE)
-	hunter.visible_message(span_danger(profile.get_bear_down_message(hunter, target)), null, span_hear("I hear a body hit the ground."))
+	target.felt_visible_message(span_danger(profile.get_bear_down_message(hunter, target)), null, span_hear("I hear a body hit the ground."))
 	// The weight follows the fall at once, before the target can scramble up.
 	if(!iscarbon(hunter))
 		horny_handless_hold(hunter, target, profile)
@@ -64,7 +65,7 @@
 		if(hunter.grab_state >= GRAB_AGGRESSIVE)
 			return FALSE
 		horny_promote_handless_hold(hunter, target)
-		hunter.visible_message(span_danger(profile.get_hold_message(hunter, target)), null, span_hear("I hear a violent struggle."))
+		target.felt_visible_message(span_danger(profile.get_hold_message(hunter, target)), null, span_hear("I hear a violent struggle."))
 		return TRUE
 
 	if(target.pulledby && target.pulledby != hunter && target.pulledby.grab_state >= GRAB_AGGRESSIVE)
@@ -75,7 +76,7 @@
 		return FALSE
 	horny_promote_handless_hold(hunter, target)
 	horny_jolt(hunter, target)
-	hunter.visible_message(span_danger(profile.get_hold_message(hunter, target)), null, span_hear("I hear a violent struggle."))
+	target.felt_visible_message(span_danger(profile.get_hold_message(hunter, target)), null, span_hear("I hear a violent struggle."))
 	return TRUE
 
 /// Coils squeeze every beat they hold on; the breath goes before the body does. TRUE when it squeezed.
@@ -86,7 +87,7 @@
 		return FALSE
 	target.adjust_stamina(profile.squeeze_fatigue)
 	if(prob(25))
-		target.visible_message(span_danger(profile.get_squeeze_message(hunter, target)), span_userdanger(profile.get_squeeze_message(hunter, target, TRUE)))
+		target.felt_visible_message(span_danger(profile.get_squeeze_message(hunter, target)), span_userdanger(profile.get_squeeze_message(hunter, target, TRUE)))
 	return TRUE
 
 /// One beat of the handless catch. Same results as the handed ladder.
@@ -104,7 +105,7 @@
 	if(target.surrendering)
 		if(target.body_position != LYING_DOWN)
 			target.Knockdown(50)
-			hunter.visible_message(span_danger("[hunter] eases the yielding [target] down."))
+			target.felt_visible_message(span_danger("[hunter] eases the yielding [target] down."))
 			hunter.changeNext_move(CLICK_CD_GRABBING)
 			return HORNY_SEIZE_ACTED
 		if(held || (target.pulledby && target.pulledby != hunter))

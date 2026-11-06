@@ -128,8 +128,9 @@
 	hole_shake_hook("birth", 2)
 
 /// A birth leaves what the egg carried in the canal: slime counts as lube, venom stings, the rest soaks in.
-/obj/item/organ/genitals/filling_organ/proc/take_birth_residue(obj/item/oviposition_egg/egg)
-	if(!egg || !reagents)
+/// [share] scales it: a birth leaves all of it, an egg on the way in only its coat.
+/obj/item/organ/genitals/filling_organ/proc/take_birth_residue(obj/item/oviposition_egg/egg, share = 1)
+	if(!egg || !reagents || share <= 0)
 		return
 	var/list/residue = egg.get_birth_residue()
 	if(!length(residue))
@@ -138,7 +139,7 @@
 	var/lube_before = opening?.get_lube_level() || 0
 	var/stings = FALSE
 	for(var/reagent_type in residue)
-		var/amount = min(residue[reagent_type], max(0, reagents.maximum_volume - reagents.total_volume))
+		var/amount = min(residue[reagent_type] * share, max(0, reagents.maximum_volume - reagents.total_volume))
 		if(amount <= 0)
 			continue
 		reagents.add_reagent(reagent_type, amount)
