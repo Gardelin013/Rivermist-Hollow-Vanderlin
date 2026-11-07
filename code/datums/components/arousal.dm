@@ -200,7 +200,11 @@
 
 /datum/component/arousal/proc/can_climax()
 	// Add some checks for like curses or something here.
-	if(last_ejaculation_time + ORGASM_COOLDOWN_TIME - clamp(edging_charge, 0, ORGASM_COOLDOWN_TIME - 10) >= world.time)
+	var/mob/living/living_parent = parent
+	var/cooldown = ORGASM_COOLDOWN_TIME * (isliving(living_parent) ? living_parent.get_climax_cooldown_multiplier() : 1)
+	if(cooldown <= 0)
+		return TRUE
+	if(last_ejaculation_time + cooldown - clamp(edging_charge, 0, max(cooldown - 10, 0)) >= world.time)
 		return FALSE
 	return TRUE
 
@@ -223,6 +227,9 @@
 /datum/component/arousal/proc/adjust_orgasm_prog(datum/source, amount)
 	if(orgasm_progress > 0)
 		amount *= arousal_multiplier
+	if(amount > 0 && isliving(parent))
+		var/mob/living/living_parent = parent
+		amount *= living_parent.get_orgasm_speed_multiplier()
 	return set_orgasm_prog(source, orgasm_progress + amount)
 
 /datum/component/arousal/proc/set_arousal(datum/source, amount)
@@ -569,7 +576,13 @@
 		after_ejaculation(FALSE, mob, null, action, action_initiator, action_target, action_performer)
 	else
 		// Still pressing at the opening, or a successful pull-out to finish outside, lands the climax outside.
-		var/pulled_out = action.orifice_pressing || (wants_to_finish_outside(action, mob) && try_pull_out(mob, target))
+		var/knot_force_bonus = mob.get_climax_knot_force_bonus(action)
+		var/wants_out = wants_to_finish_outside(action, mob)
+		// A knot force bonus means the climax always knots, so it cannot pull out.
+		if(wants_out && knot_force_bonus > 0)
+			wants_out = FALSE
+			to_chat(mob, span_love("I can't make myself pull out!"))
+		var/pulled_out = action.orifice_pressing || (wants_out && try_pull_out(mob, target))
 		var/return_type = pulled_out ? pull_out_for_climax(action, mob, target) : action.handle_climax_message(mob, target, must_flip)
 		if(!return_type)
 			var/turf/turf = get_turf(mob)
@@ -590,13 +603,21 @@
 
 		var/knot_finished = FALSE
 		if(action.knot_on_finish && !pulled_out) //no idea how to stop other partner from triggering the knotting yet sorry
-			knot_finished = action.try_knot_on_climax(mob, target)
+			knot_finished = try_climax_knot(action, mob, target, knot_force_bonus)
 
 		if(return_type == ORGASM_LOCATION_INTO && ishuman(mob) && ishuman(target))
 			var/mob/living/carbon/human/source_human = mob
 			var/mob/living/carbon/human/target_human = target
 			target_human.handle_werewolf_creampie_conversion(source_human, knot_finished)
 
+/// Ties the climax knot; a force bonus roughens the action's force for this one synchronous call.
+/datum/component/arousal/proc/try_climax_knot(datum/sex_action/action, mob/living/climaxer, mob/living/partner, force_bonus = 0)
+	if(force_bonus <= 0)
+		return action.try_knot_on_climax(climaxer, partner)
+	var/base_force = action.force
+	action.force = clamp(base_force + force_bonus, SEX_FORCE_MIN, SEX_FORCE_MAX)
+	. = action.try_knot_on_climax(climaxer, partner)
+	action.force = base_force
 
 /datum/component/arousal/proc/handle_climax(datum/sex_action/action, climax_type, mob/living/user, mob/living/target, giving, mob/living/action_initiator, mob/living/action_target, atom/action_performer)
 	var/obj/item/organ/genitals/filling_organ/testicles/testes
@@ -849,7 +870,8 @@
 
 	set_arousal(parent, arousal * (arousal_falloff_coeff + edging_charge / MAX_EDGING))
 	set_orgasm_prog(parent, 0)
-	SEND_SIGNAL(user, COMSIG_SEX_CLIMAX, action, action_initiator, action_target, action_performer)
+	// The trailing intimate flag marks a climax inside or in the mouth; older handlers ignore it.
+	SEND_SIGNAL(user, COMSIG_SEX_CLIMAX, action, action_initiator, action_target, action_performer, intimate)
 	if(arousal > MAX_AROUSAL / 4)
 		user.play_climax_motion()
 
@@ -1308,6 +1330,18 @@
 	if(istype(item, /obj/item/penis_fake)) //it's because of the hole system
 		return
 	adjust_arousal(source, 1)
+
+/// Scales this mob's climax cooldown; 0 or less removes it.
+/mob/living/proc/get_climax_cooldown_multiplier()
+	return 1
+
+/// Scales the orgasm progress this mob gains.
+/mob/living/proc/get_orgasm_speed_multiplier()
+	return 1
+
+/// Force levels added to this mob's climax knot; above 0 the climax also cannot pull out.
+/mob/living/proc/get_climax_knot_force_bonus(datum/sex_action/action)
+	return 0
 
 /datum/stress_event/blue_balls
 	timer = 1.5 MINUTES

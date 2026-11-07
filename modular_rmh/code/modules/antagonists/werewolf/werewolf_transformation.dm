@@ -25,10 +25,7 @@
 		process_pending_forced_transformation()
 
 	if(transformed && !HAS_TRAIT(current_body, TRAIT_PARALYSIS))
-		if(current_body.rage_datum?.check_rage(text2num(WW_RAGE_MEDIUM)))
-			if(current_body.blood_volume > BLOOD_VOLUME_SURVIVE)
-				for(var/datum/wound/wound as anything in current_body.get_wounds())
-					wound.heal_wound(1.2)
+		handle_beast_rage_life(current_body)
 
 /datum/antagonist/werewolf/proc/get_human_holder()
 	var/mob/living/carbon/human/current_body = owner?.current
@@ -64,12 +61,15 @@
 			human_holder.add_stress(/datum/stress_event/werewolf_restless_1)
 		if(2)
 			human_holder.add_stress(/datum/stress_event/werewolf_restless_2)
-		if(WW_FORCED_TRANSFORM_NIGHT_COUNT to INFINITY)
+		if(WW_RESTLESS_NIGHT_CAP to INFINITY)
 			human_holder.add_stress(/datum/stress_event/werewolf_restless_3)
 
 /datum/antagonist/werewolf/proc/mark_transformation_complete()
 	transformed_since_last_nightfall = TRUE
 	reset_transformation_pressure()
+	// Under the full moon the body never needs to settle between forms.
+	if(is_full_moon_night())
+		return
 	var/datum/action/cooldown/spell/undirected/werewolf_form/transformation_action = get_transformation_action()
 	transformation_action?.StartCooldown(WW_TRANSFORMATION_COOLDOWN)
 
@@ -82,6 +82,8 @@
 
 /// Remaining time before another form change is allowed. The toggle action's own cooldown is the single source of truth.
 /datum/antagonist/werewolf/proc/get_transformation_cooldown_remaining()
+	if(is_full_moon_night())
+		return 0
 	var/datum/action/cooldown/transformation_action = get_transformation_action()
 	if(!transformation_action)
 		return 0
@@ -113,26 +115,22 @@
 
 	handle_nightfall(current_body)
 
+/// Ordinary skipped nights only add restless stress; the full moon alone forces the change.
 /datum/antagonist/werewolf/proc/handle_nightfall(mob/living/carbon/human/current_body)
+	var/full_moon = is_full_moon_night()
+	var/restless_nights = 0
 	if(transformed || transformed_since_last_nightfall)
 		reset_transformation_pressure()
-		transformed_since_last_nightfall = FALSE
-		return
-
-	nights_without_transformation = min(nights_without_transformation + 1, WW_FORCED_TRANSFORM_NIGHT_COUNT)
-	update_transformation_pressure()
-
-	switch(nights_without_transformation)
-		if(1)
-			to_chat(current_body, span_warning("One night passes without letting the beast out. It grows restless. Two nights left."))
-		if(2)
-			to_chat(current_body, span_userdanger("Two nights have passed without transforming. The beast claws at my mind. On next night it will claw itself out."))
-		if(WW_FORCED_TRANSFORM_NIGHT_COUNT)
-			forced_transformation_pending = TRUE
-			to_chat(current_body, span_userdanger("Three nights have passed - IT cannot wait any longer!"))
-			process_pending_forced_transformation()
-
+	else
+		nights_without_transformation = min(nights_without_transformation + 1, WW_RESTLESS_NIGHT_CAP)
+		update_transformation_pressure()
+		restless_nights = nights_without_transformation
 	transformed_since_last_nightfall = FALSE
+
+	if(full_moon)
+		handle_full_moonrise(current_body)
+		return
+	announce_moonrise(current_body, restless_nights)
 
 /datum/antagonist/werewolf/proc/process_pending_forced_transformation()
 	if(!forced_transformation_pending)
@@ -248,7 +246,7 @@
 	human_user.flash_fullscreen("redflash3")
 	human_user.emote("scream", forced = TRUE)
 	if(force_due_to_missed_nights)
-		to_chat(human_user, span_userdanger("Three nights denied. The beast tears free!"))
+		to_chat(human_user, span_userdanger("The full moon drags the beast out of me!"))
 	else
 		to_chat(human_user, span_userdanger("The Moon calls!"))
 	human_user.Stun(WW_TRANSFORMATION_LOCKDOWN, ignore_canstun = TRUE)
@@ -292,19 +290,8 @@
 	new_werewolf.blood_volume = human_user.blood_volume
 	human_user.fully_heal(HEAL_DAMAGE|HEAL_BLOOD|HEAL_WOUNDS|HEAL_RESTRAINTS)
 
-	if(human_user.getorganslot(ORGAN_SLOT_PENIS))
-		var/obj/item/organ/genitals/penis/knotted/big/penis = new
-		penis.length_cm = 28
-		penis.Insert(new_werewolf, TRUE, FALSE)
-	if(human_user.getorganslot(ORGAN_SLOT_TESTICLES))
-		var/obj/item/organ/genitals/filling_organ/testicles/internal/testicles = new
-		testicles.Insert(new_werewolf, TRUE, FALSE)
-	if(human_user.getorganslot(ORGAN_SLOT_BREASTS))
-		var/obj/item/organ/genitals/filling_organ/breasts/breasts = new
-		breasts.Insert(new_werewolf, TRUE, FALSE)
-	if(human_user.getorganslot(ORGAN_SLOT_VAGINA))
-		var/obj/item/organ/genitals/filling_organ/vagina/vagina = new
-		vagina.Insert(new_werewolf, TRUE, FALSE)
+	apply_beast_anatomy(human_user, new_werewolf)
+	apply_beast_profile(human_user, new_werewolf)
 
 	transformed = TRUE
 	transformation_in_progress = FALSE
@@ -323,6 +310,10 @@
 		to_chat(new_werewolf, span_userdanger("I transform into a horrible beast!"))
 	new_werewolf.emote("rage")
 
+	var/datum/rage/werewolf/beast_rage = new_werewolf.rage_datum
+	if(istype(beast_rage))
+		beast_rage.raise_rage_to(WW_TRANSFORM_RAGE_FLOOR)
+
 	mark_transformation_complete()
 	RegisterSignal(new_werewolf, COMSIG_LIVING_COMBAT_KILL, PROC_REF(on_werewolf_kill))
 	RegisterSignal(new_werewolf, COMSIG_LIVING_UNSHAPESHIFTED, PROC_REF(werewolf_untransform))
@@ -340,15 +331,44 @@
 /datum/antagonist/werewolf/proc/generate_werewolf(mob/living/carbon/human/user)
 	var/mob/living/carbon/human/species/werewolf/new_werewolf = new (get_turf(user))
 	new_werewolf.age = user.age
-	new_werewolf.real_name = wolfname
-	new_werewolf.name = wolfname
+	var/beast_name = get_beast_name()
+	new_werewolf.real_name = beast_name
+	new_werewolf.name = beast_name
 	new_werewolf.skin_armor = new /obj/item/clothing/armor/regenerating/skin/werewolf_skin(new_werewolf)
+	// The mind arrives later, so the species cannot read our look yet.
+	var/datum/species/werewolf/beast_species = new_werewolf.dna?.species
+	if(istype(beast_species))
+		beast_species.apply_form_look(new_werewolf, get_form_look())
 
 	for(var/werewolf_power_type in werewolf_form_powers)
 		var/datum/action/werewolf_power = new werewolf_power_type(new_werewolf)
 		werewolf_power.Grant(new_werewolf)
 
 	return new_werewolf
+
+/// Builds the beast's genitals from the human's; the penis is knotted and never shorter than the floor.
+/datum/antagonist/werewolf/proc/apply_beast_anatomy(mob/living/carbon/human/human_user, mob/living/carbon/human/species/werewolf/new_werewolf)
+	var/obj/item/organ/genitals/penis/human_penis = get_real_organ(human_user, ORGAN_SLOT_PENIS)
+	if(human_penis)
+		var/obj/item/organ/genitals/penis/knotted/beast_penis = new
+		beast_penis.length_cm = max(human_penis.get_length_cm(), WW_BEAST_MIN_PENIS_LENGTH)
+		beast_penis.organ_size = max(human_penis.organ_size, get_penis_visual_size(beast_penis.length_cm))
+		beast_penis.Insert(new_werewolf, TRUE, FALSE)
+	var/obj/item/organ/genitals/filling_organ/testicles/human_testicles = human_user.getorganslot(ORGAN_SLOT_TESTICLES)
+	if(human_testicles)
+		var/obj/item/organ/genitals/filling_organ/testicles/internal/beast_testicles = new
+		beast_testicles.organ_size = human_testicles.organ_size
+		beast_testicles.Insert(new_werewolf, TRUE, FALSE)
+	var/obj/item/organ/genitals/filling_organ/breasts/human_breasts = human_user.getorganslot(ORGAN_SLOT_BREASTS)
+	if(human_breasts)
+		var/obj/item/organ/genitals/filling_organ/breasts/beast_breasts = new
+		beast_breasts.organ_size = human_breasts.organ_size
+		beast_breasts.Insert(new_werewolf, TRUE, FALSE)
+	var/obj/item/organ/genitals/filling_organ/vagina/human_vagina = human_user.getorganslot(ORGAN_SLOT_VAGINA)
+	if(human_vagina)
+		var/obj/item/organ/genitals/filling_organ/vagina/beast_vagina = new
+		beast_vagina.organ_size = human_vagina.organ_size
+		beast_vagina.Insert(new_werewolf, TRUE, FALSE)
 
 /datum/antagonist/werewolf/proc/transfer_skill_state_to_werewolf(mob/living/carbon/human/human_user, mob/living/carbon/human/species/werewolf/new_werewolf)
 	if(!human_user?.attributes || !new_werewolf?.attributes)

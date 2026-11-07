@@ -260,6 +260,9 @@
 	if(clan)
 		. += "VITAE: [round(bloodpool)]/[maxbloodpool]"
 		. += "DETECTIONS: [detections]"
+	var/datum/rage/werewolf/werewolf_rage = rage_datum
+	if(istype(werewolf_rage))
+		. += werewolf_rage.get_status_tab_line()
 
 /mob/living/carbon/human/show_inv(mob/user, extra_only = FALSE)
 	user.set_machine(src)

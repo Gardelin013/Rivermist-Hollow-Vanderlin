@@ -367,6 +367,7 @@
 			send_clench_prompt()
 			continue
 
+		send_action_tick(action_user, action_target)
 		run_act_hook(PROC_REF(on_perform), action_user, action_target)
 		leave_perform_lipstick_marks()
 		on_orifice_cycle()
@@ -476,7 +477,16 @@
 
 /// on_perform() inside its message scopes, for callers outside the act runtime.
 /datum/sex_action/proc/felt_perform(mob/living/user, mob/living/target)
+	send_action_tick(user, target)
 	run_act_hook(PROC_REF(on_perform), user, target)
+
+/// Tells both bodies a beat is about to be performed; handlers must not sleep.
+/datum/sex_action/proc/send_action_tick(mob/living/user, mob/living/target)
+	if(!user || !target)
+		return
+	SEND_SIGNAL(user, COMSIG_SEX_ACTION_TICK, src, user, target)
+	if(target != user)
+		SEND_SIGNAL(target, COMSIG_SEX_ACTION_TICK, src, user, target)
 
 /// Never returns null - the result divides do_time, so an unlisted speed would be a division by zero.
 /datum/sex_action/proc/get_speed_multiplier()

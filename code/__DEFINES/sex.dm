@@ -18,6 +18,7 @@ GLOBAL_LIST_INIT(sex_actions, build_sex_actions())
 #define COMSIG_SEX_GET_AROUSAL "sex_get_arousal"                        // () - Get current arousal info
 #define COMSIG_SEX_GET_AROUSAL_FLOOR "sex_get_arousal_floor"            // (list/floor_data) - Raise floor_data["floor"]; cooling stops there
 #define COMSIG_SEX_CLIMAX "sex_climax"                                  // (sex_action, action_receiver, action_partner, action_performer) - Handle climax event
+#define COMSIG_SEX_ACTION_TICK "sex_action_tick"                        // (sex_action, action_user, action_target) - to both, once per performed beat
 #define COMSIG_SEX_RECEIVE_ACTION "sex_receive_action"                  // (sex_action, action_receiver, action_partner, arousal_amt, pain_amt, orgasm_prog_amt, giving, force, speed, resist, action_performer) - Receive action effects
 #define COMSIG_SEX_GENERIC_ACTION "sex_receive_gen_action"					// ... - for generic actions without the sex session panel
 #define COMSIG_SEX_ADJUST_EDGING "sex_adjust_edging"                 	// (amount) - Adjust edging level

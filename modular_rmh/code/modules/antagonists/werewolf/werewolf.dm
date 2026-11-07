@@ -16,7 +16,8 @@
 	/// Are we currently out of our human form? Redundancy to easily check for transformation.
 	var/transformed
 	/// How much rage decays by while transformed.
-	var/transformed_rage_decay = 5
+	// With the base -0.5 this drains 1 per life tick: a full bar lasts five idle minutes.
+	var/transformed_rage_decay = 0.5
 	/// TRUE while the werewolf is stuck in the transformation animation.
 	var/transformation_in_progress = FALSE
 	/// Consecutive nightfalls spent without letting the beast out.
@@ -25,7 +26,7 @@
 	var/transformed_since_last_nightfall = FALSE
 	/// Cached time-of-day value used to detect nightfall without touching the night subsystem.
 	var/last_seen_tod = null
-	/// TRUE once the werewolf has skipped too many nights and must transform as soon as possible.
+	/// TRUE once the werewolf has denied a full moon and must transform as soon as possible.
 	var/forced_transformation_pending = FALSE
 	/// TRUE while the beast-form rage decay penalty is applied to the rage datum.
 	var/transform_rage_decay_active = FALSE
@@ -33,6 +34,8 @@
 	var/subject_to_moon_pressure = TRUE
 
 	var/wolfname = "Werewolf"
+	/// Id of the /datum/werewolf_form_look the beast body draws from.
+	var/form_look_id = WEREWOLF_LOOK_LEAN
 	var/list/datum/action/werewolf_form_powers = list(
 		/datum/action/cooldown/spell/undirected/howl, \
 		/datum/action/cooldown/spell/undirected/claws, \
@@ -62,18 +65,33 @@
 /datum/antagonist/werewolf/lesser/roundend_report()
 	return
 
+/// Runs on the examined wolf's datum; only a werewolf examiner recognises its kin.
 /datum/antagonist/werewolf/examine_friendorfoe(datum/antagonist/examined_datum, mob/examiner, mob/examined)
+	if(!IS_WEREWOLF(examiner))
+		return null
+	var/lineage_line = get_lineage_examine_line(examiner)
+	if(lineage_line)
+		return lineage_line
 	if(istype(examined_datum, /datum/antagonist/werewolf/lesser))
 		return span_boldnotice("A young lupine kin.")
-	if(istype(examined_datum, /datum/antagonist/werewolf))
-		return span_boldnotice("An elder lupine kin.")
-	if(examiner.Adjacent(examined))
-		if(istype(examined_datum, /datum/antagonist/vampire/lord))
-			if(transformed)
-				return span_boldwarning("An Ancient Vampire. I must be careful!")
-		if(istype(examined_datum, /datum/antagonist/vampire))
-			if(transformed)
-				return span_boldwarning("A vampire.")
+	return span_boldnotice("An elder lupine kin.")
+
+/// Runs on the examiner's datum; the beast smells vampires up close.
+/datum/antagonist/werewolf/examine_target(mob/examiner, mob/examined, list/P, list/examine_contents)
+	. = ..()
+	var/vampire_line = get_vampire_examine_line(examiner, examined)
+	if(vampire_line)
+		LAZYADDASSOCLIST(examine_contents, EXAMINE_SECT_PREGEAR, vampire_line)
+
+/// Warning a beast-form examiner gets beside a vampire, or null.
+/datum/antagonist/werewolf/proc/get_vampire_examine_line(mob/examiner, mob/examined)
+	if(!transformed || examiner == examined || !examiner.Adjacent(examined))
+		return null
+	if(examined.mind?.has_antag_datum(/datum/antagonist/vampire/lord))
+		return span_boldwarning("An Ancient Vampire. I must be careful!")
+	if(examined.mind?.has_antag_datum(/datum/antagonist/vampire))
+		return span_boldwarning("A vampire.")
+	return null
 
 /datum/antagonist/werewolf/on_gain()
 	SSmapping.retainer.werewolves |= owner
@@ -83,16 +101,25 @@
 	owner.current.grant_language(/datum/language/beast)
 	owner.current.add_faction(FACTION_WOLVES)
 
-	wolfname = "[pick(strings("werewolf_names.json", "wolf_prefixes"))] [pick(strings("werewolf_names.json", "wolf_suffixes"))]"
+	wolfname = random_werewolf_name()
+	load_beast_profile()
 	last_seen_tod = GLOB.tod
 	grant_werewolf_powers()
 	return ..()
+
+/proc/random_werewolf_name()
+	return "[pick(strings("werewolf_names.json", "wolf_prefixes"))] [pick(strings("werewolf_names.json", "wolf_suffixes"))]"
+
+/datum/antagonist/werewolf/proc/get_form_look()
+	RETURN_TYPE(/datum/werewolf_form_look)
+	return get_werewolf_form_look(form_look_id)
 
 /// The curse's full kit - beast form, lair, contracts, rage. Lesser kin override this with their shallow gift.
 /datum/antagonist/werewolf/proc/grant_werewolf_powers()
 	owner.current.add_spell(/datum/action/cooldown/spell/undirected/werewolf_form, source = owner)
 	initialize_werewolf_lair_ability()
 	initialize_werewolf_contract_interface()
+	grant_moon_reading()
 
 	var/datum/rage/werewolf/new_rage = new
 	new_rage.grant_to_holder(owner.current)
@@ -103,6 +130,7 @@
 	clear_transformation_pressure()
 	cleanup_werewolf_lair()
 	cleanup_werewolf_contract_interface()
+	remove_moon_reading()
 
 	if(owner.current)
 		owner.current.remove_spell(/datum/action/cooldown/spell/undirected/werewolf_form)
@@ -140,6 +168,7 @@
 		new /datum/objective/werewolf_counter/convert(),
 		new /datum/objective/werewolf_counter/trap(),
 		new /datum/objective/werewolf_counter/contracts(),
+		new /datum/objective/werewolf/pack_keeper(),
 		new /datum/objective/werewolf/survive(),
 	)
 	if(owner.current?.getorganslot(ORGAN_SLOT_TESTICLES))

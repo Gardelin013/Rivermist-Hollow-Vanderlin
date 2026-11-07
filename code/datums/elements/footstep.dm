@@ -32,7 +32,7 @@
 			return
 		if(FOOTSTEP_MOB_CLAW)
 			footstep_sounds = GLOB.clawfootstep
-		if(FOOTSTEP_MOB_BAREFOOT)
+		if(FOOTSTEP_MOB_BAREFOOT, FOOTSTEP_MOB_BEAST)
 			footstep_sounds = GLOB.barefootstep
 		if(FOOTSTEP_MOB_HEAVY)
 			footstep_sounds = GLOB.heavyfootstep
@@ -79,7 +79,7 @@
 	if(steps % 2)
 		return
 
-	. = list(HEELSTEP_MOB_HEEL = turf.heelstep, FOOTSTEP_MOB_SHOE = turf.footstep, FOOTSTEP_MOB_BAREFOOT = turf.barefootstep, FOOTSTEP_MOB_HEAVY = turf.heavyfootstep, FOOTSTEP_MOB_METAL = turf.heavyfootstep, FOOTSTEP_MOB_CLAW = turf.clawfootstep, STEP_SOUND_PRIORITY = STEP_SOUND_NO_PRIORITY)
+	. = list(HEELSTEP_MOB_HEEL = turf.heelstep, FOOTSTEP_MOB_SHOE = turf.footstep, FOOTSTEP_MOB_BAREFOOT = turf.barefootstep, FOOTSTEP_MOB_BEAST = turf.barefootstep, FOOTSTEP_MOB_HEAVY = turf.heavyfootstep, FOOTSTEP_MOB_METAL = turf.heavyfootstep, FOOTSTEP_MOB_CLAW = turf.clawfootstep, STEP_SOUND_PRIORITY = STEP_SOUND_NO_PRIORITY)
 	SEND_SIGNAL(source, COMSIG_MOB_PREPARE_STEP_SOUND, .) // Used to override shoe material before turf
 	SEND_SIGNAL(turf, COMSIG_TURF_PREPARE_STEP_SOUND, .)
 	return .

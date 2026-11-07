@@ -77,6 +77,7 @@
 	steps[HEELSTEP_MOB_HEEL]  = heelstep
 	steps[FOOTSTEP_MOB_SHOE] = footstep
 	steps[FOOTSTEP_MOB_BAREFOOT] = barefootstep
+	steps[FOOTSTEP_MOB_BEAST] = barefootstep
 	steps[FOOTSTEP_MOB_HEAVY] = heavyfootstep
 	steps[FOOTSTEP_MOB_CLAW] = clawfootstep
 	steps[STEP_SOUND_PRIORITY] = priority

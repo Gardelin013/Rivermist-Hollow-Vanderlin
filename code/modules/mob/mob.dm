@@ -1160,10 +1160,10 @@ GLOBAL_VAR_INIT(mobids, 1)
 ///Can this mob use storage
 /mob/proc/canUseStorage()
 	return FALSE
-/mob/living/proc/ai_targeting_ally_check(mob/living/target)
+/mob/living/proc/ai_targeting_ally_check(mob/living/target, ignore_neutral = FALSE)
 	if(!target)
 		return FALSE
-	if(faction_check_atom(target, exact_match = FALSE))
+	if(ignore_neutral ? ai_targeting_shares_sworn_faction(target) : faction_check_atom(target, exact_match = FALSE))
 		return TRUE
 	if(ai_targeting_related_faction_check(target))
 		return TRUE
@@ -1172,6 +1172,17 @@ GLOBAL_VAR_INIT(mobids, 1)
 	if(ai_targeting_same_family(target))
 		return TRUE
 	return FALSE
+
+/// faction_check_atom without the Neutral placeholder every mob starts with.
+/mob/living/proc/ai_targeting_shares_sworn_faction(mob/living/target)
+	var/list/shared_factions = LAZYCOPY(faction) & target.get_faction()
+	shared_factions -= FACTION_NEUTRAL
+	if(length(shared_factions))
+		return TRUE
+	if(LAZYLEN(allies) && LAZYLEN(target.allies) && length(allies & target.allies))
+		return TRUE
+	// Legacy name-based allegiances, as in /mob/faction_check_atom.
+	return has_faction(target.name) || has_ally(target.name)
 
 /mob/living/proc/ai_targeting_related_faction_check(mob/living/target)
 	if(!target)

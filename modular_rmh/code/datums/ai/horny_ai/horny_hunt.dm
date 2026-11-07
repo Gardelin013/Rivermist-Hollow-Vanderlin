@@ -1045,6 +1045,7 @@
 	controller.clear_blackboard_key(BB_HORNY_WEB_SPAT_AT)
 	controller.clear_blackboard_key(BB_HORNY_PRESENTED_UNTIL)
 	controller.clear_blackboard_key(target_key)
+	controller.clear_blackboard_key(BB_HORNY_DIRECTED_TARGET)
 	controller.clear_blackboard_key(BB_HORNY_TIME_START)
 	if(basic_mob.is_dead())
 		return

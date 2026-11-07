@@ -147,6 +147,9 @@
 			chest.receive_damage(40)
 			target.add_splatter_floor()
 			target.emote("scream")
+		else if(can_pin_target(target))
+			pin_target(target)
+			return
 		else
 			target.grabbedby(owner)
 			target.grippedby(owner, instant = TRUE)
@@ -154,3 +157,32 @@
 		if(!is_source_facing_target(target, owner) || owner.alpha <= 40)
 			target.Knockdown(2 SECONDS)
 			target.Paralyze(0.1)
+
+/// Only a werewolf in beast form pounces; other lungers keep the plain grab.
+/datum/action/cooldown/spell/lunge/proc/can_pin_target(mob/living/target)
+	if(!isliving(target) || target.stat == DEAD || target.body_position != STANDING_UP)
+		return FALSE
+	var/datum/antagonist/werewolf/wolf = IS_WEREWOLF(owner)
+	return !!wolf?.transformed
+
+/// Knocks the prey flat whatever its facing, then holds it in an aggressive grab it cannot resist briefly.
+/datum/action/cooldown/spell/lunge/proc/pin_target(mob/living/target)
+	var/mob/living/beast = owner
+	target.Knockdown(WW_POUNCE_KNOCKDOWN)
+	target.grabbedby(beast)
+	target.grippedby(beast, instant = TRUE)
+	if(beast.pulling != target || beast.grab_state < GRAB_AGGRESSIVE)
+		return FALSE
+	// Backdate the resist stamp so only the pin window remains before the prey may struggle.
+	beast.mob_timers[MT_RESIST_GRAB] = world.time - WW_GRAB_RESIST_SPACING + WW_POUNCE_PIN_WINDOW
+	playsound(beast, pick('sound/vo/mobs/wwolf/jump (1).ogg', 'sound/vo/mobs/wwolf/jump (2).ogg', 'sound/vo/mobs/wwolf/jump (3).ogg'), 80, TRUE)
+	beast.visible_message(
+		span_danger("[beast] pins [target] to the ground!"),
+		span_danger("I pin [target] beneath me!"),
+		span_hear("I hear a heavy thud and a snarl!"),
+		COMBAT_MESSAGE_RANGE,
+		list(target),
+	)
+	to_chat(target, span_userdanger("[beast] pins me to the ground!"))
+	log_combat(beast, target, "pinned", addition = "werewolf pounce")
+	return TRUE

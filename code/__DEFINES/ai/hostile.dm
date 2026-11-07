@@ -119,6 +119,8 @@
 
 
 #define BB_BASIC_MOB_CURRENT_HORNY_TARGET "BB_basic_current_horny_target"
+/// Target a pet order pointed this mob at; while it is the horny target, it passes the ally gate.
+#define BB_HORNY_DIRECTED_TARGET "BB_horny_directed_target"
 #define BB_HORNY_AGGRO_TARGET "BB_horny_aggro_target"
 #define BB_HORNY_HOSTILE_TARGETS "BB_horny_hostile_targets"
 #define BB_HORNY_SEEK_COOLDOWN "BB_horny_seek_cooldown"

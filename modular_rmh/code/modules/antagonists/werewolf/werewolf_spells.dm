@@ -64,7 +64,7 @@
 
 	var/howler_name = owner.real_name
 	if(werewolf_antag)
-		howler_name = werewolf_antag.wolfname
+		howler_name = werewolf_antag.get_howl_name()
 
 	// The caster sees their own howl.
 	to_chat(
@@ -119,6 +119,10 @@
 
 	// Avoid keeping the previous text around between casts.
 	message = null
+
+/// Name other wolves hear on a howl; pups add their elder.
+/datum/antagonist/werewolf/proc/get_howl_name()
+	return wolfname
 
 /datum/action/cooldown/spell/undirected/claws
 	name = "Lupine Claws"
