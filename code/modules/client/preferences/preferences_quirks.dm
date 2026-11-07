@@ -176,11 +176,13 @@
 			valid_extra_customizations[quirk_type] = extra_values.Copy()
 	quirk_customizations = valid_customizations
 	quirk_extra_customizations = valid_extra_customizations
+	trim_unaffordable_prosthetics() // RMH EDIT
 
 /datum/preferences/proc/calculate_quirk_balance()
 	var/balance = STARTING_QUIRK_POINTS
 	for(var/datum/quirk/quirk as anything in quirks)
 		balance += initial(quirk.point_value)
+	balance += prosthetic_point_value() // RMH EDIT - Prosthetics window choices share the quirk balance
 	return balance
 
 /datum/preferences/proc/count_boons_in_list()

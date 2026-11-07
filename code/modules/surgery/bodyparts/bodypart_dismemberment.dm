@@ -201,7 +201,7 @@
 		was_owner.dropItemToGround(owner.get_item_for_held_index(held_index), force = TRUE)
 		was_owner.hand_bodyparts[held_index] = null
 	was_owner.remove_bodypart(src)
-	owner = null
+	set_owner(null) // RMH EDIT - a bare owner = null left trait signals on the old owner
 	update_icon_dropped()
 	was_owner.update_health_hud() //update the healthdoll
 	was_owner.update_body()

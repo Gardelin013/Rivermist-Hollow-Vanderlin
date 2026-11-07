@@ -443,8 +443,7 @@
 	allowed_ages = list(AGE_MIDDLEAGED, AGE_OLD)
 
 /datum/special_trait/war_veteran/on_apply(mob/living/carbon/human/character, silent)
-	character.add_quirk(/datum/quirk/negative/wooden_arm_left)
-	character.add_quirk(/datum/quirk/negative/cyclops_left)
+	fit_veteran_wounds(character) // RMH EDIT - Prosthetics window parts replaced the limb quirks
 	character.add_quirk(/datum/quirk/negative/old_war_wound)
 	character.clamped_adjust_skillrank(/datum/skill/combat/swords, 4, 4, TRUE)
 	character.clamped_adjust_skillrank(/datum/skill/combat/polearms, 4, 4, TRUE)

@@ -103,3 +103,11 @@
 #define OVI_EGG_TRAIT_POISON "poison"
 #define OVI_EGG_TRAIT_PARASITE "parasite"
 #define OVI_EGG_TRAIT_FAST_GROWTH "fast_growth"
+
+/// What kind of part a slot takes. Prosthetic options and implants list the kinds they fit.
+#define PROSTHETIC_KIND_ARM "arm"
+#define PROSTHETIC_KIND_LEG "leg"
+#define PROSTHETIC_KIND_EYE "eye"
+#define PROSTHETIC_KIND_HEART "heart"
+#define PROSTHETIC_KIND_LUNGS "lungs"
+#define PROSTHETIC_KIND_TONGUE "tongue"

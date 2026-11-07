@@ -533,6 +533,7 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 	.["cc_rivals"] = read_preference(/datum/preference/numeric/rival_count) || 0
 	.["cc_tattoo_count"] = character_creator_tattoo_count()
 	.["cc_tattoos"] = character_creator_tattoo_data()
+	.["cc_prosthetics"] = character_creator_prosthetic_data()
 	.["cc_texts"] = list(
 		"flavortext" = read_preference(/datum/preference/text/flavortext) || "",
 		"nsfwflavortext" = read_preference(/datum/preference/text/nsfwflavortext) || "",
@@ -569,6 +570,10 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 	switch(action)
 		if("cc_tattoo")
 			return character_creator_tattoo_act(user, params)
+		if("cc_prosthetic")
+			return character_creator_prosthetic_act(user, params)
+		if("cc_implant")
+			return character_creator_implant_act(user, params)
 		if("cc_set_lang")
 			character_creator_lang = (params["lang"] == CC_LANG_RU) ? CC_LANG_RU : CC_LANG_EN
 			save_preferences()
@@ -810,6 +815,8 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 		"markings" = body_markings,
 		"emissive_markings" = emissive_markings,
 		"tattoos" = tattoos,
+		"prosthetics" = prosthetics,
+		"implants" = implants,
 		"descriptors" = descriptors,
 		"custom_descriptors" = custom_descriptor_list,
 		"quirks" = quirk_list,
@@ -970,6 +977,9 @@ GLOBAL_LIST_INIT(character_creator_view_actions, list(
 		tattoos = imported_tattoos
 		validate_tattoos()
 
+	prosthetics = islist(payload["prosthetics"]) ? payload["prosthetics"] : list()
+	implants = islist(payload["implants"]) ? payload["implants"] : list()
+	validate_prosthetics()
 	character_creator_import_quirks(payload["quirks"])
 	// Genital set rules depend on quirks, so they are enforced once both halves are in place.
 	validate_customizer_entries()

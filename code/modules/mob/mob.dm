@@ -504,6 +504,12 @@ GLOBAL_VAR_INIT(mobids, 1)
 
 	DEFAULT_QUEUE_OR_CALL_VERB(VERB_CALLBACK(src, PROC_REF(run_examinate), examinify))
 
+//RMH EDITED START
+/// REF of the atom this mob last examined closer, and when, so one double-click gives one closer look.
+/mob/var/last_examined_more_ref
+/mob/var/last_examined_more_time = 0
+//RMH EDITED END
+
 /mob/proc/run_examinate(atom/examinify, force_examinate_more = FALSE)
 	if(QDELETED(examinify)) // since this can run async we might have had the atom get qdeleted already
 		return
@@ -555,6 +561,12 @@ GLOBAL_VAR_INIT(mobids, 1)
 	var/ref_to_atom = REF(examinify)
 	var/recent_examine_time = LAZYACCESS(client?.recent_examines, ref_to_atom)
 	if(force_examinate_more || (!isnull(recent_examine_time) && world.time - recent_examine_time < EXAMINE_MORE_WINDOW))
+		//RMH EDITED START - a double-click whose second click already looked closer shows nothing twice
+		if(force_examinate_more && last_examined_more_ref == ref_to_atom && world.time - last_examined_more_time < EXAMINE_MORE_WINDOW)
+			return
+		last_examined_more_ref = ref_to_atom
+		last_examined_more_time = world.time
+		//RMH EDITED END
 		var/list/closer_result = examinify.examine_more(src)
 		if(!length(closer_result))
 			closer_result += span_notice("<i>I examine [examinify] closer, but find nothing of interest...</i>")
