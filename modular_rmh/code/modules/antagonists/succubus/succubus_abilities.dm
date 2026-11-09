@@ -479,6 +479,7 @@
 	current_mob.add_spell(/datum/action/cooldown/spell/succubus_whisper, source = owner)
 	current_mob.add_spell(/datum/action/cooldown/spell/succubus_charm, source = owner)
 	current_mob.add_spell(/datum/action/cooldown/spell/succubus_enthrall, source = owner)
+	current_mob.add_spell(/datum/action/cooldown/spell/hypnosis/succubus, source = owner)
 	refresh_succubus_tier_abilities()
 
 /datum/antagonist/succubus/proc/refresh_succubus_tier_abilities()
@@ -515,6 +516,7 @@
 	current_mob.remove_spell(/datum/action/cooldown/spell/succubus_whisper)
 	current_mob.remove_spell(/datum/action/cooldown/spell/succubus_charm)
 	current_mob.remove_spell(/datum/action/cooldown/spell/succubus_enthrall)
+	current_mob.remove_spell(/datum/action/cooldown/spell/hypnosis/succubus)
 	current_mob.remove_spell(/datum/action/cooldown/spell/undirected/succubus_beguiling_doubles)
 	current_mob.remove_spell(/datum/action/cooldown/spell/undirected/succubus_summon_imp)
 	current_mob.remove_spell(/datum/action/cooldown/spell/undirected/succubus_summon_lusthound)
