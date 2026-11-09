@@ -5197,6 +5197,7 @@
 #include "modular_rmh\modular\piercing\piercing.dm"
 #include "modular_rmh\modular\piercing\piercings.dm"
 #include "modular_rmh\modular\piercing\supply.dm"
+#include "modular_rmh\modular\pixel_rotation\pixel_rotation.dm"
 #include "modular_rmh\modular\playthings\anal_beads.dm"
 #include "modular_rmh\modular\playthings\anal_beads_actions.dm"
 #include "modular_rmh\modular\playthings\blindfold.dm"
