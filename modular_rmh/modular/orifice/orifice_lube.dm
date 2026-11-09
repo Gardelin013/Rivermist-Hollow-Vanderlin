@@ -194,6 +194,10 @@
 		if(istype(toy))
 			take_lube_from(toy.get_lube_reagents(FALSE))
 		return
+	// A toy in a worn harness keeps its own lube as well as the wearer's groin coat.
+	var/obj/item/dildo/strapon_toy = penetrator?.get_strapon_toy()
+	if(strapon_toy)
+		take_lube_from(strapon_toy.get_lube_reagents(FALSE))
 	var/datum/component/fluid_coated/coated = penetrator?.GetComponent(/datum/component/fluid_coated)
 	if(!coated)
 		return

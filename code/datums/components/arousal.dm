@@ -548,6 +548,8 @@
 		var/obj/item/organ/genitals/filling_organ/vagina/strapon_vag = mob.getorganslot(ORGAN_SLOT_VAGINA)
 		if(strapon_vag?.reagents)
 			strapon_vag.produce_climax_fluid()
+		// A worn harness may empty its bulb, or pump the release, through the toy.
+		mob.on_strapon_climax(action, target)
 		after_ejaculation(FALSE, parent, target, action, action_initiator, action_target, action_performer)
 		return
 	var/obj/item/organ/genitals/filling_organ/testicles/climax_testes = mob.getorganslot(ORGAN_SLOT_TESTICLES)

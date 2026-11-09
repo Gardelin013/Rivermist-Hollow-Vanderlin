@@ -124,7 +124,7 @@
 /datum/sex_action/grind/proc/scale_grinder_pleasure(mob/living/user, contact_mult, list/amounts)
 	var/mult = contact_mult
 	if(is_strapon_grind(user))
-		mult *= GRIND_STRAPON_MULT
+		mult *= user.get_strapon_feel(GRIND_STRAPON_MULT)
 	amounts[1] *= mult
 	amounts[2] *= mult
 	if(is_denied(user))

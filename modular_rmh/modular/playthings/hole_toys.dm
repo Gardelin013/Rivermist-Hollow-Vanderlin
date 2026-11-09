@@ -261,6 +261,10 @@
 		return "I can't reach like this."
 	if(has_status_effect(/datum/status_effect/labour))
 		return "Not now. My body has other work."
+	return get_hole_access_block_reason(hole)
+
+/// Why [hole] is out of reach whatever the body's state: armor, a worn device, or something inside it now.
+/mob/living/carbon/human/proc/get_hole_access_block_reason(obj/item/organ/genitals/filling_organ/hole)
 	// The panel's rules: only armor above light keeps hands off, and a worn device seals its slot.
 	if(get_sex_covering_garment(hole.slot == ORGAN_SLOT_BREASTS ? BODY_ZONE_CHEST : BODY_ZONE_PRECISE_GROIN))
 		return "My clothes are in the way."

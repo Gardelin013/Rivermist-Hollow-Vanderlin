@@ -685,6 +685,10 @@
 /datum/sex_action/proc/considered_limp(mob/living/limper)
 	if(QDELETED(limper))
 		return TRUE
+	// A strapon toy is always hard.
+	var/obj/item/organ/genitals/penis/penis = limper.getorganslot(ORGAN_SLOT_PENIS)
+	if(penis?.is_false_organ())
+		return FALSE
 	var/list/arousal_data = list()
 	SEND_SIGNAL(limper, COMSIG_SEX_GET_AROUSAL, arousal_data)
 	return arousal_data["arousal"] < VISIBLE_AROUSAL_THRESHOLD
