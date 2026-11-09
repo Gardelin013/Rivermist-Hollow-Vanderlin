@@ -87,7 +87,7 @@
 /mob/living/simple_animal/hostile/retaliate/tentacle/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/ai_retaliate)
-	var/obj/item/organ/genitals/penis/ovipositor/ovipositor = ensure_typed_ovipositor(src, OVI_EGG_TENTACLE, 2, 6, 4)
+	var/obj/item/organ/genitals/penis/ovipositor/ovipositor = ensure_tentacle_ovipositor(src)
 	if(ovipositor)
 		ovipositor.name = "egg-bearing tentacle"
 		ovipositor.desc = "A sensitive, prehensile tentacle adapted to carry and lay soft eggs."

@@ -74,6 +74,15 @@
 #define OVI_EGG_DEPOSIT_RESIDUE_SHARE 0.5
 /// A fresh egg passes the opening at this share of its ripe width.
 #define OVI_EGG_LAY_GIRTH_SHARE 0.5
+/// Act cycles per egg in a lay act; speed shortens the cycles, not the count.
+#define LAY_EGG_CYCLES_PER_EGG 4
+/// Eggs one lay act lays before it ends spent for now.
+#define LAY_EGG_ACT_CAP 3
+/// Eggs a climax rush pushes at most, and after an act that laid its cap.
+#define LAY_EGG_RUSH_CAP 2
+#define LAY_EGG_RUSH_CAP_AFTER_CAP 1
+/// Creature ovipositors regrow eggs this many times slower than a player's.
+#define OVI_CREATURE_STAGE_TIME_MULTIPLIER 2
 /// Chance per minute that a ripe egg starts labour, for kinds without a fixed delay.
 #define OVI_EGG_LABOUR_CHANCE 10
 // How an egg kind hatches: on the floor once laid, inside its host, or either by a roll.
@@ -95,8 +104,14 @@
 #define OVI_EGG_MAX_CUSTOM_NAME_LENGTH 96
 #define OVI_EGG_MAX_CUSTOM_DESC_LENGTH 512
 #define OVI_EGG_STAGE_TIME 1 MINUTES
-#define OVIPOSITION_BIRTH_LIMIT 8
+/// Creatures one body may hatch from eggs and embryos in the window; growing creature eggs hold slots too.
+#define OVIPOSITION_BIRTH_LIMIT 6
 #define OVIPOSITION_BIRTH_LIMIT_WINDOW (30 MINUTES)
+/// How often a body with eggs held by the limit checks for a free slot, at most.
+#define OVIPOSITION_HELD_EGG_RECHECK (1 MINUTES)
+// What start_oviposition_egg_growth() did; HELD is truthy: the egg landed and lies dormant.
+#define OVI_EGG_GROWTH_STARTED 1
+#define OVI_EGG_GROWTH_HELD 2
 
 // Oviposition egg modifier flags.
 #define OVI_EGG_TRAIT_APHRODISIAC "aphrodisiac"

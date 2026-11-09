@@ -164,7 +164,7 @@
 	can_lower = FALSE
 	muffled_words = "Mmmf..."
 	strip_delay = 3 SECONDS
-	slipouttime = 45 SECONDS
+	slipouttime = 20 SECONDS
 	sellprice = 0
 	grid_width = 32
 	grid_height = 32
@@ -248,7 +248,7 @@
 	// Worn on the head so the mask slot stays free for a gag.
 	slot_flags = ITEM_SLOT_HEAD
 	strip_delay = 3 SECONDS
-	slipouttime = 45 SECONDS
+	slipouttime = 20 SECONDS
 	sellprice = 0
 	salvage_result = /obj/item/natural/silk
 	salvage_amount = 2
@@ -305,7 +305,7 @@
 	damaged_icon = null
 	damaged_overlay_icon = null
 	strip_delay = 3 SECONDS
-	slipouttime = 60 SECONDS
+	slipouttime = 30 SECONDS
 	sellprice = 0
 	salvage_result = /obj/item/natural/silk
 	salvage_amount = 2

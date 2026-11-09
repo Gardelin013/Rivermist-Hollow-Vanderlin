@@ -5006,6 +5006,7 @@
 #include "modular_rmh\code\modules\mob\living\carbon\human\species_types\seelie\seelie.dm"
 #include "modular_rmh\code\modules\mob\living\carbon\human\species_types\seelie\seelie_interactions.dm"
 #include "modular_rmh\code\modules\mob\living\simple_animal\hostile\spider_brood.dm"
+#include "modular_rmh\code\modules\mob\living\simple_animal\hostile\spider_disperse.dm"
 #include "modular_rmh\code\modules\mob\living\simple_animal\hostile\spider_honey.dm"
 #include "modular_rmh\code\modules\mob\living\simple_animal\hostile\spider_silk.dm"
 #include "modular_rmh\code\modules\mob\living\simple_animal\hostile\spider_venom.dm"

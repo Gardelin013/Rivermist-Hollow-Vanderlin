@@ -113,6 +113,9 @@
 	if(succeeded && target && controller.blackboard[BB_BASIC_MOB_CURRENT_TARGET] == target)
 		controller.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET)
 		controller.clear_blackboard_key(BB_BASIC_MOB_CURRENT_TARGET_HIDING_LOCATION)
+	// The wrapper walks off and leaves the cocoon be.
+	if(succeeded && istype(target?.loc, /obj/structure/spider/cocoon))
+		spider_shun_cocoon(controller, target.loc)
 	controller.clear_blackboard_key(target_key)
 	controller.clear_blackboard_key(BB_SPIDER_SATED_WITH)
 
@@ -315,6 +318,7 @@
 		return
 	pawn.visible_message(span_warning("[pawn] spins more silk over [cocoon] and seals it."))
 	to_chat(victim, span_love("[pawn] seals the silk over my hips."))
+	spider_shun_cocoon(pawn.ai_controller, cocoon)
 
 /datum/ai_behavior/spider_brood/finish_action(datum/ai_controller/controller, succeeded, cocoon_key)
 	. = ..()

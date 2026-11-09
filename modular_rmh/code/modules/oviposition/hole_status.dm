@@ -126,6 +126,7 @@
 	data["stomach"] = build_stomach()
 	data["ovipositor"] = build_ovipositor()
 	data["labour"] = build_labour()
+	data["births"] = owner.get_oviposition_birth_status()
 	return data
 
 /datum/hole_status_menu/proc/build_labour()

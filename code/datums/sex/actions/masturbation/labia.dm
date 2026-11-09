@@ -1,5 +1,5 @@
 /datum/sex_action/masturbate/labia
-	name = "Pull labia"
+	name = "Play with labia"
 
 /datum/sex_action/masturbate/labia/shows_on_menu(mob/living/user, mob/living/target)
 	if(user != target)
@@ -60,8 +60,8 @@
 	user.visible_message(span_warning("[user] stops teasing [user.p_their()] labia."))
 
 /datum/sex_action/masturbate/other/labia
-	name = "Labia pulling"
-	remote_phrase = "Pull their labia"
+	name = "Play with labia"
+	remote_phrase = "Play with their labia"
 	check_same_tile = FALSE
 
 /datum/sex_action/masturbate/other/labia/shows_on_menu(mob/living/user, mob/living/target)
