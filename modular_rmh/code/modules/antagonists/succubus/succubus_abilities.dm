@@ -60,7 +60,6 @@
 	var/list/lines = list()
 	lines += "This soul lies open to my arts."
 	lines += cast_on.has_erp_pref(/datum/erp_preference/boolean/enthrallable) ? "Their will could be bound to mine, in time." : "Their will is anchored; thralldom is beyond reach."
-	lines += cast_on.has_erp_pref(/datum/erp_preference/boolean/dream_visitable) ? "Their dreams lie unlatched." : "Their dreams are barred."
 	lines += cast_on.has_erp_pref(/datum/erp_preference/boolean/fatal_drain_ok) ? "I could drink this one to the very dregs..." : "Something guards their lifespark; I may sip, never drain."
 	if(cast_on.IsWedded())
 		lines += "A mortal vow binds this soul. Corrupting it would be especially sweet."

@@ -749,6 +749,10 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	)
 
 /datum/horny_family_profile/tentacles/add_act_choices(list/weighted_actions, mob/living/hunter, mob/living/target)
+	// A burrow tentacle's kind may pick its own acts; only an ovipositor kind reaches the egg acts.
+	var/datum/tentacle_kind/kind = get_tentacle_kind_of(hunter)
+	if(kind?.add_act_choices(src, weighted_actions, hunter, target))
+		return
 	if(add_egg_act_choices(weighted_actions, hunter, target))
 		return
 	if(hunter.getorganslot(ORGAN_SLOT_PENIS))
@@ -1116,7 +1120,7 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 	)
 
 /datum/horny_family_profile/tentacles/get_act_words(mob/living/user, mob/living/target)
-	return list(
+	var/list/words = list(
 		"part" = "slick tentacle",
 		"article" = "a",
 		"their" = "its",
@@ -1146,6 +1150,10 @@ GLOBAL_LIST_EMPTY(horny_family_profiles)
 			"body_rub" = "slime dragging on skin",
 		),
 	)
+	// Burrow tentacle kinds swap in words of their own: feelers, beads, a pointed head.
+	var/datum/tentacle_kind/kind = get_tentacle_kind_of(user)
+	kind?.adjust_act_words(words, user, target)
+	return words
 
 /datum/horny_family_profile/maneaters/get_act_words(mob/living/user, mob/living/target)
 	return list(

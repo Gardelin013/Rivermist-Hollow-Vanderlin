@@ -43,6 +43,14 @@
 // RMH object smoothing groups. S_OBJ(1-7) are occupied by core structures.
 #define SMOOTH_GROUP_TENTACLE_GROWTH S_OBJ(8)
 
+// Gradient-map palettes for the greyscale tentacle sheets. Colours are in GLOB.tentacle_palettes.
+#define TENTACLE_PALETTE_PINK "pink"
+#define TENTACLE_PALETTE_CAVE "cave"
+#define TENTACLE_PALETTE_GROUND "ground"
+#define TENTACLE_PALETTE_GRASS "grass"
+#define TENTACLE_PALETTE_COLONY "colony"
+#define TENTACLE_PALETTE_VINE "vine"
+
 // Oviposition egg type identifiers.
 #define OVI_EGG_NORMAL "normal_ovi"
 #define OVI_EGG_AVIAN "avian_ovi"
