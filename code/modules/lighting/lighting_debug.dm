@@ -55,4 +55,4 @@
 	field_type = /datum/proximity_monitor/advanced/debug_lights/sunlight
 
 /datum/proximity_monitor/advanced/debug_lights/sunlight/get_color_matrix(turf/target)
-	return target.outdoor_effect?.sunlight_overlay?.color
+	return target.outdoor_look?.look_sunlight?.color

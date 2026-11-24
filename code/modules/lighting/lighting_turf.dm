@@ -96,9 +96,12 @@
 		vis_contents += new_look
 		new_look.users++
 	lighting_look = new_look
+	refresh_luminosity()
 
-	var/new_luminosity = new_look ? new_look.luminosity : 1
-	if (luminosity != new_luminosity)
+/// Sets our luminosity: lit when we have no dynamic lighting, when our lighting look is lit, or when the sky lights us.
+/turf/proc/refresh_luminosity()
+	var/new_luminosity = (!lighting_look || lighting_look.luminosity || outdoor_look?.luminosity) ? 1 : 0
+	if(luminosity != new_luminosity)
 		luminosity = new_luminosity
 
 // Used to get a scaled lumcount.
@@ -158,7 +161,7 @@
 /turf/proc/change_area(area/old_area, area/new_area)
 	GLOB.SUNLIGHT_QUEUE_WORK += src
 	if(outdoor_effect)
-		GLOB.SUNLIGHT_QUEUE_UPDATE += outdoor_effect
+		GLOB.SUNLIGHT_QUEUE_UPDATE += src
 	if(SSlighting.initialized)
 		if (new_area.dynamic_lighting != old_area.dynamic_lighting)
 			if (new_area.dynamic_lighting)

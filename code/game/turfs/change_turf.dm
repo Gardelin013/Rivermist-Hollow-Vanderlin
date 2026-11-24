@@ -14,6 +14,7 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 		if(QDELETED(thing))
 			continue
 		qdel(thing, force=TRUE)
+	clear_outdoor_effect()
 
 	if(turf_type)
 		var/turf/newT = ChangeTurf(turf_type, baseturf_type, flags)
@@ -75,7 +76,9 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 	var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
 	var/atom/movable/lighting_look/old_lighting_look = lighting_look
-	var/old_outdoor_effect = outdoor_effect
+	var/datum/outdoor_state/old_outdoor_effect = outdoor_effect
+	var/atom/movable/outdoor_look/old_outdoor_look = outdoor_look
+	var/list/old_sunlight_corners = sunlight_corners
 	var/old_corners = corners
 
 	var/old_exl = explosion_level
@@ -127,17 +130,21 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 	W.blueprint_data = old_bp
 
 	if(SSlighting.initialized)
+		// The new turf starts with an empty vis_contents and its own luminosity.
 		if(SSoutdoor_effects.initialized)
 			outdoor_effect = old_outdoor_effect
+			sunlight_corners = old_sunlight_corners
+			// The look still counts this turf as a user, so it goes back without set_outdoor_look().
+			if(old_outdoor_look)
+				outdoor_look = old_outdoor_look
+				vis_contents += old_outdoor_look
 			update_sky_and_weather_states()
 
 		recalc_atom_opacity()
-		// The new turf starts with an empty vis_contents and its own luminosity.
 		if(old_lighting_look)
 			lighting_look = old_lighting_look
 			vis_contents += old_lighting_look
-			if(luminosity != old_lighting_look.luminosity)
-				luminosity = old_lighting_look.luminosity
+		refresh_luminosity()
 		affecting_lights = old_affecting_lights
 		corners = old_corners
 		if (old_opacity != opacity || dynamic_lighting != old_dynamic_lighting)
