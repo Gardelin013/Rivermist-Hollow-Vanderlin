@@ -51,6 +51,10 @@ SUBSYSTEM_DEF(outdoor_effects)
 
 	var/last_color = null
 	var/picked_color
+	/// world.time when the sunlight screens started to change to picked_color.
+	var/transition_started = 0
+	/// How long that change takes, in deciseconds.
+	var/transition_length = 0
 	//Ensure midnight is the liast step
 	var/list/datum/time_of_day/time_cycle_steps = list(
 		new /datum/time_of_day/dawn(),
@@ -234,16 +238,31 @@ SUBSYSTEM_DEF(outdoor_effects)
 		i = 0
 
 	if(check_cycle())
+		transition_started = world.time
+		transition_length = get_transition_length()
 		for (var/atom/movable/screen/fullscreen/lighting_backdrop/sunlight/SP in sunlighting_planes)
 			transition_sunlight_color(SP)
 
 //Transition from our last color to our current color (i.e if it is going from daylight (white) to sunset (red), we transition to red in the first hour of sunset)
 /datum/controller/subsystem/outdoor_effects/proc/transition_sunlight_color(atom/movable/screen/fullscreen/lighting_backdrop/sunlight/SP)
-	/* transistion in an hour or time diff from now to our next step, whichever is smaller */
+	animate(SP, color = picked_color, time = transition_length)
+
+/// How long a change of the sky colour takes: an hour of game time, or the time to the next step if that is shorter.
+/datum/controller/subsystem/outdoor_effects/proc/get_transition_length()
 	if(!next_step_datum)
 		get_time_of_day()
-	var/timeDiff = min((1 HOURS / SSticker.station_time_rate_multiplier), daytimeDiff(station_time(), next_step_datum.start))
-	animate(SP, color = picked_color, time = timeDiff)
+	return min((1 HOURS / SSticker.station_time_rate_multiplier), daytimeDiff(station_time(), next_step_datum.start))
+
+/// Gives a new sunlight screen the colour that the other screens show at this moment.
+/datum/controller/subsystem/outdoor_effects/proc/sync_sunlight_color(atom/movable/screen/fullscreen/lighting_backdrop/sunlight/SP)
+	if(!next_step_datum)
+		get_time_of_day()
+	var/time_left = transition_started + transition_length - world.time
+	if(time_left <= 0 || transition_length <= 0 || !last_color)
+		SP.color = picked_color
+		return
+	SP.color = gradient(last_color, picked_color, 1 - time_left / transition_length)
+	animate(SP, color = picked_color, time = time_left)
 
 // Updates overlays and vis_contents for outdoor effects
 /datum/controller/subsystem/outdoor_effects/proc/update_outdoor_effect_overlays(atom/movable/outdoor_effect/OE)

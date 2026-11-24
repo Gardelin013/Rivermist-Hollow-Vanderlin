@@ -68,6 +68,9 @@
 
 	// by default, vis_contents is inherited from the turf that was here before
 	vis_contents.Cut()
+	// The lighting look is ours, and a map load can initialise us after it was put back.
+	if(lighting_look)
+		vis_contents += lighting_look
 
 	assemble_baseturfs()
 

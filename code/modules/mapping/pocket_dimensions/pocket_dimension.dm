@@ -241,7 +241,6 @@
 		if(QDELETED(current_turf))
 			continue
 
-		clear_displaced_lighting_overlay(current_turf)
 		current_turf.lighting_build_overlay()
 
 		if(current_turf.light_system == STATIC_LIGHT && current_turf.light_power && current_turf.light_outer_range && current_turf.light_on)
@@ -254,23 +253,6 @@
 				continue
 
 			contained_atom.update_light()
-
-/datum/pocket_dimension/proc/clear_displaced_lighting_overlay(turf/current_turf)
-	var/atom/movable/lighting_object/light_overlay = current_turf?.lighting_object
-	if(!light_overlay || light_overlay.loc == current_turf)
-		return
-
-	current_turf.lighting_object = null
-	current_turf.luminosity = 1
-
-	var/turf/actual_turf = get_turf(light_overlay)
-	if(actual_turf?.lighting_object == light_overlay)
-		actual_turf.lighting_object = null
-		actual_turf.luminosity = 1
-
-	light_overlay.myturf = null
-	light_overlay.moveToNullspace()
-	qdel(light_overlay, force = TRUE)
 
 /datum/pocket_dimension/proc/seal_padding_ring()
 	if(!reservation || !load_turf || !template?.padding)
@@ -292,7 +274,7 @@
 
 /// Render machinery the turf owns and recreates on its own. Never our content, never a visitor's cargo.
 /datum/pocket_dimension/proc/is_turf_render_movable(atom/movable/movable)
-	return istype(movable, /atom/movable/lighting_object) || istype(movable, /atom/movable/outdoor_effect)
+	return istype(movable, /atom/movable/outdoor_effect)
 
 /datum/pocket_dimension/proc/should_track_native_movable(atom/movable/movable)
 	if(!movable || QDELETED(movable) || ismob(movable))
@@ -367,7 +349,7 @@
 			qdel(exit_marker)
 
 		for(var/atom/movable/movable as anything in current_turf)
-			// Lighting objects churn constantly, so holding one here strands a dead ref until round end.
+			// The turf deletes and remakes its render objects, so holding one here strands a dead ref.
 			if(is_turf_render_movable(movable))
 				continue
 			native_movables[movable] = TRUE
