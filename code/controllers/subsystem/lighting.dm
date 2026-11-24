@@ -94,7 +94,7 @@ SUBSYSTEM_DEF(lighting)
 		if(!IS_DYNAMIC_LIGHTING(dynamic_area))
 			continue
 		for(var/turf/contained_turf in dynamic_area.get_turfs_from_all_zlevels())
-			if(!IS_DYNAMIC_LIGHTING(contained_turf))
+			if(!IS_DYNAMIC_LIGHTING(contained_turf) || IS_FILLER_TURF(contained_turf))
 				continue
 			new/atom/movable/lighting_object(contained_turf)
 			CHECK_TICK

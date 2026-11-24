@@ -70,6 +70,7 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 	if(flags & CHANGETURF_SKIP)
 		return new path(src)
 
+	var/old_type = type
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
@@ -142,6 +143,9 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 				lighting_build_overlay()
 			else
 				lighting_clear_overlay()
+		// A filler turf has no lighting object. Build one when it becomes a real turf.
+		else if(!lighting_object && old_type == world.turf && IS_DYNAMIC_LIGHTING(src) && !IS_FILLER_TURF(src))
+			lighting_build_overlay()
 
 	// only queue for smoothing if SSatom initialized us, and we'd be changing smoothing state
 	if(flags_1 & INITIALIZED_1)

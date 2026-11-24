@@ -138,6 +138,9 @@
 
 /turf/closed/Initialize()
 	. = ..()
+	// One shared list for each wall type, in place of one copy for each wall.
+	if(islist(attacked_sound))
+		attacked_sound = typelist("attacked_sound", attacked_sound)
 	if(above_floor)
 		var/turf/open/openspace/target = GET_TURF_ABOVE(src)
 		if(istype(target))

@@ -62,8 +62,8 @@
 				user.reset_offsets("structure_climb")
 	if(redstone_id)
 		for(var/obj/structure/O in redstone_attached)
-			O.redstone_attached -= src
-			redstone_attached -= O
+			LAZYREMOVE(O.redstone_attached, src)
+			LAZYREMOVE(redstone_attached, O)
 		GLOB.redstone_objs -= src
 	return ..()
 

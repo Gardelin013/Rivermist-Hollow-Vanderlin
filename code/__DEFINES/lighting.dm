@@ -104,6 +104,9 @@
 /// dynamic lighting enabled only if starlight is.
 #define DYNAMIC_LIGHTING_IFSTARLIGHT 3
 #define IS_DYNAMIC_LIGHTING(A) A.dynamic_lighting
+/// The default turf in the default area: a cell outside every loaded map, or unused reserved space.
+/// It has no lighting object until it becomes a real turf.
+#define IS_FILLER_TURF(T) (T.type == world.turf && T.loc.type == world.area)
 
 
 //code assumes higher numbers override lower numbers.
