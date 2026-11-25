@@ -131,6 +131,7 @@
 #include "rmh_law_documents.dm"
 #include "rogue_inhands.dm"
 #include "roguetown_clothing.dm"
+#include "rune_insurance.dm"
 #include "runtime_gc_regressions.dm"
 #include "sex_armor_reach.dm"
 #include "sex_scene.dm"

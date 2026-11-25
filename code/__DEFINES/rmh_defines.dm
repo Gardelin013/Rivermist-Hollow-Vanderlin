@@ -262,3 +262,33 @@
 	/datum/action/cooldown/silk_weaving/bed,\
 	/datum/action/cooldown/silk_weaving/cocoon,\
 )
+
+/// Percent of an item's value charged as its rune insurance premium until the banker changes it.
+#define RUNE_INSURANCE_DEFAULT_RATE 10
+/// Bounds the banker can set the premium rate within.
+#define RUNE_INSURANCE_MIN_RATE 5
+#define RUNE_INSURANCE_MAX_RATE 50
+/// Lowest premium for one item.
+#define RUNE_INSURANCE_MIN_PREMIUM 10
+/// Lowest premium for one piece of armor or one weapon.
+#define RUNE_INSURANCE_MIN_PREMIUM_ARMS 20
+/// How far from the body, in tiles, the rune reaches for insured items.
+#define RUNE_INSURANCE_PULL_RADIUS 10
+
+/// Claim speeds, slowest first. A pending claim can only move to a higher one.
+#define RUNE_INSURANCE_TIER_STANDARD 1
+#define RUNE_INSURANCE_TIER_EXPRESS 2
+#define RUNE_INSURANCE_TIER_INSTANT 3
+
+/// How long the bank takes to hand a claim over.
+#define RUNE_INSURANCE_WAIT_STANDARD (10 MINUTES)
+#define RUNE_INSURANCE_WAIT_EXPRESS (3 MINUTES)
+
+/// Fee on every claim after the first of the round, as a percent of the vaulted items' insured value.
+#define RUNE_INSURANCE_REPEAT_PERCENT 10
+#define RUNE_INSURANCE_REPEAT_MIN_FEE 10
+/// Fee for a faster claim, as a percent of the vaulted items' insured value.
+#define RUNE_INSURANCE_EXPRESS_PERCENT 15
+#define RUNE_INSURANCE_EXPRESS_MIN_FEE 10
+#define RUNE_INSURANCE_INSTANT_PERCENT 40
+#define RUNE_INSURANCE_INSTANT_MIN_FEE 25

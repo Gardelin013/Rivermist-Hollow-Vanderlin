@@ -5327,6 +5327,8 @@
 #include "modular_rmh\modular\resurrection_rune\resurrection_rune.dm"
 #include "modular_rmh\modular\reverie\reverie.dm"
 #include "modular_rmh\modular\role_calls\role_calls.dm"
+#include "modular_rmh\modular\rune_insurance\insurance_machine.dm"
+#include "modular_rmh\modular\rune_insurance\rune_insurance.dm"
 #include "modular_rmh\modular\selectable_moanpacks\emote.dm"
 #include "modular_rmh\modular\selectable_moanpacks\moanpacks_defs.dm"
 #include "modular_rmh\modular\sex_panel\action_menu_info.dm"
