@@ -1738,6 +1738,7 @@
 #include "code\datums\sex\actions\oral\suck_balls.dm"
 #include "code\datums\sex\actions\oral\suck_nipples.dm"
 #include "code\datums\sex\actions\other\_held_item_zone.dm"
+#include "code\datums\sex\actions\other\ear_play.dm"
 #include "code\datums\sex\actions\other\facesitting.dm"
 #include "code\datums\sex\actions\other\feather_tickling.dm"
 #include "code\datums\sex\actions\other\foot_tail.dm"
