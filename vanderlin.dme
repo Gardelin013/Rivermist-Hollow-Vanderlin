@@ -6,7 +6,6 @@
 // BEGIN_PREFERENCES
 #define DEBUG
 // END_PREFERENCES
-#include "modular_rmh\code\_DEFINES\law_documents.dm"
 // BEGIN_INCLUDE
 #include "_odlint.dm"
 #include "_bootstrap\genesis_call.dm"
