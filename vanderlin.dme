@@ -5028,6 +5028,7 @@
 #include "modular_rmh\code\modules\mob\sex_breast_anim.dm"
 #include "modular_rmh\code\modules\mob\sex_motion.dm"
 #include "modular_rmh\code\modules\mob\sex_through_clothes.dm"
+#include "modular_rmh\code\modules\mob\smell_memory.dm"
 #include "modular_rmh\code\modules\mob\undead_wolf.dm"
 #include "modular_rmh\code\modules\mob\dead\body_markings\constructs.dm"
 #include "modular_rmh\code\modules\mob\dead\body_markings\moth.dm"
