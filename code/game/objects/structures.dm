@@ -139,8 +139,8 @@
 		occupied = FALSE
 
 /obj/structure/ui_act(action, params)
-	..()
 	add_fingerprint(usr)
+	return ..()
 
 /obj/structure/MouseDrop_T(atom/movable/O, mob/user)
 	. = ..()

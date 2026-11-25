@@ -1445,40 +1445,52 @@
 
 	if(!surrendering)
 		if(alert(src, "Yield in surrender?",,"YES","NO") == "YES")
-			if(surrendering || stat)
-				return
-			if(HAS_TRAIT(src, TRAIT_PACIFISM))
-				had_pacifist = TRUE
-			else
-				ADD_TRAIT(src, TRAIT_PACIFISM, TRAIT_GENERIC)
-			surrendering = TRUE
-			record_round_statistic(STATS_YIELDS)
-			changeNext_move(CLICK_CD_EXHAUSTED)
-			if(cmode)
-				toggle_cmode()
-			var/image/flaggy = image('icons/effects/effects.dmi',src,"surrender",ABOVE_MOB_LAYER)
-			flaggy.appearance_flags = RESET_TRANSFORM|KEEP_APART
-			flaggy.transform = null
-			flaggy.pixel_y = 12
-			flick_overlay_view(flaggy, 150)
-			drop_all_held_items()
-			Stun(20)
-			Knockdown(200)
-			src.visible_message("<span class='notice'>[src] yields utterly - they cannot harm anyone like this!</span>")
-			playsound(src, 'sound/misc/surrender.ogg', 100, FALSE, -1)
-			log_attack("[key_name(src)] has toggled yield ON!")
-			SEND_SIGNAL(src, COMSIG_LIVING_YIELDED)
+			surrender()
 	else
 		if(IsKnockdown() || IsStun())
 			to_chat(src, span_warn("I can't rescind my yield when knocked down!"))
 			return
 
 		if(alert(src, "Rescind your yield?",,"YES","NO") == "YES")
-			surrendering = FALSE
-			if(!had_pacifist)
-				REMOVE_TRAIT(src, TRAIT_PACIFISM, TRAIT_GENERIC)
-			had_pacifist = FALSE
-			src.visible_message("<span class='notice'>[src] no longer yields!</span>")
+			rescind_surrender()
+
+/// Yields in surrender with no confirm dialog; returns TRUE when the yield starts.
+/mob/living/proc/surrender()
+	if(surrendering || stat)
+		return FALSE
+	if(HAS_TRAIT(src, TRAIT_PACIFISM))
+		had_pacifist = TRUE
+	else
+		ADD_TRAIT(src, TRAIT_PACIFISM, TRAIT_GENERIC)
+	surrendering = TRUE
+	record_round_statistic(STATS_YIELDS)
+	changeNext_move(CLICK_CD_EXHAUSTED)
+	if(cmode)
+		toggle_cmode()
+	var/image/flaggy = image('icons/effects/effects.dmi',src,"surrender",ABOVE_MOB_LAYER)
+	flaggy.appearance_flags = RESET_TRANSFORM|KEEP_APART
+	flaggy.transform = null
+	flaggy.pixel_y = 12
+	flick_overlay_view(flaggy, 150)
+	drop_all_held_items()
+	Stun(20)
+	Knockdown(200)
+	src.visible_message("<span class='notice'>[src] yields utterly - they cannot harm anyone like this!</span>")
+	playsound(src, 'sound/misc/surrender.ogg', 100, FALSE, -1)
+	log_attack("[key_name(src)] has toggled yield ON!")
+	SEND_SIGNAL(src, COMSIG_LIVING_YIELDED)
+	return TRUE
+
+/// Ends a yield with no confirm dialog; returns TRUE when a yield was ended.
+/mob/living/proc/rescind_surrender()
+	if(!surrendering)
+		return FALSE
+	surrendering = FALSE
+	if(!had_pacifist)
+		REMOVE_TRAIT(src, TRAIT_PACIFISM, TRAIT_GENERIC)
+	had_pacifist = FALSE
+	src.visible_message("<span class='notice'>[src] no longer yields!</span>")
+	return TRUE
 
 /mob/living/verb/swap_lying_direction_verb()
 	set name = "Swap Lying Direction"
