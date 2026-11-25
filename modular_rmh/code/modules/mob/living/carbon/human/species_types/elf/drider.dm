@@ -8,9 +8,7 @@
 	desc = "Driders are drow whose upper bodies remain elven while their lower halves take the form of a great spider. \
 	They keep the keen senses, grace, and underworld bearing of their kin, but move on eight legs and leave a far stronger impression wherever they go. \
 	\n\n\
-	(+1 PER, +2 SPD, +1 LCK, Allure, Darkvision, Sunlight Sensitivity, Elvish Language).\
-	\n\n\
-	Proficiencies: Knives(4), Swords(3), Crossbows(3), Whipflails(3), Sneaking(4), Lockpicking(3), Arcane(3), Blood(2), Alchemy(3), Weaponsmithing(2), Traps(1).\
+	(Darkvision, Sunlight Sensitivity, Elvish Language).\
 	\n\n\
 	THIS IS A DISCRIMINATED SPECIES. PLAY AT YOUR OWN RISK."
 
@@ -26,3 +24,11 @@
 
 /datum/species/elf/dark/drider/check_roundstart_eligible()
 	return TRUE
+
+/datum/species/elf/dark/drider/on_species_gain(mob/living/carbon/C, datum/species/old_species)
+	. = ..()
+	C.add_silk_weaving(SPECIES_TRAIT)
+
+/datum/species/elf/dark/drider/on_species_loss(mob/living/carbon/human/C)
+	C.remove_silk_weaving(SPECIES_TRAIT)
+	return ..()

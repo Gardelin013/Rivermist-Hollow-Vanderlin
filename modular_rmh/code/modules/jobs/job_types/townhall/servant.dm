@@ -11,6 +11,7 @@
 	spawn_positions = 4
 	give_bank_account = 60
 	can_have_apprentices = FALSE
+	required_present_jobs = list(/datum/job/burgmeister, /datum/job/councilor)
 
 	allowed_ages = list(AGE_ADULT, AGE_MIDDLEAGED, AGE_OLD, AGE_IMMORTAL)
 	allowed_races = RACES_PLAYER_ALL

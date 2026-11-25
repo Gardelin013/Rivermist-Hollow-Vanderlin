@@ -90,7 +90,8 @@
 	has_reflection = FALSE
 
 /mob/living/onZImpact(turf/impacted_turf, levels, impact_flags = NONE)
-	if(isgroundlessturf(impacted_turf) && defeat_rescue_from_hazard())
+	// Only rescue from groundless landings that are actually unsafe (lava), not water or a pipe over open space.
+	if(isgroundlessturf(impacted_turf) && !impacted_turf.can_traverse_safely(src) && defeat_rescue_from_hazard())
 		return
 	if(!isgroundlessturf(impacted_turf))
 		impact_flags |= ZImpactDamage(impacted_turf, levels)
@@ -1087,7 +1088,7 @@
 	if(full_heal_flags)
 		fully_heal(full_heal_flags)
 
-	if(stat == DEAD && can_be_revived()) //in some cases you can't revive (e.g. no brain)
+	if(stat == DEAD && can_be_revived(full_heal_flags))
 		GLOB.dead_mob_list -= src
 		GLOB.alive_mob_list += src
 		set_suicide(FALSE)
@@ -1205,12 +1206,14 @@
 	SEND_SIGNAL(src, COMSIG_LIVING_POST_FULLY_HEAL, heal_flags)
 
 //proc called by revive(), to check if we can actually ressuscitate the mob (we don't want to revive him and have him instantly die again)
-/mob/living/proc/can_be_revived()
+/mob/living/proc/can_be_revived(full_heal_flags = NONE)
+	if(HAS_TRAIT(src, TRAIT_RUNE_SEVERED) && !(full_heal_flags & HEAL_ADMIN))
+		return FALSE
 	if(health <= HEALTH_THRESHOLD_DEAD)
 		return FALSE
 	return TRUE
 
-/mob/living/carbon/human/can_be_revived()
+/mob/living/carbon/human/can_be_revived(full_heal_flags = NONE)
 	. = ..()
 	var/obj/item/bodypart/head/H = get_bodypart(BODY_ZONE_HEAD)
 	if(!istype(H) || HAS_TRAIT(H, TRAIT_ROTTEN) || H.skeletonized)
@@ -1467,11 +1470,7 @@
 	changeNext_move(CLICK_CD_EXHAUSTED)
 	if(cmode)
 		toggle_cmode()
-	var/image/flaggy = image('icons/effects/effects.dmi',src,"surrender",ABOVE_MOB_LAYER)
-	flaggy.appearance_flags = RESET_TRANSFORM|KEEP_APART
-	flaggy.transform = null
-	flaggy.pixel_y = 12
-	flick_overlay_view(flaggy, 150)
+	show_surrender_flag()
 	drop_all_held_items()
 	Stun(20)
 	Knockdown(200)
@@ -1491,6 +1490,13 @@
 	had_pacifist = FALSE
 	src.visible_message("<span class='notice'>[src] no longer yields!</span>")
 	return TRUE
+
+/mob/living/proc/show_surrender_flag()
+	var/image/flaggy = image('icons/effects/effects.dmi', src, "surrender", ABOVE_MOB_LAYER)
+	flaggy.appearance_flags = RESET_TRANSFORM|KEEP_APART
+	flaggy.transform = null
+	flaggy.pixel_y = 12
+	flick_overlay_view(flaggy, 150)
 
 /mob/living/verb/swap_lying_direction_verb()
 	set name = "Swap Lying Direction"

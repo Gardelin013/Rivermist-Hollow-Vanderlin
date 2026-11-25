@@ -143,6 +143,7 @@
 	armor_type = /datum/armor/boots/anklet
 
 /obj/item/clothing/shoes/rumaclan
+	sewrepair = /datum/attribute/skill/misc/sewing/mending
 	name = "raised sandals"
 	desc = "A pair of strange sandals that push you off the ground."
 	icon_state = "eastsandals"

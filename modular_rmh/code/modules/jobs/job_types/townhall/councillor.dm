@@ -44,7 +44,7 @@
 	. = ..()
 	var/mob/living/carbon/human/human_councilor = spawned
 	grant_outlaw_decree(human_councilor)
-	spawned.verbs |= /mob/living/carbon/human/proc/councilor_announcement
+	add_verb(spawned, /mob/living/carbon/human/proc/councilor_announcement)
 
 // ─────────────────────────────
 // SUBCLASSES
@@ -341,7 +341,7 @@
 //ANNOUNCEMENT SYSTEM
 
 /mob/living/carbon/human/proc/councilor_announcement()
-	set name = "Announcement"
+	set name = "Councilor Announcement"
 	set category = "Councilor"
 	if(stat)
 		return

@@ -124,22 +124,15 @@
 	else //if youre a fish face you cant cancel it out
 		var/ugly = HAS_ANY_OF_TRAITS(src, list(TRAIT_UGLY, TRAIT_ABOMINATION, TRAIT_DISFIGURED)) //todo: ABOMINATION descriptor
 		var/beautiful = HAS_TRAIT(src, TRAIT_BEAUTIFUL)
-		if(ugly ^ beautiful)
-			if(beautiful)
-				var/beauty_desc = "gorgeous"
-				if(src.pronouns == SHE_HER)
-					beauty_desc = "beautiful"
-				else if(src.pronouns == HE_HIM)
-					beauty_desc = "handsome"
-				. += span_rose("[P[THEYRE]] [beauty_desc]!")
-				user.add_stress(self_inspect ? /datum/stress_event/beautiful_self : /datum/stress_event/beautiful)
-			else // you can only be ugly then, huh.
-				. += span_necrosis("[P[THEYRE]] hideous!")
-				user.add_stress(self_inspect ? /datum/stress_event/ugly_self : /datum/stress_event/ugly)
-
-	if(HAS_TRAIT(src, TRAIT_ALLURE))
-		. += span_love(span_bold("[P[THEYVE]] quite a tempting appeal"))
-		user.add_stress(self_inspect ? /datum/stress_event/allure_self : /datum/stress_event/allure)
+		// RMH EDIT: Charisma sets the impression; the rare looks traits are read together with it.
+		var/looks = (ugly ^ beautiful) ? (beautiful ? 1 : -1) : 0
+		var/impression = get_impression()
+		var/appeal_line = get_appeal_line(looks, impression, P)
+		if(appeal_line)
+			. += appeal_line
+		var/appeal_event = get_appeal_stress_event(looks, impression, self_inspect)
+		if(appeal_event)
+			user.add_stress(appeal_event)
 
 	// Self inspections
 	if(!self_inspect)

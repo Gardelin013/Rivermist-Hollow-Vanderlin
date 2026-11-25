@@ -70,7 +70,7 @@ GLOBAL_LIST_EMPTY(burgmeister_titles)
 	ruler_title = "Burgmeister"
 	to_chat(world, "<b>[span_notice(span_big("[H.real_name] is [ruler_title] of [SSmapping.config.map_name]."))]</b>")
 	to_chat(world, "<br>")
-	spawned.verbs |= /mob/living/carbon/human/proc/burgmeister_announcement
+	add_verb(spawned, /mob/living/carbon/human/proc/burgmeister_announcement)
 
 /datum/outfit/burgmeister/pre_equip(mob/living/carbon/human/equipped_human, visuals_only)
 	. = ..()
@@ -466,7 +466,7 @@ GLOBAL_LIST_EMPTY(burgmeister_titles)
 //ANNOUNCEMENT SYSTEM
 
 /mob/living/carbon/human/proc/burgmeister_announcement()
-	set name = "Announcement"
+	set name = "Burgmeister Announcement"
 	set category = "Burgmeister"
 	if(stat)
 		return

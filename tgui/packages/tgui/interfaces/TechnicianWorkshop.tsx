@@ -1047,11 +1047,11 @@ export const TechnicianWorkshop = () => {
                         </div>
                         <div className="TechnicianWorkshop__fee-cost">
                           <div className="TechnicianWorkshop__cost-heading">Service fee</div>
-                          <div className={`TechnicianWorkshop__fee-value ${smelting && data.budget < smelting.service_fee ? 'is-missing' : ''}`}>
+                          <div className={`TechnicianWorkshop__fee-value ${smelting && data.budget < (smelting.service_fee ?? 0) ? 'is-missing' : ''}`}>
                             {smelting?.supported ? `${smelting.service_fee} a` : '—'}
                           </div>
                           <div className="TechnicianWorkshop__depot-value">Stored: {data.budget || 0} a</div>
-                          {smelting?.supported && data.budget < smelting.service_fee && <div className="TechnicianWorkshop__fee-warning">Insufficient amnas</div>}
+                          {smelting?.supported && data.budget < (smelting.service_fee ?? 0) && <div className="TechnicianWorkshop__fee-warning">Insufficient amnas</div>}
                         </div>
                       </div>
                     </>
