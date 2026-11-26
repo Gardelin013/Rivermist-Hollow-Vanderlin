@@ -307,6 +307,21 @@
 	var/bloodiness = 20
 	var/dirt_amt = 3
 
+/turf/open/floor/dirt/MiddleClick(mob/user, list/modifiers)
+	. = ..()
+	if(!isliving(user))
+		return
+
+	var/mob/living/L = user
+	if(L.stat != CONSCIOUS || !L.TurfAdjacent(src))
+		return
+
+	var/obj/item/weapon/shovel/S = L.get_active_held_item()
+	if(!istype(S) || !istype(L.used_intent, /datum/intent/shovelscoop))
+		return
+
+	return S.start_autodig(L, src)
+
 /turf/open/floor/dirt/attack_hand_secondary(mob/user, list/modifiers)
 	. = ..()
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
