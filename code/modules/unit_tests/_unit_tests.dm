@@ -159,6 +159,7 @@
 #include "toggles_menu.dm"
 #include "unit_test.dm"
 #include "voice_sounds.dm"
+#include "washing_clothes.dm"
 #include "weapon_icons.dm"
 #include "womb_pairing.dm"
 // END_INCLUDE
