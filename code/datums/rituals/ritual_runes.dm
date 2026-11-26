@@ -8,6 +8,7 @@
 	obj_flags = NONE
 	layer = SIGIL_LAYER
 	color = null
+	rain_washable = FALSE
 	var/magictype = "arcyne"//"arcyne", "divine", "druid", "blood"
 	var/runesize = 0	//Used to determine range of 'range' of the rune when counting for invokers. Should correspond to rune size. EX: 32x32 and 96x96 should be size 1. Increase each size by one for every tile radius increase after.
 	var/invoker_name = "basic rune"

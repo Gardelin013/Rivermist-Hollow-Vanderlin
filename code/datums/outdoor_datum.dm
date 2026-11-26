@@ -267,3 +267,14 @@ Sunlight System
 
 /turf/closed/is_weatherproof_ceiling() // ditto, skip checks for this.
 	return TRUE
+
+/// Whether weather falls on this turf. Uses the cached outdoor state, so it is cheap.
+/turf/proc/is_weather_exposed()
+	return outdoor_effect && !outdoor_effect.weatherproof
+
+/// Whether rain is falling on this turf right now.
+/turf/proc/is_rained_on()
+	var/datum/particle_weather/weather = SSParticleWeather.runningWeather
+	if(!weather?.running || weather.target_trait != PARTICLEWEATHER_RAIN)
+		return FALSE
+	return is_weather_exposed()
