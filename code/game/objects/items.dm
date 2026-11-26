@@ -428,7 +428,8 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 	recipe_quality = clamp(quality, 0, 4)
 	update_appearance(UPDATE_OVERLAYS)
 	if(recipe_quality >= 3) // gold tier and above
-		AddComponent(/datum/component/particle_spewer/sparkle)
+		var/datum/component/particle_spewer/sparkle/glint = AddComponent(/datum/component/particle_spewer/sparkle)
+		glint?.particle_plane = QUALITY_GLINT_PLANE
 	else
 		var/datum/component/particle_spewer = GetComponent(/datum/component/particle_spewer/sparkle)
 		qdel(particle_spewer)

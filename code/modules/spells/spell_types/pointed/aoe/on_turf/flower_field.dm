@@ -235,6 +235,7 @@
 \-----------------*/
 
 /datum/status_effect/debuff/flower_base
+	alert_type = null
 	var/overlay_state = null
 	var/field_path = null
 	var/image/flower_overlay

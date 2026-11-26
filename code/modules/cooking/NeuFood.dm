@@ -291,6 +291,7 @@
 	user.visible_message(span_info("[user] eats from [src]."), \
 			span_notice("I swallow a gulp of [src]."))
 	addtimer(CALLBACK(reagents, TYPE_PROC_REF(/datum/reagents, trans_to), user, min(amount_per_transfer_from_this, 5), TRUE, TRUE, FALSE, user, FALSE, INGEST), 5 DECISECONDS)
+	start_auto_spooning(user, tool)
 
 	return ITEM_INTERACT_SUCCESS
 

@@ -70,6 +70,7 @@
 
 /datum/status_effect/bounty
 	id = "bounty"
+	alert_type = /atom/movable/screen/alert/status_effect/bounty
 	status_type = STATUS_EFFECT_UNIQUE
 	var/mob/living/rewarded
 
@@ -77,6 +78,11 @@
 	. = ..()
 	if(.)
 		rewarded = caster
+
+/atom/movable/screen/alert/status_effect/bounty
+	name = "Bounty"
+	desc = "Someone gets a reward if I die."
+	icon_state = "dream_mark"
 
 /datum/status_effect/bounty/on_apply()
 	to_chat(owner, span_boldnotice("You hear something behind you talking... \"You have been marked for death by [rewarded]. If you die, they will be rewarded.\""))
@@ -136,6 +142,7 @@
 /atom/movable/screen/alert/bugged
 	name = "BUGGED"
 	desc = "AN AUDIO-PARASITE ON ME."
+	icon = 'modular_rmh/icons/mob/screen_alert.dmi'
 	icon_state = "blackeye"
 
 /atom/movable/screen/alert/bugged/Click()

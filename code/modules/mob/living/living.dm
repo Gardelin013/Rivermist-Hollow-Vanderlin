@@ -167,6 +167,8 @@
 		return
 	if (buckled || now_pushing)
 		return
+	if(try_bump_climb(A))
+		return
 	if(ismob(A))
 		var/mob/M = A
 		if(MobBump(M))
@@ -937,7 +939,7 @@
 	if(pulledby && pulledby.grab_state >= GRAB_AGGRESSIVE)
 		var/fail_resist = resist_grab()
 		if(fail_resist)
-			set_resting(TRUE, silent = TRUE)
+			stand_up_failed()
 			return
 
 	if(iscarbon(src))
@@ -953,12 +955,12 @@
 
 	if(!instant && !do_after(src, timer SECONDS, src, timed_action_flags = (IGNORE_USER_LOC_CHANGE|IGNORE_TARGET_LOC_CHANGE|IGNORE_HELD_ITEM|IGNORE_USER_DIR_CHANGE), extra_checks = CALLBACK(src, TYPE_PROC_REF(/mob/living, rest_checks_callback)), interaction_key = DOAFTER_SOURCE_GETTING_UP))
 		if(body_position == LYING_DOWN) // stay lying down
-			set_resting(TRUE, silent = TRUE)
+			stand_up_failed()
 		return
 
 	if(!rest_checks_callback())
 		if(body_position == LYING_DOWN)
-			set_resting(TRUE, silent = TRUE)
+			stand_up_failed()
 		return
 
 	set_body_position(STANDING_UP)
@@ -2700,8 +2702,13 @@
 
 /// Proc to append behavior to the condition of being floored. Called when the condition ends.
 /mob/living/proc/on_floored_end()
-	if(!resting)
-		get_up()
+	if(resting)
+		return
+	if(auto_stand_declined())
+		if(body_position == LYING_DOWN)
+			set_resting(TRUE, silent = TRUE)
+		return
+	get_up()
 
 /// Proc to append behavior to the condition of being handsblocked. Called when the condition starts.
 /mob/living/proc/on_handsblocked_start()

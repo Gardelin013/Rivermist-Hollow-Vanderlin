@@ -124,16 +124,6 @@
 	layer = UI_DAMAGE_LAYER
 	plane = FULLSCREEN_PLANE
 
-/atom/movable/screen/fullscreen/love
-	icon_state = "lovehud"
-	layer = 20.509
-	plane = FULLSCREEN_PLANE
-	alpha = 0
-
-/atom/movable/screen/fullscreen/love/Initialize(mapload, datum/hud/hud_owner)
-	. = ..()
-	animate(src, alpha = 255, time = 30)
-
 /atom/movable/screen/fullscreen/crit
 	icon_state = "passage"
 	layer = 20.51
