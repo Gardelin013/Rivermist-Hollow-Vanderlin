@@ -1057,6 +1057,7 @@ const ru: CharacterCreatorStrings = {
     Bread: 'Хлеб',
     Pastry: 'Выпечка',
     'Pies & tarts': 'Пироги и тарты',
+    'Stew & soup': 'Супы и рагу',
     'Cakes & sweets': 'Торты и сладости',
     Wine: 'Вино',
     'Ale & beer': 'Эль и пиво',

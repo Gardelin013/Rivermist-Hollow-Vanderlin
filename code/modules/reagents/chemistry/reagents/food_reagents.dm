@@ -31,6 +31,7 @@
 
 		if(!HAS_TRAIT(HM, TRAIT_AGEUSIA))
 			HM.culinary_react_to_drink(drink_type, quality)
+			HM.culinary_react_to_food(dish_type, dish_fare)
 
 		if (quality && !HAS_TRAIT(HM, TRAIT_AGEUSIA))
 			switch (quality)
