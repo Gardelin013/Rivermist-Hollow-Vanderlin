@@ -1107,10 +1107,6 @@
 	if(was_zombie)
 		target.mind.remove_antag_datum(/datum/antagonist/zombie)
 
-	var/datum/component/rot/rot = target.GetComponent(/datum/component/rot)
-	if(rot)
-		rot.amount = 0
-
 	for(var/obj/item/bodypart/bodypart as anything in target.bodyparts)
 		REMOVE_TRAIT(bodypart, TRAIT_ROTTEN, GERM_LEVEL_TRAIT)
 		bodypart.update_limb()

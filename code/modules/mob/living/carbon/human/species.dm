@@ -1542,14 +1542,12 @@ GLOBAL_LIST_EMPTY(roundstart_species)
 				H.remove_stress(/datum/stress_event/filth_lover)
 			else
 				H.add_stress(/datum/stress_event/clean)
-			H.remove_status_effect(/datum/status_effect/debuff/stinky_person)
 			H.remove_stress(/datum/stress_event/dirty)
 			H.remove_stress(/datum/stress_event/disgusting)
 
 		if(HYGIENE_LEVEL_DIRTY to HYGIENE_LEVEL_CLEAN)
 			H.remove_stress(/datum/stress_event/dirty)
 			H.remove_stress(/datum/stress_event/disgusting)
-			H.remove_status_effect(/datum/status_effect/debuff/stinky_person)
 
 
 //////////////////

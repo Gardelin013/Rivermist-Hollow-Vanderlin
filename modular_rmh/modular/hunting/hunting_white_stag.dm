@@ -200,7 +200,6 @@
 	maxHealth = 1
 	pixel_x = -24
 	head_butcher = /obj/item/natural/head/white_stag
-	rot_type = null
 	botched_butcher_results = list(
 		/obj/item/reagent_containers/food/snacks/meat/steak = 6,
 		/obj/item/reagent_containers/food/snacks/fat = 2,

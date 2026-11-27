@@ -127,6 +127,14 @@
 	color = "#fc5a8d"
 
 //Body odor
+/datum/reagent/musk
+	name = "Musk"
+	description = "."
+	reagent_state = GAS
+	color = "#801E28" // rgb: 128, 30, 40
+	taste_description = "musky"
+	metabolization_rate = 1
+
 /datum/pollutant/fragrance/musk
 	name = "Musk"
 	pollutant_flags = POLLUTANT_SMELL|POLLUTANT_BREATHE_ACT
@@ -134,7 +142,7 @@
 
 	scent = "body odor"
 	color = "#c13636"
-	var/musk_reagent = /datum/reagent/miasmagas
+	var/musk_reagent = /datum/reagent/musk
 
 /datum/pollutant/fragrance/musk/breathe_act(mob/living/carbon/victim, amount, total_amount)
 	. = ..()

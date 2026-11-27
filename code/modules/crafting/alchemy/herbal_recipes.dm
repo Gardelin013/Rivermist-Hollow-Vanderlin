@@ -590,9 +590,6 @@
 	M.adjustToxLoss(1.5 * efficiency)
 	if(prob(15))
 		M.emote("cough")
-	var/turf/T = get_turf(M)
-	if(T)
-		T.pollute_turf(/datum/pollutant/rot, 16 * efficiency)
 	. = ..()
 
 // Magical Enhancement

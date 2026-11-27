@@ -198,10 +198,6 @@
 	consumed_resource_pool = min(consumed_resource_max, consumed_resource_pool + amount)
 	total_feeds++
 
-	var/turf/T = get_turf(src)
-	if(T)
-		T.pollute_turf(/datum/pollutant/rot, 50)
-
 	if(total_feeds >= feeds_per_humor)
 		try_spawn_humor_from_feeds()
 
@@ -271,10 +267,6 @@
 		SV.rot()
 		vines -= SV
 		killed++
-
-	var/turf/death_turf = get_turf(dead_papameat)
-	if(death_turf)
-		death_turf.pollute_turf(/datum/pollutant/rot, 200)
 
 	if(!length(papameats))
 		die()

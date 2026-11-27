@@ -39,13 +39,7 @@
 				to_chat(owner, span_warning("[food] rots away into nothing."))
 				qdel(food)
 		return
-	// DATUMISE ROT PLEASE
-	if(isanimal(cast_on))
-		var/mob/living/simple_animal/SA = cast_on
-		var/datum/component/rot/rot = SA.GetComponent(/datum/component/rot/simple)
-		if(rot && rot.amount < 9.9 MINUTES)
-			rot.amount = 9.9 MINUTES
-		return
+
 	if(!ishuman(cast_on))
 		return
 	var/mob/living/carbon/human/target = cast_on

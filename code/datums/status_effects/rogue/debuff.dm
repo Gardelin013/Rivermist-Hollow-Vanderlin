@@ -561,27 +561,6 @@
 	name = "Lux Drained"
 	desc = span_danger("Oh- \n I don't... have it anymore.\n")
 
-
-/datum/status_effect/debuff/stinky_person
-	tick_interval = STATUS_EFFECT_NO_TICK
-	id = "stinky_person"
-	alert_type = /atom/movable/screen/alert/status_effect/debuff/stinky_person
-	duration = -1
-
-/atom/movable/screen/alert/status_effect/debuff/stinky_person
-	name = "Stinky Person"
-	desc = "<span class='warning'>I smell HORRID.</span>\n"
-	icon_state = "stinky" //TODO add icon
-
-/datum/status_effect/debuff/stinky_person/on_apply()
-	. = ..()
-	owner.AddComponent(/datum/component/rot/stinky_person)
-
-/datum/status_effect/debuff/stinky_person/on_remove()
-	. = ..()
-	var/datum/component/stinky_component = owner.GetComponent(/datum/component/rot/stinky_person)
-	qdel(stinky_component)
-
 /datum/status_effect/debuff/tainted_lux
 	tick_interval = STATUS_EFFECT_NO_TICK
 	id = "tainted_lux"

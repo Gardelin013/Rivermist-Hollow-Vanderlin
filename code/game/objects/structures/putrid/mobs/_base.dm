@@ -277,8 +277,4 @@
 		draining_target = null
 
 /mob/living/simple_animal/hostile/retaliate/meatvine/proc/puff_gas()
-	if(!prob(50))
-		return
-	var/turf/turf = get_turf(src)
-	turf.pollute_turf(/datum/pollutant/rot, 100)
 	return
