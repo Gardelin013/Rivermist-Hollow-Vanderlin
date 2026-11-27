@@ -157,10 +157,7 @@
 	entry_turfs.Cut()
 	drop_turfs.Cut()
 	affected_turfs.Cut()
-	native_movables.Cut()
-	native_movable_keys.Cut()
-	native_movables_by_key.Cut()
-	native_slot_offsets.Cut()
+	clear_native_tracking()
 	load_turf = null
 
 	release_reservation()
@@ -293,13 +290,46 @@
 	if(!movable || !slot_key)
 		return
 
-	native_movables[movable] = TRUE
+	track_native_movable(movable)
 	native_movable_keys[movable] = slot_key
 	native_movables_by_key[slot_key] = movable
 	native_slot_offsets[slot_key] = list(
 		current_turf.x - load_turf.x,
 		current_turf.y - load_turf.y,
 	)
+
+/// Marks a movable as part of the loaded layout until it is deleted or the layout is released.
+/datum/pocket_dimension/proc/track_native_movable(atom/movable/movable)
+	if(!movable || native_movables[movable])
+		return
+	native_movables[movable] = TRUE
+	// Not COMSIG_PARENT_QDELETING: dungeon rooms already listen for that on their guardians.
+	RegisterSignal(movable, COMSIG_PARENT_PREQDELETED, PROC_REF(on_native_movable_deleting))
+
+/datum/pocket_dimension/proc/on_native_movable_deleting(atom/movable/source)
+	SIGNAL_HANDLER
+	forget_native_movable(source)
+
+/// Drops every layout reference to a native movable. Its slot stays, so a snapshot records it as removed.
+/datum/pocket_dimension/proc/forget_native_movable(atom/movable/movable)
+	UnregisterSignal(movable, COMSIG_PARENT_PREQDELETED)
+	native_movables -= movable
+	snapshotted_native_movables -= movable
+	var/slot_key = native_movable_keys[movable]
+	if(isnull(slot_key))
+		return
+	native_movable_keys -= movable
+	if(native_movables_by_key[slot_key] == movable)
+		native_movables_by_key -= slot_key
+
+/// Stops watching every native movable and empties the layout lists.
+/datum/pocket_dimension/proc/clear_native_tracking()
+	for(var/atom/movable/movable as anything in native_movables)
+		UnregisterSignal(movable, COMSIG_PARENT_PREQDELETED)
+	native_movables.Cut()
+	native_movable_keys.Cut()
+	native_movables_by_key.Cut()
+	native_slot_offsets.Cut()
 
 /datum/pocket_dimension/proc/create_exit_object(obj/effect/landmark/pocket_dimension/exit/exit_marker, turf/current_turf)
 	var/exit_type = exit_marker?.exit_structure_type || template?.exit_structure_type || /obj/structure/pocket_dimension_exit
@@ -315,10 +345,7 @@
 	entry_turfs.Cut()
 	drop_turfs.Cut()
 	managed_areas.Cut()
-	native_movables.Cut()
-	native_movable_keys.Cut()
-	native_movables_by_key.Cut()
-	native_slot_offsets.Cut()
+	clear_native_tracking()
 	QDEL_LIST(exit_objects)
 	exit_objects = list()
 	var/list/native_slot_counts = list()
@@ -345,7 +372,7 @@
 			qdel(exit_marker)
 
 		for(var/atom/movable/movable as anything in current_turf)
-			native_movables[movable] = TRUE
+			track_native_movable(movable)
 			if(!should_track_native_movable(movable))
 				continue
 
@@ -371,7 +398,7 @@
 		pocket_area.name = "[template.name] #[instance_id]"
 
 	for(var/obj/structure/pocket_dimension_exit/exit_object as anything in exit_objects)
-		native_movables[exit_object] = TRUE
+		track_native_movable(exit_object)
 
 /datum/pocket_dimension/proc/get_occupants()
 	var/list/occupants = list()
@@ -718,9 +745,7 @@
 	for(var/slot_key in native_snapshots)
 		var/atom/movable/template_movable = native_movables_by_key[slot_key]
 		if(template_movable)
-			native_movables -= template_movable
-			native_movable_keys -= template_movable
-			native_movables_by_key -= slot_key
+			forget_native_movable(template_movable)
 			template_movable.moveToNullspace()
 			qdel(template_movable)
 

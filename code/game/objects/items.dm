@@ -914,6 +914,9 @@ GLOBAL_DATUM_INIT(fire_overlay, /mutable_appearance, mutable_appearance('icons/e
 		else
 			if(!do_after(user, 3 DECISECONDS, src))
 				return
+		// The item can be destroyed during the pickup delay.
+		if(QDELETED(src))
+			return
 
 	//If the item is in a storage item, take it out
 	var/outside_storage = !(item_flags & IN_STORAGE)
