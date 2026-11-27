@@ -152,7 +152,7 @@
 #define SUNLIGHTING_PLANE 140
 #define SUNLIGHTING_RENDER_TARGET "*SUNLIGHT_RENDER_TARGET"
 
-///Normal 1 per turf dynamic lighting objects
+///The shared lighting looks that turfs show
 #define LIGHTING_PLANE 150
 #define LIGHTING_RENDER_TARGET "LIGHT_RENDER_TARGET"
 
