@@ -11,7 +11,7 @@
 	body.wear_pants = pants
 	body.cloak = cloak
 	body.backr = back_item
-	body.wear_ring = ring
+	body.wear_rings[1] = ring
 	body.wear_wrists = wrists
 	body.wear_armor = armor
 

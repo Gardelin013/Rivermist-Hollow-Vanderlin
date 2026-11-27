@@ -228,14 +228,19 @@
 	if(usr.incapacitated(IGNORE_GRAB))
 		return TRUE
 
-	if(hud?.mymob && slot_id)
-		var/obj/item/inv_item = hud.mymob.get_item_by_slot(slot_id)
-		if(inv_item)
-			return inv_item.Click(location, control, params)
+	var/obj/item/inv_item = get_slot_item()
+	if(inv_item)
+		return inv_item.Click(location, control, params)
 
 	if(usr.attack_ui(slot_id, params))
 		usr.update_inv_hands()
 	return TRUE
+
+/// Item worn in the slot this cell shows.
+/atom/movable/screen/inventory/proc/get_slot_item()
+	if(!hud?.mymob || !slot_id)
+		return null
+	return hud.mymob.get_item_by_slot(slot_id)
 
 /atom/movable/screen/inventory/MouseEntered(location, control, params)
 	. = ..()
@@ -252,7 +257,7 @@
 		icon_empty = icon_state
 
 	if(hud?.mymob && slot_id && icon_full)
-		var/obj/item/I = hud.mymob.get_item_by_slot(slot_id)
+		var/obj/item/I = get_slot_item()
 		if(I)
 			icon_state = icon_full
 			if(I.uses_integrity)
@@ -274,7 +279,7 @@
 
 	var/obj/item/holding = user.get_active_held_item()
 
-	if(!holding || user.get_item_by_slot(slot_id))
+	if(!holding || get_slot_item())
 		return
 
 	var/image/item_overlay = image(holding)

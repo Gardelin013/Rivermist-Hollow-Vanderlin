@@ -382,8 +382,7 @@
 		items += beltr
 	if(beltl)
 		items += beltl
-	if(wear_ring)
-		items += wear_ring
+	items += get_worn_rings()
 	if(wear_wrists)
 		items += wear_wrists
 	if(wear_armor)
@@ -524,8 +523,7 @@
 	for(var/slot in SLOT_DISPLAY_PRIORITY)
 		if(obscured_slots[SLOT_CHECK_REGULAR] & slot || ((extra_obscured & slot) && (obscured_slots[SLOT_CHECK_EXTRA] & ITEM_SLOT_EXTRA)))
 			continue
-		var/obj/item/I = get_item_by_slot(slot)
-		if(I)
+		for(var/obj/item/I as anything in get_items_by_slot(slot))
 			items[I] = slot
 	return items
 
