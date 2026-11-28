@@ -485,13 +485,6 @@ All foods are distributed among various categories. Use common sense.
 		else
 			eater.visible_message("<span class='danger'>[user] tries to feed [eater] [src].</span>", \
 								"<span class='danger'>[user] tries to feed me [src].</span>")
-		if(iscarbon(eater))
-			var/mob/living/carbon/C = eater
-			var/obj/item/bodypart/CH = C.get_bodypart(BODY_ZONE_HEAD)
-			if(C.cmode)
-				if(!CH.grabbedby)
-					to_chat(user, "<span class='info'>[C.p_they(TRUE)] steals [C.p_their()] face from it.</span>")
-					return ITEM_INTERACT_BLOCKING
 
 		if(!do_after(user, 3 SECONDS, eater))
 			return ITEM_INTERACT_BLOCKING

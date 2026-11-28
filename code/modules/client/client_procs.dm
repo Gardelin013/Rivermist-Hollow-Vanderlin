@@ -20,11 +20,6 @@ GLOBAL_LIST_EMPTY(respawncounts)
 #define MINUTE_COUNT	4
 #define ADMINSWARNED_AT	5
 
-#define TOPIC_LIMIT_COUNTED 0
-#define TOPIC_LIMIT_FREE 1
-#define TOPIC_LIMIT_FREE_PING 2
-/// Shortest gap between two chat pings that skip the topic limiter.
-#define TOPIC_FREE_PING_INTERVAL (1 SECONDS)
 	/*
 	When somebody clicks a link in game, this Topic is called first.
 	It does the stuff in this proc and  then is redirected to the Topic() proc for the src=[0xWhatever]

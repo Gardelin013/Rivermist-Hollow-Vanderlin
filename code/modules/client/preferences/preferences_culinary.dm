@@ -7,6 +7,10 @@
 /datum/reagent/consumable
 	/// Drink types this reagent belongs to, DRINKTYPE_* flags. Untagged reagents never count.
 	var/drink_type = NONE
+	/// Dish groups this reagent counts as when eaten, DISH_* flags; soups and stews.
+	var/dish_type = NONE
+	/// Fare of this reagent as a dish, for the favourite food threshold.
+	var/dish_fare = FARE_NEUTRAL
 
 /// Dish groups in the order the player sees them.
 GLOBAL_LIST_INIT(culinary_dish_groups, list(
@@ -20,6 +24,7 @@ GLOBAL_LIST_INIT(culinary_dish_groups, list(
 	"Bread" = DISH_BREAD,
 	"Pastry" = DISH_PASTRY,
 	"Pies & tarts" = DISH_PIE,
+	"Stew & soup" = DISH_SOUP,
 	"Cakes & sweets" = DISH_SWEET,
 ))
 
@@ -47,6 +52,7 @@ GLOBAL_LIST_INIT(culinary_dish_icons, list(
 	"[DISH_PASTRY]" = /obj/item/reagent_containers/food/snacks/pastry,
 	"[DISH_PIE]" = /obj/item/reagent_containers/food/snacks/pie/cooked/apple,
 	"[DISH_SWEET]" = /obj/item/reagent_containers/food/snacks/strawbycake_cooked,
+	"[DISH_SOUP]" = /obj/item/reagent_containers/glass/bowl,
 ))
 
 /// Name of a group flag in groups, or "None".
@@ -87,6 +93,9 @@ GLOBAL_LIST_INIT(culinary_dish_icons, list(
 		for(var/obj/item/reagent_containers/food/snacks/food_type as anything in subtypesof(/obj/item/reagent_containers/food/snacks))
 			if(initial(food_type.faretype) >= FAVOURITE_FOOD_MINFARE)
 				reachable |= initial(food_type.dish_type)
+		for(var/datum/reagent/consumable/dish as anything in subtypesof(/datum/reagent/consumable))
+			if(initial(dish.dish_fare) >= FAVOURITE_FOOD_MINFARE)
+				reachable |= initial(dish.dish_type)
 		options = list()
 		for(var/label in GLOB.culinary_dish_groups)
 			if(reachable & GLOB.culinary_dish_groups[label])

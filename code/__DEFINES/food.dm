@@ -75,6 +75,7 @@
 #define DISH_PASTRY		(1<<8)
 #define DISH_PIE		(1<<9)
 #define DISH_SWEET		(1<<10)
+#define DISH_SOUP		(1<<11)
 
 // Drink types (consumable reagent drink_type).
 #define DRINKTYPE_MILK		(1<<0)

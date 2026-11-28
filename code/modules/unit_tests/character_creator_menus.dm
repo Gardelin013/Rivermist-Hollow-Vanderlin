@@ -91,6 +91,13 @@
 	eater.culinary_react_to_drink(/datum/reagent/consumable/ethanol/beer::drink_type, /datum/reagent/consumable/ethanol/beer::quality)
 	QF_ASSERT(eater.has_stress_type(/datum/stress_event/hated_drink), "A hated drink counts at any quality")
 
+	var/mob/living/carbon/human/soup_lover = allocate(/mob/living/carbon/human)
+	soup_lover.culinary_preferences = list(CULINARY_FAVOURITE_FOOD = DISH_SOUP)
+	soup_lover.culinary_react_to_food(/datum/reagent/consumable/soup/stew/gross::dish_type, /datum/reagent/consumable/soup/stew/gross::dish_fare)
+	QF_ASSERT(!soup_lover.has_stress_type(/datum/stress_event/favourite_food), "Beggars stew must not count as a favourite")
+	soup_lover.culinary_react_to_food(/datum/reagent/consumable/soup/stew/meat::dish_type, /datum/reagent/consumable/soup/stew/meat::dish_fare)
+	QF_ASSERT(soup_lover.has_stress_type(/datum/stress_event/favourite_food), "Meat stew counts for a soup lover")
+
 	var/mob/living/carbon/human/milk_lover = allocate(/mob/living/carbon/human)
 	milk_lover.culinary_preferences = list(CULINARY_FAVOURITE_DRINK = DRINKTYPE_MILK)
 	milk_lover.culinary_react_to_drink(/datum/reagent/consumable/milk::drink_type, /datum/reagent/consumable/milk::quality)
@@ -139,10 +146,20 @@
 	)
 	for(var/datum/reagent/consumable/drink as anything in drink_tags)
 		QF_ASSERT_EQUAL(initial(drink.drink_type), drink_tags[drink], "[drink] has the wrong drink type")
+	var/list/soup_tags = list(
+		/datum/reagent/consumable/soup/oatmeal = DISH_SOUP,
+		/datum/reagent/consumable/soup/veggie/cabbage = DISH_SOUP | DISH_VEGETABLE,
+		/datum/reagent/consumable/soup/stew/fish = DISH_SOUP | DISH_SEAFOOD,
+		/datum/reagent/consumable/soup/stew/meat = DISH_SOUP | DISH_MEAT,
+		/datum/reagent/consumable/ethanol/beer = NONE,
+	)
+	for(var/datum/reagent/consumable/dish as anything in soup_tags)
+		QF_ASSERT_EQUAL(initial(dish.dish_type), soup_tags[dish], "[dish] has the wrong dish groups")
+	QF_ASSERT_EQUAL(/datum/reagent/consumable/soup/stew/gross::dish_fare, FARE_POOR, "Beggars stew is poor fare")
 	// Every dish group has a picture and enough normal food to be a favourite.
 	var/list/favourite_dishes = culinary_favourite_dish_options()
 	for(var/label in GLOB.culinary_dish_groups)
-		QF_ASSERT(ispath(GLOB.culinary_dish_icons["[GLOB.culinary_dish_groups[label]]"], /obj/item/reagent_containers/food/snacks), "[label] has no picture")
+		QF_ASSERT(ispath(GLOB.culinary_dish_icons["[GLOB.culinary_dish_groups[label]]"], /obj/item), "[label] has no picture")
 		QF_ASSERT(label in favourite_dishes, "[label] has no normal food")
 
 /// Poor Vision: each choice gives that eyewear, None gives nothing, loadout eyewear skips the swap.
