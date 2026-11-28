@@ -192,6 +192,9 @@
 			return FALSE
 		nearest_vine.master.spawn_spacevine_piece(request.target_location)
 
+		// Visual feedback
+		request.target_location.pollute_turf(/datum/pollutant/rot, 30)
+
 /datum/ai_behavior/meatvine_bridge/finish_action(datum/ai_controller/controller, succeeded, bridge_key)
 	. = ..()
 	if(succeeded)

@@ -67,6 +67,10 @@
 		cast_on.mind.remove_antag_datum(/datum/antagonist/zombie)
 		cast_on.death()
 
+	var/datum/component/rot/rot = cast_on.GetComponent(/datum/component/rot)
+	if(rot)
+		rot.amount = 0
+
 	for(var/obj/item/bodypart/rotty in cast_on.bodyparts)
 		rotty.revive_limb(FALSE)
 		rotty.germ_level = 0

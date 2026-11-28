@@ -166,6 +166,9 @@
 	for(var/datum/injury/injury in BP.injuries)
 		injury.adjust_germ_level(SANITIZATION_PER_UNIT_WATER)
 
+/datum/reagent/water/gross/on_aeration(volume, turf/turf)
+	turf.pollute_turf(/datum/pollutant/rot/sewage, volume * 3)
+
 /datum/reagent/water/gross/on_mob_life(mob/living/carbon/M, efficiency)
 	..()
 	if(HAS_TRAIT(M, TRAIT_NASTY_EATER )) // lets orcs and goblins drink bogwater

@@ -273,6 +273,8 @@
 
 	var/list/death_trackers = list()
 
+	var/rot_type = /datum/component/rot/simple
+
 	var/list/mob_descriptors
 	var/list/custom_descriptors
 

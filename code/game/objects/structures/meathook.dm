@@ -280,6 +280,10 @@
 						var/obj/item/I = new listed_item(get_turf(user))
 						I.add_mob_blood(butchery_target)
 						var/rotstuff = FALSE
+						var/datum/component/rot/simple/CR = butchery_target.GetComponent(/datum/component/rot/simple)
+						if(CR)
+							if(CR.amount >= 10 MINUTES)
+								rotstuff = TRUE
 						if(istype(I, /obj/item/reagent_containers/food/snacks))
 							var/obj/item/reagent_containers/food/snacks/F = I
 							F.set_quality(recipe_quality)

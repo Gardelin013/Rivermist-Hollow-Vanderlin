@@ -70,6 +70,11 @@
 		span_notice("[surgeon] burns the flesh of [patient]."),
 	)
 
+	// I would rather not have this but afaik this is the only way to reduce this outside of the cure rot miracle
+	var/datum/component/rot/rot = patient?.GetComponent(/datum/component/rot)
+	if(rot) // ew
+		rot.amount = 0
+
 	if(ishuman(patient))
 		var/mob/living/carbon/human/H = patient
 		H?.funeral = FALSE

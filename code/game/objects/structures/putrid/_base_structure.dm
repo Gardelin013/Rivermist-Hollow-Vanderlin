@@ -413,6 +413,8 @@
 	if(!prob(50))
 		return
 
+	var/turf/T = get_turf(src)
+	T.pollute_turf(/datum/pollutant/rot, 100)
 	reagents.clear_reagents()
 
 /obj/structure/meatvine/proc/transfer_feromones(amount)

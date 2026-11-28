@@ -6,6 +6,7 @@
 	race = /datum/species/goblin
 	bodyparts = list(/obj/item/bodypart/chest/goblin, /obj/item/bodypart/head/goblin, /obj/item/bodypart/l_arm/goblin,
 					/obj/item/bodypart/r_arm/goblin, /obj/item/bodypart/r_leg/goblin, /obj/item/bodypart/l_leg/goblin, /obj/item/bodypart/mouth)
+	rot_type = /datum/component/rot/corpse/goblin
 	var/gob_outfit = /datum/outfit/npc/goblin
 	ambushable = FALSE
 	base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/unarmed/claw)
@@ -302,6 +303,56 @@
 		var/datum/outfit/O = new gob_outfit
 		if(O)
 			equipOutfit(O)
+
+//RMH EDITED START - skeletons crumble away instead of lying forever
+/datum/component/rot/corpse/goblin
+	wither_time = 30 MINUTES
+//RMH EDITED END
+
+/datum/component/rot/corpse/goblin/process()
+	if(HAS_TRAIT(parent, TRAIT_STASIS) || HAS_TRAIT(parent, TRAIT_NO_ROT))
+		return
+	var/amt2add = 10 //1 second
+	var/time_elapsed = last_process ? (world.time - last_process)/10 : 1
+	if(last_process)
+		amt2add = ((world.time - last_process)/10) * amt2add
+	last_process = world.time
+	amount += amt2add
+	if(has_world_trait(/datum/world_trait/pestra_mercy))
+		amount -= (is_ascendant(PESTRA) ? 2.5 : 5) * time_elapsed
+
+	var/mob/living/carbon/C = parent
+	if(!C)
+		qdel(src)
+		return
+	if(C.stat != DEAD)
+		qdel(src)
+		return
+	if(try_wither()) //RMH EDITED
+		return
+	var/should_update = FALSE
+	var/is_matthios = FALSE
+	if(C.has_faction(FACTION_MATTHIOS))
+		is_matthios = TRUE
+	if(amount > 20 MINUTES)
+		for(var/obj/item/bodypart/B in C.bodyparts)
+			if(!B.skeletonized)
+				B.skeletonized = TRUE
+				should_update = TRUE
+	else if(amount > 12 MINUTES)
+		for(var/obj/item/bodypart/B in C.bodyparts)
+			if(!HAS_TRAIT(B, TRAIT_ROTTEN))
+				B.kill_limb()
+				should_update = TRUE
+			if(HAS_TRAIT(B, TRAIT_ROTTEN) && amount < 16 MINUTES && !is_matthios)
+				var/turf/open/T = C.loc
+				if(istype(T))
+					T.pollute_turf(/datum/pollutant/rot, 4)
+	if(should_update)
+		if(amount > 20 MINUTES)
+			C.update_body() //RMH EDITED - the component stays for try_wither()
+		else if(amount > 12 MINUTES)
+			C.update_body()
 
 /////
 ////

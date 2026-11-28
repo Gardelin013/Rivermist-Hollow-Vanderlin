@@ -575,6 +575,10 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 	// Always add guaranteed items up front
 	if(guaranteed_butcher_results)
 		butcher += guaranteed_butcher_results
+	var/rotstuff = FALSE
+	var/datum/component/rot/simple/CR = GetComponent(/datum/component/rot/simple)
+	if(CR && CR.amount >= 10 MINUTES)
+		rotstuff = TRUE
 	var/atom/Tsec = drop_location()
 	// Track results
 	var/botch_count = 0
@@ -621,6 +625,9 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		for(var/j in 1 to total_amount)
 			var/obj/item/I = new path(Tsec)
 			I.add_mob_blood(src)
+			if(rotstuff && istype(I,/obj/item/reagent_containers/food/snacks))
+				var/obj/item/reagent_containers/food/snacks/F = I
+				F.become_rotten()
 		if(user.mind)
 			user.mind.add_sleep_experience(/datum/attribute/skill/labor/butchering, GET_MOB_ATTRIBUTE_VALUE(user, STAT_INTELLIGENCE) * 0.5)
 		playsound(src, 'sound/foley/gross.ogg', 70, FALSE)
@@ -638,6 +645,8 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 						head.ButcheringResults(2)
 				if(SKILL_RANK_MASTER to INFINITY)
 					head.ButcheringResults(2)
+			if(rotstuff)
+				head.ButcheringResults(-1)
 		var/final_message = "I finish butchering: [butcher_summary(botch_count, normal_count, perfect_count, bonus_count, botch_chance, perfect_chance, happiness_bonus)]"
 		if(happiness_message)
 			final_message += " [happiness_message]"

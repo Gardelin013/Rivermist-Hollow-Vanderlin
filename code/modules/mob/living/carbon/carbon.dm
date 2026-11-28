@@ -1087,6 +1087,11 @@
 
 	spill_embedded_objects()
 
+	if(heal_flags & HEAL_ADMIN) //reset rot on admin revives
+		var/datum/component/rot/corpse/CR = GetComponent(/datum/component/rot/corpse)
+		if(CR)
+			CR.amount = 0
+
 	if(heal_flags & HEAL_LIMBS)
 		regenerate_limbs()
 		if(heal_flags & HEAL_ADMIN) //reset rot on admin revives
