@@ -1378,8 +1378,8 @@ GLOBAL_LIST_EMPTY(ccg_round_trade_loss_progress_awarded)
 	if(!CONFIG_GET(flag/sql_enabled))
 		return "<p class='toolbar'><b>Test mode:</b> SQL is off in the config, so collections live in memory and are gone after a restart.</p>"
 	if(GLOB.ccg_memory_only)
-		return "<p class='toolbar'><b>Test mode is on:</b> collections live in memory and nothing is saved. <a href='?src=[REF(src)];[HrefToken()];ccg_manage=toggle_saving'>Turn test mode off</a> <span class='muted'>(saved collections reload)</span></p>"
-	return "<p class='toolbar'>Collections are saved to SQL. <a href='?src=[REF(src)];[HrefToken()];ccg_manage=toggle_saving'>Turn on test mode</a> <span class='muted'>(everyone starts from the starter cards; nothing is saved)</span></p>"
+		return "<p class='toolbar'><b>Test mode is on:</b> collections live in memory and nothing is saved. <a href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=toggle_saving'>Turn test mode off</a> <span class='muted'>(saved collections reload)</span></p>"
+	return "<p class='toolbar'>Collections are saved to SQL. <a href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=toggle_saving'>Turn on test mode</a> <span class='muted'>(everyone starts from the starter cards; nothing is saved)</span></p>"
 
 /datum/admins/proc/ccg_management_panel(target_ckey = null)
 	if(!check_rights(R_ADMIN))
@@ -1394,11 +1394,11 @@ GLOBAL_LIST_EMPTY(ccg_round_trade_loss_progress_awarded)
 		usr << browse(jointext(html, ""), "window=ccg_admin_management;size=800x650")
 		return
 	if(target_ckey)
-		html += "<header><div><h2>Arlette Management</h2><span class='muted'>Player collection</span></div><a href='?src=[REF(src)];[HrefToken()];ccg_manage=index'>Players</a></header>"
+		html += "<header><div><h2>Arlette Management</h2><span class='muted'>Player collection</span></div><a href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=index'>Players</a></header>"
 		html += ccg_saving_mode_html()
 		html += "<h3>[html_encode(target_ckey)]</h3>"
-		html += "<p class='toolbar'><a href='?src=[REF(src)];[HrefToken()];ccg_manage=clear_collection;ckey=[url_encode(target_ckey)]' class='danger'>Clear collection</a>"
-		html += "<a href='?src=[REF(src)];[HrefToken()];ccg_manage=clear_decks;ckey=[url_encode(target_ckey)]' class='danger'>Clear saved decks</a></p>"
+		html += "<p class='toolbar'><a href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=clear_collection;ckey=[url_encode(target_ckey)]' class='danger'>Clear collection</a>"
+		html += "<a href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=clear_decks;ckey=[url_encode(target_ckey)]' class='danger'>Clear saved decks</a></p>"
 		var/list/card_amounts = list()
 		if(memory_only)
 			var/datum/preferences/memory_prefs = ccg_admin_online_preferences(target_ckey)
@@ -1429,8 +1429,8 @@ GLOBAL_LIST_EMPTY(ccg_round_trade_loss_progress_awarded)
 			var/card_name = html_encode(card.name)
 			var/amount = card_amounts[card_id] || 0
 			html += "<tr><td>[card_name] <span class='muted'>([html_encode(card_id)])</span></td><td class='count'>[amount]</td>"
-			html += "<td class='actions'><a class='control' href='?src=[REF(src)];[HrefToken()];ccg_manage=change;ckey=[url_encode(target_ckey)];card_id=[url_encode(card_id)];amount=-1'>-</a>"
-			html += "<a class='control' href='?src=[REF(src)];[HrefToken()];ccg_manage=change;ckey=[url_encode(target_ckey)];card_id=[url_encode(card_id)];amount=1'>+</a></td></tr>"
+			html += "<td class='actions'><a class='control' href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=change;ckey=[url_encode(target_ckey)];card_id=[url_encode(card_id)];amount=-1'>-</a>"
+			html += "<a class='control' href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=change;ckey=[url_encode(target_ckey)];card_id=[url_encode(card_id)];amount=1'>+</a></td></tr>"
 		html += "</table>"
 	else
 		var/list/player_ckeys = list()
@@ -1456,8 +1456,8 @@ GLOBAL_LIST_EMPTY(ccg_round_trade_loss_progress_awarded)
 		html += ccg_saving_mode_html()
 		html += "<table><tr><th>Ckey</th><th class='actions'>Actions</th></tr>"
 		for(var/player_ckey in player_ckeys)
-			html += "<tr><td><a href='?src=[REF(src)];[HrefToken()];ccg_manage=view;ckey=[url_encode(player_ckey)]'>[html_encode(player_ckey)]</a></td>"
-			html += "<td class='actions'><a class='danger' href='?src=[REF(src)];[HrefToken()];ccg_manage=clear_collection;ckey=[url_encode(player_ckey)]'>Clear collection</a></td></tr>"
+			html += "<tr><td><a href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=view;ckey=[url_encode(player_ckey)]'>[html_encode(player_ckey)]</a></td>"
+			html += "<td class='actions'><a class='danger' href='byond://?src=[REF(src)];[HrefToken()];ccg_manage=clear_collection;ckey=[url_encode(player_ckey)]'>Clear collection</a></td></tr>"
 		html += "</table>"
 	html += "</body></html>"
 	usr << browse(jointext(html, ""), "window=ccg_admin_management;size=800x650")

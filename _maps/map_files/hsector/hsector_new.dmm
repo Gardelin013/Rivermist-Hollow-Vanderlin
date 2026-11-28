@@ -45643,7 +45643,6 @@
 /obj/structure/door/town{
 	resident_key_amount = 2
 	},
-/obj/effect/mapping_helpers/access/locker,
 /turf/open/floor/concrete,
 /area/indoors/town/rmh/living)
 "nTw" = (
@@ -61938,7 +61937,6 @@
 /obj/structure/door/town{
 	resident_key_amount = 2
 	},
-/obj/effect/mapping_helpers/access/locker,
 /turf/open/floor/woodturned,
 /area/indoors/town/rmh/living)
 "ubI" = (

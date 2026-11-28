@@ -180,6 +180,7 @@
 	starting = null
 	original = null
 	fired_from = null
+	impacted = null
 	STOP_PROCESSING(SSprojectiles, src)
 	cleanup_beam_segments()
 	QDEL_NULL(trajectory)

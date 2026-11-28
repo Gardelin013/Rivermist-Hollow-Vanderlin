@@ -202,6 +202,8 @@
 	return ..(new_perspective)
 
 /mob/living/carbon/human/Destroy()
+	// Each quirk's owner points back at us; removed first, while the body they clean up is intact.
+	QDEL_LIST(quirks)
 	QDEL_NULL(active_ooze_editor)
 	QDEL_NULL(physiology)
 	culture = null

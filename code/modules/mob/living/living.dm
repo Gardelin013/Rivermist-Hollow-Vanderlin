@@ -61,6 +61,15 @@
 				qdel(S)
 			else
 				S.be_replaced()
+	// Wounds point back at us through their owner var. Each one removes itself from the lazy list.
+	for(var/datum/wound/wound as anything in simple_wounds)
+		qdel(wound)
+	simple_wounds = null
+	// Affix timers and beams hold this mob; nothing else ends them.
+	for(var/datum/mob_affix/affix as anything in affixes)
+		affix.cleanup_affix(src)
+		qdel(affix)
+	affixes = null
 	if(buckled)
 		buckled.unbuckle_mob(src,force=1)
 

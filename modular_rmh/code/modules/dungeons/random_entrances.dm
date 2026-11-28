@@ -65,7 +65,7 @@
 	var/list/covered_pools = list()
 	var/list/stats = list()
 	var/list/entrances = list()
-	var/list/surface_files = list("hsector.dmm", "bogforest.dmm", "frozen_mountains.dmm")
+	var/list/surface_files = list("hsector_new.dmm", "bogforest.dmm", "frozen_mountains.dmm")
 	for(var/zone in quotas)
 		pools[zone] = list()
 		covered_pools[zone] = list()

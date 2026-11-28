@@ -103,7 +103,7 @@
 	TEST_ASSERT(length(records) >= RANDOM_DUNGEON_MIN_PLACED, "Expected at least [RANDOM_DUNGEON_MIN_PLACED] random entrances, got [length(records)]: [jointext(SStreesetup.random_dungeon_entrance_report, " / ")]")
 	TEST_ASSERT(length(records) <= RANDOM_DUNGEON_MAX_PLACED, "Expected at most [RANDOM_DUNGEON_MAX_PLACED] random entrances, got [length(records)].")
 
-	var/list/map_files = list("hsector.dmm" = 6, "frozen_mountains.dmm" = 6, "bogforest.dmm" = 10)
+	var/list/map_files = list("hsector_new.dmm" = 5, "frozen_mountains.dmm" = 6, "bogforest.dmm" = 9)
 	var/list/all_entrances = list()
 	for(var/obj/structure/dungeon_entrance/entrance in world)
 		var/turf/entrance_turf = get_turf(entrance)

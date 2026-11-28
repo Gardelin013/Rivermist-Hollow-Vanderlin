@@ -44,6 +44,10 @@ GLOBAL_VAR_INIT(mobids, 1)
 		qdel(cc)
 	client_colours = null
 	ghostize(drawskip=TRUE)
+	// Minds outlive their bodies in SSticker.minds; a mind left pointing here keeps us from collecting.
+	if(mind?.current == src)
+		mind.UnregisterSignal(src, COMSIG_MOB_DEATH)
+		mind.current = null
 	..()
 	return QDEL_HINT_HARDDEL
 

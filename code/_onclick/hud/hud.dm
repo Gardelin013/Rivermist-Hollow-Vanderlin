@@ -196,6 +196,8 @@ GLOBAL_LIST_INIT(available_ui_styles, sortList(list(
 
 	inv_slots.Cut()
 	ring_slots.Cut()
+	// Screens drop their hud on its QDELETING signal, so the heart's own Destroy cannot clear this.
+	interact_heart = null
 	action_intent = null
 	zone_select = null
 	pull_icon = null

@@ -28,3 +28,11 @@
 	pants.add_atom_colour("#FF0000", WASHABLE_COLOUR_PRIORITY)
 	body.wash(CLEAN_WASH)
 	TEST_ASSERT(pants.atom_colours[WASHABLE_COLOUR_PRIORITY], "Clothing hidden by armor should not be washed")
+
+	// The slots were set directly, so unequipping never clears them; the body would keep the deleted items.
+	body.wear_pants = null
+	body.cloak = null
+	body.backr = null
+	body.wear_rings[1] = null
+	body.wear_wrists = null
+	body.wear_armor = null
